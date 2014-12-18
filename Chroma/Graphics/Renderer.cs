@@ -60,6 +60,16 @@ namespace Chroma.Graphics
       DrawRectangleS(position + World, width, height, color);
     }
 
+    public void DrawLineW(Vector2 from, Vector2 to, Color color)
+    {
+      DrawLineS(from + World, to + World, color);
+    }
+
+    public void DrawSpriteW(string spriteName, Vector2 position, Color tint, float scale = 1.0f)
+    {
+      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position, tint, scale);
+    }
+
     #endregion
 
     #region Screen draw

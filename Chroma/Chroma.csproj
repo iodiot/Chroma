@@ -158,6 +158,7 @@
     <Compile Include="Game1.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Actors\GolemActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

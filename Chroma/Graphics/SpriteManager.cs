@@ -79,13 +79,13 @@ namespace Chroma.Graphics
       return textures[name];
     }
 
-    public List<Sprite> GetAnimationFrames(string prefix, List<int> frames)
+    public List<Sprite> GetFrames(string prefix, IEnumerable<int> frames)
     {
       var result = new List<Sprite>();
 
-      foreach (var f in frames) 
+      foreach (var frame in frames) 
       {
-        result.Add(GetSprite(String.Format("{0}{1}", prefix, f)));
+        result.Add(GetSprite(String.Format("{0}{1}", prefix, frame)));
       }
 
       return result;

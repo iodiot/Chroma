@@ -27,7 +27,7 @@ namespace Chroma.Actors
 
       animation = new Animation();
       var prefix = String.Format("coin_{0}", type == CoinType.Vertical ? "v" : "h");
-      animation.Add("live", core.SpriteManager.GetAnimationFrames(prefix, new List<int>{ 1, 2, 3 }));
+      animation.Add("live", core.SpriteManager.GetFrames(prefix, new List<int>{ 1, 2, 3 }));
 
       animation.Play("live");
     }

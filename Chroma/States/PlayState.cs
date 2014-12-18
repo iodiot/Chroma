@@ -37,6 +37,8 @@ namespace Chroma.States
         var y = (float)(10 * Math.Sin(i * 0.5));
         ActorManager.Add(new CoinActor(core, new Vector2(50 + i * 10, 25 + y)));
       }
+
+      ActorManager.Add(new GolemActor(core, new Vector2(300, 27)));
     }
 
     public override void Load()

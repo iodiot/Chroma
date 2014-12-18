@@ -76,7 +76,7 @@ namespace Chroma
       SoundManager.Load();
       MessageManager.Load();
 
-      animation.Add("live", SpriteManager.GetAnimationFrames("projectile_red_", new List<int>{ 1, 2, 3, 4 }));
+      animation.Add("live", SpriteManager.GetFrames("projectile_red_", new List<int>{ 1, 2, 3, 4 }));
       animation.Play("live");
 
       ChangeStateTo(new PlayState(this));

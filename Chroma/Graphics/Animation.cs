@@ -27,10 +27,16 @@ namespace Chroma.Graphics
       timeLine = 0;
     }
 
-    public void Add(string name, List<Sprite> frames)
+    public void Add(string name, IEnumerable<Sprite> frames)
     {
       animations[name] = new List<Sprite>();
       animations[name].AddRange(frames);
+    }
+
+    public void AddAndPlay(string name, IEnumerable<Sprite> frames)
+    {
+      Add(name, frames);
+      Play(name);
     }
 
     public void Play(string name)

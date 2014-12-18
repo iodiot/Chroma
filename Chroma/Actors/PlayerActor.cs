@@ -21,8 +21,8 @@ namespace Chroma.Actors
       Handle = "player";
 
       animation = new Animation();
-      animation.Add("walk", core.SpriteManager.GetAnimationFrames("druid_walk_", new List<int>{ 1, 2, 3, 4 }));
-      animation.Add("raise", core.SpriteManager.GetAnimationFrames("druid_raise_", new List<int>{ 1, 2 }));
+      animation.Add("walk", core.SpriteManager.GetFrames("druid_walk_", new List<int>{ 1, 2, 3, 4 }));
+      animation.Add("raise", core.SpriteManager.GetFrames("druid_raise_", new List<int>{ 1, 2 }));
 
       animation.Play("walk");
 
