@@ -64,7 +64,7 @@ namespace Chroma.Graphics
     {
       if (animations[CurrentPlay] == null)
       {
-        return null ;
+        return null;
       }
 
       return animations[CurrentPlay][(int)timeLine];

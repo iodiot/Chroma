@@ -102,6 +102,8 @@ namespace Chroma
 
       animation.Update(ticks);
 
+      MessageManager.Update(ticks);
+
       ++ticks;
     }
 

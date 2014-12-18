@@ -67,14 +67,14 @@ namespace Chroma.Graphics
 
     public Sprite GetSprite(string name)
     {
-      Debug.Assert(sprites.ContainsKey(name), String.Format("SpriteManager.GetSprite() - Sprite {0} is missing", name));
+      Debug.Assert(sprites.ContainsKey(name), String.Format("SpriteManager.GetSprite() : Sprite {0} is missing", name));
 
       return sprites[name];
     }
 
     public Texture2D GetTexture(string name)
     {
-      Debug.Assert(textures.ContainsKey(name), String.Format("SpriteManager.GetTexture() - Texture {0} is missing", name));
+      Debug.Assert(textures.ContainsKey(name), String.Format("SpriteManager.GetTexture() : Texture {0} is missing", name));
 
       return textures[name];
     }

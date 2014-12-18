@@ -131,9 +131,7 @@ namespace Chroma.States
 
       ActorManager.Draw();
 
-     // DrawFgGrass();
-
-      //core.Renderer.DrawLineS(Vector2.Zero, core.Renderer.ScreenCenter, Color.Yellow);
+      //DrawFgGrass();
 
       base.Draw();
     }
