@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chroma", "Chroma\Chroma.csproj", "{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+		Debug|iPhone = Debug|iPhone
+		Release|iPhone = Release|iPhone
+		Ad-Hoc|iPhone = Ad-Hoc|iPhone
+		AppStore|iPhone = AppStore|iPhone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Debug|iPhone.Build.0 = Debug|iPhone
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Release|iPhone.ActiveCfg = Release|iPhone
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Release|iPhone.Build.0 = Release|iPhone
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Chroma\Chroma.csproj
+	EndGlobalSection
+EndGlobal

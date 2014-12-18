@@ -1,0 +1,432 @@
+{
+	"image-path": "atlas.png",
+	"normal-map-path": "atlas-normals.png",
+	"width": "256",
+	"height": "340",
+	"sprites": [
+		{
+			"name": "coin_0",
+			"x": "243",
+			"y": "33",
+			"width": "5",
+			"height": "5",
+			"normal-map": "false"
+		},
+		{
+			"name": "coin_h1",
+			"x": "248",
+			"y": "28",
+			"width": "5",
+			"height": "5",
+			"normal-map": "false"
+		},
+		{
+			"name": "coin_h2",
+			"x": "251",
+			"y": "7",
+			"width": "5",
+			"height": "5",
+			"normal-map": "false"
+		},
+		{
+			"name": "coin_h3",
+			"x": "251",
+			"y": "21",
+			"width": "5",
+			"height": "5",
+			"normal-map": "false"
+		},
+		{
+			"name": "coin_v1",
+			"x": "248",
+			"y": "33",
+			"width": "5",
+			"height": "5",
+			"normal-map": "false"
+		},
+		{
+			"name": "coin_v2",
+			"x": "243",
+			"y": "28",
+			"width": "5",
+			"height": "5",
+			"normal-map": "false"
+		},
+		{
+			"name": "coin_v3",
+			"x": "251",
+			"y": "14",
+			"width": "5",
+			"height": "5",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_fall_1",
+			"x": "221",
+			"y": "243",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_fall_2",
+			"x": "191",
+			"y": "243",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_land",
+			"x": "181",
+			"y": "222",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_raise_1",
+			"x": "0",
+			"y": "291",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_raise_2",
+			"x": "151",
+			"y": "222",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_walk_1",
+			"x": "121",
+			"y": "222",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_walk_2",
+			"x": "211",
+			"y": "222",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_walk_3",
+			"x": "161",
+			"y": "243",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "druid_walk_4",
+			"x": "30",
+			"y": "291",
+			"width": "30",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "earth",
+			"x": "0",
+			"y": "222",
+			"width": "37",
+			"height": "69",
+			"normal-map": "false"
+		},
+		{
+			"name": "glow_blue",
+			"x": "37",
+			"y": "243",
+			"width": "34",
+			"height": "30",
+			"normal-map": "false"
+		},
+		{
+			"name": "glow_red",
+			"x": "71",
+			"y": "243",
+			"width": "34",
+			"height": "30",
+			"normal-map": "false"
+		},
+		{
+			"name": "golem_1",
+			"x": "236",
+			"y": "108",
+			"width": "20",
+			"height": "28",
+			"normal-map": "false"
+		},
+		{
+			"name": "golem_2",
+			"x": "236",
+			"y": "193",
+			"width": "20",
+			"height": "28",
+			"normal-map": "false"
+		},
+		{
+			"name": "golem_3",
+			"x": "0",
+			"y": "312",
+			"width": "20",
+			"height": "28",
+			"normal-map": "false"
+		},
+		{
+			"name": "golem_4",
+			"x": "20",
+			"y": "312",
+			"width": "20",
+			"height": "28",
+			"normal-map": "false"
+		},
+		{
+			"name": "golem_5",
+			"x": "236",
+			"y": "165",
+			"width": "20",
+			"height": "28",
+			"normal-map": "false"
+		},
+		{
+			"name": "golem_6",
+			"x": "236",
+			"y": "136",
+			"width": "20",
+			"height": "28",
+			"normal-map": "false"
+		},
+		{
+			"name": "grass",
+			"x": "37",
+			"y": "222",
+			"width": "84",
+			"height": "21",
+			"normal-map": "false"
+		},
+		{
+			"name": "ground",
+			"x": "37",
+			"y": "273",
+			"width": "28",
+			"height": "9",
+			"normal-map": "false"
+		},
+		{
+			"name": "heart_1",
+			"x": "243",
+			"y": "0",
+			"width": "8",
+			"height": "7",
+			"normal-map": "false"
+		},
+		{
+			"name": "heart_2",
+			"x": "243",
+			"y": "21",
+			"width": "8",
+			"height": "7",
+			"normal-map": "false"
+		},
+		{
+			"name": "heart_3",
+			"x": "243",
+			"y": "7",
+			"width": "8",
+			"height": "7",
+			"normal-map": "false"
+		},
+		{
+			"name": "heart_4",
+			"x": "243",
+			"y": "14",
+			"width": "8",
+			"height": "7",
+			"normal-map": "false"
+		},
+		{
+			"name": "imp_1",
+			"x": "105",
+			"y": "243",
+			"width": "28",
+			"height": "27",
+			"normal-map": "false"
+		},
+		{
+			"name": "imp_2",
+			"x": "183",
+			"y": "81",
+			"width": "28",
+			"height": "27",
+			"normal-map": "false"
+		},
+		{
+			"name": "imp_3",
+			"x": "133",
+			"y": "243",
+			"width": "28",
+			"height": "27",
+			"normal-map": "false"
+		},
+		{
+			"name": "imp_4",
+			"x": "211",
+			"y": "81",
+			"width": "28",
+			"height": "27",
+			"normal-map": "false"
+		},
+		{
+			"name": "projectile_red_1",
+			"x": "239",
+			"y": "97",
+			"width": "14",
+			"height": "8",
+			"normal-map": "false"
+		},
+		{
+			"name": "projectile_red_2",
+			"x": "241",
+			"y": "222",
+			"width": "14",
+			"height": "8",
+			"normal-map": "false"
+		},
+		{
+			"name": "projectile_red_3",
+			"x": "239",
+			"y": "89",
+			"width": "14",
+			"height": "8",
+			"normal-map": "false"
+		},
+		{
+			"name": "projectile_red_4",
+			"x": "239",
+			"y": "81",
+			"width": "14",
+			"height": "8",
+			"normal-map": "false"
+		},
+		{
+			"name": "spike",
+			"x": "251",
+			"y": "0",
+			"width": "5",
+			"height": "6",
+			"normal-map": "false"
+		},
+		{
+			"name": "tower_3_1",
+			"x": "118",
+			"y": "108",
+			"width": "59",
+			"height": "57",
+			"normal-map": "false"
+		},
+		{
+			"name": "tower_3_2",
+			"x": "118",
+			"y": "165",
+			"width": "59",
+			"height": "57",
+			"normal-map": "false"
+		},
+		{
+			"name": "tower_3_3",
+			"x": "59",
+			"y": "108",
+			"width": "59",
+			"height": "57",
+			"normal-map": "false"
+		},
+		{
+			"name": "tower_3_4",
+			"x": "59",
+			"y": "165",
+			"width": "59",
+			"height": "57",
+			"normal-map": "false"
+		},
+		{
+			"name": "tower_3_5",
+			"x": "177",
+			"y": "108",
+			"width": "59",
+			"height": "57",
+			"normal-map": "false"
+		},
+		{
+			"name": "tower_3_6",
+			"x": "177",
+			"y": "165",
+			"width": "59",
+			"height": "57",
+			"normal-map": "false"
+		},
+		{
+			"name": "tower_3_7",
+			"x": "0",
+			"y": "165",
+			"width": "59",
+			"height": "57",
+			"normal-map": "false"
+		},
+		{
+			"name": "tower_3_8",
+			"x": "0",
+			"y": "108",
+			"width": "59",
+			"height": "57",
+			"normal-map": "false"
+		},
+		{
+			"name": "trees_l1",
+			"x": "122",
+			"y": "0",
+			"width": "121",
+			"height": "54",
+			"normal-map": "false"
+		},
+		{
+			"name": "trees_l2",
+			"x": "0",
+			"y": "0",
+			"width": "122",
+			"height": "54",
+			"normal-map": "false"
+		},
+		{
+			"name": "trees_l3",
+			"x": "0",
+			"y": "54",
+			"width": "119",
+			"height": "54",
+			"normal-map": "false"
+		},
+		{
+			"name": "trees_l4",
+			"x": "119",
+			"y": "54",
+			"width": "64",
+			"height": "54",
+			"normal-map": "false"
+		},
+		{
+			"name": "vine_1",
+			"x": "183",
+			"y": "54",
+			"width": "66",
+			"height": "27",
+			"normal-map": "false"
+		}
+	]
+}
