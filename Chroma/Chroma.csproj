@@ -159,10 +159,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Actors\GolemActor.cs" />
-    <Compile Include="Ui\Ui.cs" />
-    <Compile Include="Ui\HealthUi.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="FrameCounter.cs" />
+    <Compile Include="Ui\UI.cs" />
+    <Compile Include="Ui\HealthUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

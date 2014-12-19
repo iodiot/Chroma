@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Actors;
 using Chroma.Messages;
-using Chroma.Ui;
+using Chroma.UI;
 
 namespace Chroma.States
 {
@@ -17,7 +17,7 @@ namespace Chroma.States
     private float groundScroll;
     private int groundLevel;
 
-    private HealthUi health;
+    private HealthUI health;
 
     public PlayState(Core core) : base(core)
     {
@@ -43,7 +43,7 @@ namespace Chroma.States
 
       ActorManager.Add(new GolemActor(core, new Vector2(300, 27)));
 
-      health = new HealthUi(core);
+      health = new HealthUI(core);
     }
 
     public override void Load()
