@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Json;
 using Microsoft.Xna.Framework.Content;
@@ -12,6 +11,7 @@ namespace Chroma.Graphics
   sealed class SpriteManager
   {
     public Texture2D OnePixel { get; private set; }
+    public Texture2D Font { get; private set; }
 
     private readonly Core core;
     private readonly Dictionary<string, Sprite> sprites;
@@ -30,8 +30,10 @@ namespace Chroma.Graphics
       LoadFromFile("atlas.json");
 
       OnePixel = core.Content.Load<Texture2D>(@"Images/one.png");
+      Font = core.Content.Load<Texture2D>(@"Images/font.png");
 
       textures.Add("one", OnePixel);
+      textures.Add("font", Font);
     }
 
     public void Unload()

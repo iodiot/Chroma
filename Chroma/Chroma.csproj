@@ -159,6 +159,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Actors\GolemActor.cs" />
+    <Compile Include="Ui\Ui.cs" />
+    <Compile Include="Ui\HealthUi.cs" />
+    <Compile Include="Debug.cs" />
+    <Compile Include="FrameCounter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -168,12 +172,16 @@
     <Folder Include="Messages\" />
     <Folder Include="Content\Images\" />
     <Folder Include="Graphics\" />
+    <Folder Include="Ui\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\click1.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Sounds\scheme.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\font.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

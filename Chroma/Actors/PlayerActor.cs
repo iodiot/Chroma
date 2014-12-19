@@ -11,11 +11,13 @@ namespace Chroma.Actors
     private readonly Animation animation; 
 
     private int jumpTtl;
+    private int hurtTtl;
+
     private float groundLevel;
 
     public PlayerActor(Core core, Vector2 position) : base(core, position)
     {
-      Width = core.SpriteManager.GetSprite("druid_walk_1").Width;
+      Width = 20;
       Height = core.SpriteManager.GetSprite("druid_walk_1").Height;
 
       Handle = "player";
@@ -27,6 +29,7 @@ namespace Chroma.Actors
       animation.Play("walk");
 
       jumpTtl = 0;
+      hurtTtl = 0;
       groundLevel = position.Y;
     }
 
@@ -45,6 +48,11 @@ namespace Chroma.Actors
         }
       }
 
+      if (hurtTtl > 0)
+      {
+        --hurtTtl;
+      }
+
       animation.Update(ticks);
 
       X += 1.0f;
@@ -54,7 +62,8 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, Color.White);
+      var tint = (hurtTtl / 5) % 2 == 0 ? Color.White : Color.Red;
+      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, tint);
 
       base.Draw();
     }
@@ -68,6 +77,16 @@ namespace Chroma.Actors
         jumpTtl = 25;
         animation.Play("raise");
       }
+    }
+
+    public override void OnCollide(Actor actor)
+    {
+      if ((actor is GolemActor) && (hurtTtl == 0))
+      {
+        hurtTtl = 25;
+      }
+
+      base.OnCollide(actor);
     }
   }
 }

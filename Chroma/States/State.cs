@@ -11,7 +11,6 @@
 
     public virtual void Load()
     {
-      
     }
 
     public virtual void Unload()
@@ -28,12 +27,10 @@
 
     public virtual void Update(int ticks)
     {
-      
     }
 
     public virtual void Draw()
     {
-      
     }
   }
 }

@@ -21,9 +21,8 @@ namespace Chroma
 
     private readonly Stack<State> states;
 
+    private FrameCounter frameCounter;
     private int ticks = 0;
-    private Animation animation;
-
 
     public Core(SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
     {
@@ -35,7 +34,7 @@ namespace Chroma
 
       states = new Stack<State>();
 
-      animation = new Animation();
+      frameCounter = new FrameCounter();
 
       Log.Print(String.Format("Screen size: {0}x{1}", screenWidth, screenHeight));
     }
@@ -76,9 +75,6 @@ namespace Chroma
       SoundManager.Load();
       MessageManager.Load();
 
-      animation.Add("live", SpriteManager.GetFrames("projectile_red_", new List<int>{ 1, 2, 3, 4 }));
-      animation.Play("live");
-
       ChangeStateTo(new PlayState(this));
     }
 
@@ -91,7 +87,7 @@ namespace Chroma
       SpriteManager.Unload();
     }
 
-    public void Update()
+    public void Update(GameTime gameTime)
     {
       Renderer.Update(ticks);
 
@@ -100,19 +96,15 @@ namespace Chroma
         GetCurrentState().Update(ticks);
       }
 
-      animation.Update(ticks);
-
       MessageManager.Update(ticks);
 
       ++ticks;
     }
 
-    public void Draw()
+    public void Draw(GameTime gameTime)
     {
-      var glowRed = SpriteManager.GetSprite("glow_red");
-      var projectile = SpriteManager.GetSprite("projectile_red_1");
-
-      var v = new Vector2(10, 10);
+      var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+      frameCounter.Update(deltaTime);
 
       Renderer.Begin(BlendState.AlphaBlend);
 
@@ -121,21 +113,16 @@ namespace Chroma
         GetCurrentState().Draw();
       }
 
-      Renderer.DrawSpriteS(glowRed, new Vector2(100, 25) - v, Color.White);
-      Renderer.DrawSpriteS(animation.GetCurrentFrame(), new Vector2(100, 25), Color.White);
+      Renderer.DrawTextS(
+        String.Format("fps:{0}", Math.Round(frameCounter.AverageFramesPerSecond)), 
+        new Vector2(Renderer.ScreenWidth - 40, 3),
+        Color.White * 0.25f
+      );
 
       Renderer.End();
 
-      var blendState = BlendState.Additive;
-      blendState.ColorSourceBlend = Blend.One;
-
-      Renderer.Begin(blendState);
-    
-      Renderer.DrawSpriteS(glowRed, new Vector2(150, 25) - v, Color.White);
-
-      Renderer.DrawSpriteS(animation.GetCurrentFrame(), new Vector2(150, 25), Color.White);
-
-      Renderer.End();
+      //var blendState = BlendState.Additive;
+      //blendState.ColorSourceBlend = Blend.One;
     }
   }
 }

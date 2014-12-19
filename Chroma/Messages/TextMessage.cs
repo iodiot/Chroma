@@ -1,7 +1,7 @@
 ﻿using System;
 using Chroma.Messages;
 
-namespace Chroma
+namespace Chroma.Messages
 {
   class TextMessage : Message
   {

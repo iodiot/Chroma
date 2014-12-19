@@ -125,6 +125,29 @@ namespace Chroma.Graphics
       );
     }
 
+    public void DrawTextS(string text, Vector2 position, Color tint, float scale = 1.0f)
+    {
+      const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?\"'/\\<>()[]{}abcdefghijklmnopqrstuvwxyz_               0123456789+-=*:;                          ";
+      const int charsPerRow = 42;
+      const int charWidth = 6;
+      const int charHeight = 8;
+
+      for (var i = 0; i < text.Length; ++i)
+      {
+        var n = chars.IndexOf(text[i]);
+
+        var sprite = new Sprite(
+          (n % charsPerRow) * charWidth,
+          (n / charsPerRow) * charHeight,
+          charWidth,
+          charHeight,
+          "font"
+        );
+
+        DrawSpriteS(sprite, new Vector2(position.X + i * scale * charWidth, position.Y), tint, scale);
+      }
+    }
+
     #endregion
   }
 }

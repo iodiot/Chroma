@@ -22,11 +22,15 @@ namespace Chroma
     public override void Update(int ticks)
     {
       animation.Update(ticks);
+
+      base.Update(ticks);
     }
 
     public override void Draw()
     {
       core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, Color.White);
+
+      base.Draw();
     }
   }
 }

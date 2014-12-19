@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -46,7 +45,7 @@ namespace Chroma
 
     protected override void Update(GameTime gameTime)
     {
-      core.Update();
+      core.Update(gameTime);
 
       base.Update(gameTime);
     }
@@ -55,7 +54,7 @@ namespace Chroma
     {
       GraphicsDevice.Clear(new Color(54, 74, 74));
 
-      core.Draw();
+      core.Draw(gameTime);
 
       base.Draw(gameTime);
     }

@@ -5,7 +5,7 @@ namespace Chroma.Actors
 {
   abstract class BodyActor : Actor
   {
-    public Vector2 Position { get; set; }
+    public Vector2 Position;
     public float X { get { return Position.X; } set { Position = new Vector2(value, Position.Y); } }
     public float Y { get { return Position.Y; } set { Position = new Vector2(Position.X, value); } }
     public int Width;
@@ -18,15 +18,30 @@ namespace Chroma.Actors
     {
       Position = position;
 
-      debugDraw = false;
-      debugColor = Color.Red;
+      Width = 0;
+      Height = 0;
+
+      debugDraw = true;
+      debugColor = Color.LightPink;
+    }
+
+    public override void Load()
+    {
+      Debug.Assert(Width != 0, "BodyActor.Load() : Field Width was not set");
+      Debug.Assert(Height != 0, "BodyActor.Load() : Field Height was not set");
     }
 
     public override void Draw()
     {
       if (debugDraw)
       {
-        core.Renderer.DrawRectangleW(Position, Width, Height, debugColor * 0.25f);
+        var bounding = GetBoundingRect();
+        core.Renderer.DrawRectangleW(
+          new Vector2(bounding.X, bounding.Y), 
+          bounding.Width,
+          bounding.Height,
+          debugColor * 0.25f
+        );
       }
 
       base.Draw();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using System.Linq;
 using Chroma.Actors;
 
 namespace Chroma.Actors
@@ -38,6 +39,11 @@ namespace Chroma.Actors
 
     public void Update(int ticks)
     {
+      if (ticks % 1000 == 0)
+      {
+        RemoveOffScreenActors();
+      }
+
       foreach (var actor in actorsToRemove)
       {
         actor.Unload();
@@ -85,24 +91,46 @@ namespace Chroma.Actors
 
     public void CheckCollisions()
     {
-      foreach (var actor in actors)
-      {
-        if ((actor !=player) && (actor is BodyActor))
-        {
-          var rect = (actor as BodyActor).GetBoundingRect();
+      var bodies = actors
+        .Where(actor => (actor is BodyActor) && !(actor is PlayerActor))
+        .Select(actor => actor as BodyActor);
 
-          if (rect.Intersects(player.GetBoundingRect()))
-          {
-            player.OnCollide(actor);
-            (actor as BodyActor).OnCollide(player);
-          }
+      foreach (var body in bodies)
+      {
+        var rect = body.GetBoundingRect();
+
+        if (rect.Intersects(player.GetBoundingRect()))
+        {
+          player.OnCollide(body);
+          body.OnCollide(player);
         }
       }
     }
 
-    public void SpawnCoin()
+    public void RemoveOffScreenActors()
     {
-      Add(new CoinActor(core, new Vector2(100, 25)));
+      const float criticalDistance = 25.0f;
+
+      var x = player.Position.X;
+      var n = 0;
+
+      foreach (var actor in actors)
+      {
+        if (actor is BodyActor)
+        {
+          var otherX = (actor as BodyActor).X;
+          if (x - otherX > criticalDistance)
+          {
+            Remove(actor);
+            ++n;
+          }
+        }
+      }
+
+      if (n > 0)
+      {
+        Log.Print(String.Format("{0} offscreen actors were removed", n));
+      }
     }
   }
 }
