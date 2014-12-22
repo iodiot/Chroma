@@ -17,7 +17,7 @@ namespace Chroma.States
     private float groundScroll;
     private int groundLevel;
 
-    private HealthUI health;
+    private HealthGui health;
 
     public PlayState(Core core) : base(core)
     {
@@ -43,7 +43,7 @@ namespace Chroma.States
 
       ActorManager.Add(new GolemActor(core, new Vector2(300, 27)));
 
-      health = new HealthUI(core);
+      health = new HealthGui(core);
     }
 
     public override void Load()

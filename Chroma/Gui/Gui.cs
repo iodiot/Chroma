@@ -3,11 +3,11 @@ using Chroma;
 
 namespace Chroma.UI
 {
-  abstract class UI
+  abstract class Gui
   {
     protected readonly Core core;
 
-    public UI(Core core)
+    public Gui(Core core)
     {
       this.core = core;
     }

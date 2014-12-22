@@ -5,13 +5,13 @@ using Chroma.Graphics;
 
 namespace Chroma.UI
 {
-  class HealthUI : UI
+  class HealthGui : Gui
   {
     private int hearts;
     private Sprite sprite;
     private Animation animation;
 
-    public HealthUI(Core core) : base(core)
+    public HealthGui(Core core) : base(core)
     {
       hearts = 3;
 

@@ -161,8 +161,8 @@
     <Compile Include="Actors\GolemActor.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="FrameCounter.cs" />
-    <Compile Include="Ui\UI.cs" />
-    <Compile Include="Ui\HealthUI.cs" />
+    <Compile Include="Gui\Gui.cs" />
+    <Compile Include="Gui\HealthGui.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -172,7 +172,7 @@
     <Folder Include="Messages\" />
     <Folder Include="Content\Images\" />
     <Folder Include="Graphics\" />
-    <Folder Include="Ui\" />
+    <Folder Include="Gui\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\click1.wav">
