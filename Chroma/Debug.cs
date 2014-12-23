@@ -2,7 +2,7 @@
 
 namespace Chroma
 {
-  sealed class Debug
+  public sealed class Debug
   {
     public static void Assert(bool condition, string message)
     {

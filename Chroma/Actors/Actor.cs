@@ -4,7 +4,7 @@ using Chroma.Messages;
 
 namespace Chroma.Actors
 {
-  abstract class Actor : ISubscriber
+  public abstract class Actor : ISubscriber
   {
     public string Handle { get; protected set; }
 

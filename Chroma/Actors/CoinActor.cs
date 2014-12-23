@@ -10,13 +10,13 @@ using Chroma.Graphics;
 
 namespace Chroma.Actors
 {
-  enum CoinType
+  public enum CoinType
   {
     Vertical,
     Horizontal
   };
 
-  class CoinActor : BodyActor
+  public class CoinActor : BodyActor
   {
     private readonly Animation animation;
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Chroma.Messages
 {
-  sealed class MessageManager
+  public sealed class MessageManager
   {
-    private struct MessageDesc
+    private sealed class MessageDesc
     {
       public Message Message;
       public object Sender;
@@ -31,7 +31,7 @@ namespace Chroma.Messages
 
     public void Unload()
     {
-      Debug.Assert(handles.Count == 0, "~MessageManager() : Handles list is not empty");
+      Debug.Assert(handles.Count == 0, "MessageManager.Unload() : Handles list is not empty");
     }
 
     public void Update(int ticks)

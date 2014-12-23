@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Chroma.Actors;
 using Chroma.Graphics;
+using Chroma.Messages;
 
 namespace Chroma
 {
-  class GolemActor : BodyActor
+  public class GolemActor : BodyActor
   {
     private readonly Animation animation;
+    private int ttl = 50;
 
     public GolemActor(Core core, Vector2 position) : base(core, position)
     {
@@ -22,6 +24,16 @@ namespace Chroma
     public override void Update(int ticks)
     {
       animation.Update(ticks);
+
+      if (ttl > 0)
+      {
+        --ttl;
+      }
+      else
+      {
+        core.MessageManager.Send(new RemoveActorMessage(this), this);
+        core.MessageManager.Send(new AddActorMessage(new ParticleActor(core, Position, animation.GetCurrentFrame())), this);
+      }
 
       base.Update(ticks);
     }

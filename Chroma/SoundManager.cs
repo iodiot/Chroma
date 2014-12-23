@@ -7,7 +7,7 @@ using Chroma.Messages;
 
 namespace Chroma
 {
-  sealed class SoundManager
+  public sealed class SoundManager
   {
     private readonly Core core; 
     private readonly Dictionary<string, SoundEffect> sounds;

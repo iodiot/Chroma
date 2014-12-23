@@ -11,7 +11,7 @@ using Chroma.Graphics;
 
 namespace Chroma
 {
-  sealed class Core
+  public sealed class Core
   {
     public SpriteManager SpriteManager { get; private set; }
     public Renderer Renderer { get; private set; }

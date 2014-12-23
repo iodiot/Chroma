@@ -163,6 +163,9 @@
     <Compile Include="FrameCounter.cs" />
     <Compile Include="Gui\Gui.cs" />
     <Compile Include="Gui\HealthGui.cs" />
+    <Compile Include="Graphics\Particle.cs" />
+    <Compile Include="Graphics\ParticleManager.cs" />
+    <Compile Include="Actors\ParticleActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

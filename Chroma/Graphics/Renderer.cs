@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Chroma.Graphics
 {
-  sealed class Renderer
+  public sealed class Renderer
   {
     public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth/2, ScreenHeight/2); } }
 
@@ -127,24 +127,24 @@ namespace Chroma.Graphics
 
     public void DrawTextS(string text, Vector2 position, Color tint, float scale = 1.0f)
     {
-      const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?\"'/\\<>()[]{}abcdefghijklmnopqrstuvwxyz_               0123456789+-=*:;                          ";
-      const int charsPerRow = 42;
-      const int charWidth = 6;
-      const int charHeight = 8;
+      const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?\"'/\\<>()[]{}abcdefghijklmnopqrstuvwxyz_               0123456789+-=*:;                          ";
+      const int CharsPerRow = 42;
+      const int CharWidth = 6;
+      const int CharHeight = 8;
 
       for (var i = 0; i < text.Length; ++i)
       {
-        var n = chars.IndexOf(text[i]);
+        var n = Chars.IndexOf(text[i]);
 
-        var sprite = new Sprite(
-          (n % charsPerRow) * charWidth,
-          (n / charsPerRow) * charHeight,
-          charWidth,
-          charHeight,
-          "font"
-        );
+        var sprite = new Sprite() {
+          X = (n % CharsPerRow) * CharWidth,
+          Y = (n / CharsPerRow) * CharHeight,
+          Width = CharWidth,
+          Height = CharHeight,
+          TextureName = "font"
+        };
 
-        DrawSpriteS(sprite, new Vector2(position.X + i * scale * charWidth, position.Y), tint, scale);
+        DrawSpriteS(sprite, new Vector2(position.X + i * scale * CharWidth, position.Y), tint, scale);
       }
     }
 

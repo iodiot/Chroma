@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace Chroma.States
 {
-  class MenuState : State
+  public class MenuState : State
   {
     public MenuState(Core core) : base(core)
     {

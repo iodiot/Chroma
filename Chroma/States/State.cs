@@ -1,6 +1,6 @@
 ﻿namespace Chroma.States
 {
-  abstract class State
+  public abstract class State
   {
     protected readonly Core core;
 

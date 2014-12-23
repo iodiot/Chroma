@@ -3,7 +3,7 @@ using Chroma.Actors;
 
 namespace Chroma.Messages
 {
-  class AddActorMessage : Message
+  public class AddActorMessage : Message
   {
     public Actor Actor { get; private set; }
 

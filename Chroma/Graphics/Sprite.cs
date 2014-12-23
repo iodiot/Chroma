@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace Chroma.Graphics
 {
-  sealed class Sprite
+  public sealed class Sprite
   {
     public string TextureName;
     public int X;
@@ -10,15 +11,5 @@ namespace Chroma.Graphics
     public int Width;
     public int Height;
     public Vector2 AnchorPoint;
-
-    public Sprite(int x, int y, int width, int height, string textureName)
-    {
-      X = x;
-      Y = y;
-      Width = width;
-      Height = height;
-      TextureName = textureName;
-      AnchorPoint = Vector2.Zero;
-    }
   }
 }

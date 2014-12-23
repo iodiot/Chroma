@@ -5,11 +5,12 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Actors;
 using Chroma.Messages;
+using Chroma.Graphics;
 using Chroma.UI;
 
 namespace Chroma.States
 {
-  class PlayState : State, ISubscriber
+  public class PlayState : State, ISubscriber
   {
     public ActorManager ActorManager { get; private set; }
     private PlayerActor player;
@@ -33,15 +34,13 @@ namespace Chroma.States
       ActorManager = new ActorManager(core);
       ActorManager.Add(player);
 
-      //ActorManager.SpawnCoin();
+      //for (var i = 0; i < 100; ++i)
+      //{
+      //  var y = (float)(10 * Math.Sin(i * 0.5));
+      //  ActorManager.Add(new CoinActor(core, new Vector2(50 + i * 10, 25 + y)));
+      //}
 
-      for (var i = 0; i < 100; ++i)
-      {
-        var y = (float)(10 * Math.Sin(i * 0.5));
-        ActorManager.Add(new CoinActor(core, new Vector2(50 + i * 10, 25 + y)));
-      }
-
-      ActorManager.Add(new GolemActor(core, new Vector2(300, 27)));
+      //ActorManager.Add(new GolemActor(core, new Vector2(300, 27)));
 
       health = new HealthGui(core);
     }

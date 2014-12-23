@@ -3,7 +3,7 @@ using Chroma;
 
 namespace Chroma.UI
 {
-  abstract class Gui
+  public abstract class Gui
   {
     protected readonly Core core;
 

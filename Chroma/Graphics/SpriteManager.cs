@@ -3,19 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Json;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Chroma.Graphics
 {
-  sealed class SpriteManager
+  public sealed class SpriteManager
   {
+    // shortcuts
     public Texture2D OnePixel { get; private set; }
     public Texture2D Font { get; private set; }
 
     private readonly Core core;
     private readonly Dictionary<string, Sprite> sprites;
     private readonly Dictionary<string, Texture2D> textures;
+    private readonly Dictionary<string, Color[]> texturesData;
 
     public SpriteManager(Core core)
     {
@@ -23,6 +26,7 @@ namespace Chroma.Graphics
 
       sprites = new Dictionary<string, Sprite>();
       textures = new Dictionary<string, Texture2D>();
+      texturesData = new Dictionary<string, Color[]>();
     }
 
     public void Load()
@@ -32,13 +36,22 @@ namespace Chroma.Graphics
       OnePixel = core.Content.Load<Texture2D>(@"Images/one.png");
       Font = core.Content.Load<Texture2D>(@"Images/font.png");
 
-      textures.Add("one", OnePixel);
-      textures.Add("font", Font);
+      AddTexture("one", OnePixel);
+      AddTexture("font", Font);
     }
 
     public void Unload()
     {
 
+    }
+
+    private void AddTexture(string textureName, Texture2D texture)
+    {
+      textures.Add(textureName, texture);
+
+      var colors = new Color[texture.Width * texture.Height];
+      texture.GetData<Color>(colors);
+      texturesData.Add(textureName, colors);
     }
 
     private void LoadFromFile(string fileName)
@@ -49,10 +62,9 @@ namespace Chroma.Graphics
         results = JsonObject.Load(streamReader);
       }
 
-      string textureFileName = results["image-path"].ToString().Replace("\"", "");
+      string textureName = results["image-path"].ToString().Replace("\"", "");
 
-      // load texture
-      textures.Add(textureFileName, core.Content.Load<Texture2D>(String.Format(@"Images/{0}", textureFileName)));
+      AddTexture(textureName, core.Content.Load<Texture2D>(String.Format(@"Images/{0}", textureName)));
 
       var array = (JsonArray)results["sprites"];
       foreach (var sprite in array)
@@ -63,7 +75,10 @@ namespace Chroma.Graphics
         var width = sprite["width"];
         var height = sprite["height"];
 
-        sprites.Add(name, new Sprite(x, y, width, height, textureFileName));
+        sprites.Add(
+          name,
+          new Sprite() { X = x, Y = y, Width = width, Height = height, TextureName = textureName }
+        );
       }
     }
 
@@ -71,7 +86,8 @@ namespace Chroma.Graphics
     {
       Debug.Assert(sprites.ContainsKey(name), String.Format("SpriteManager.GetSprite() : Sprite {0} is missing", name));
 
-      return sprites[name];
+      var s = sprites[name];
+      return new Sprite() { X = s.X, Y = s.Y, Width = s.Width, Height = s.Height, TextureName = s.TextureName };
     }
 
     public Texture2D GetTexture(string name)
@@ -91,6 +107,13 @@ namespace Chroma.Graphics
       }
 
       return result;
+    }
+
+    public Color[] GetTextureData(string name)
+    {
+      Debug.Assert(texturesData.ContainsKey(name), String.Format("SpriteManager.GetTextureData() : Texture {0} is missing", name));
+
+      return texturesData[name];
     }
   }
 }

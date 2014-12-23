@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Chroma.Graphics
 {
-  sealed class Animation
+  public sealed class Animation
   {
     public string CurrentPlay { get; private set; }
     public float Speed { get; private set; }

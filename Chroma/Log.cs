@@ -2,7 +2,7 @@
 
 namespace Chroma
 {
-  sealed class Log
+  public sealed class Log
   {
     public static void Print(string message)
     {

@@ -2,7 +2,7 @@
 
 namespace Chroma.Messages
 {
-  interface ISubscriber
+  public interface ISubscriber
   {
     void OnMessage(Message message, object sender);
   }

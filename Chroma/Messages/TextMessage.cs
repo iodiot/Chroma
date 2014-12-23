@@ -3,7 +3,7 @@ using Chroma.Messages;
 
 namespace Chroma.Messages
 {
-  class TextMessage : Message
+  public class TextMessage : Message
   {
     public string Text { get; private set; }
 

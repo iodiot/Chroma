@@ -6,7 +6,7 @@ using Chroma.Actors;
 
 namespace Chroma.Actors
 {
-  sealed class ActorManager
+  public sealed class ActorManager
   {
     private readonly Core core;
     private readonly List<Actor> actors, actorsToAdd, actorsToRemove;
@@ -39,7 +39,7 @@ namespace Chroma.Actors
 
     public void Update(int ticks)
     {
-      if (ticks % 1000 == 0)
+      if (ticks % 100 == 0)
       {
         RemoveOffScreenActors();
       }

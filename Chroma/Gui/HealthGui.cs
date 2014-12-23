@@ -5,7 +5,7 @@ using Chroma.Graphics;
 
 namespace Chroma.UI
 {
-  class HealthGui : Gui
+  public class HealthGui : Gui
   {
     private int hearts;
     private Sprite sprite;
@@ -17,7 +17,7 @@ namespace Chroma.UI
 
       sprite = core.SpriteManager.GetSprite("heart_1");
       animation = new Animation();
-      animation.AddAndPlay("live", core.SpriteManager.GetFrames("heart_", new List<int> { 1, 2, 3, 4  }));
+      animation.AddAndPlay("live", core.SpriteManager.GetFrames("heart_", new List<int> { 1, 2, 3, 4 }));
     }
 
     public override void Update(int ticks)

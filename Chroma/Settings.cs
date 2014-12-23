@@ -2,7 +2,7 @@
 
 namespace Chroma
 {
-  sealed class Settings
+  public sealed class Settings
   {
     public const int ScaleFactor = 5;
   }

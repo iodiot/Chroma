@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Chroma.Actors
 {
-  abstract class BodyActor : Actor
+  public abstract class BodyActor : Actor
   {
     public Vector2 Position;
     public float X { get { return Position.X; } set { Position = new Vector2(value, Position.Y); } }
@@ -21,7 +21,7 @@ namespace Chroma.Actors
       Width = 0;
       Height = 0;
 
-      debugDraw = true;
+      debugDraw = false;
       debugColor = Color.LightPink;
     }
 

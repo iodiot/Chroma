@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Graphics;
+using Chroma.Messages;
 
 namespace Chroma.Actors
 {
-  class PlayerActor : BodyActor
+  public class PlayerActor : BodyActor
   {
     private readonly Animation animation; 
 
@@ -76,6 +77,13 @@ namespace Chroma.Actors
       {
         jumpTtl = 25;
         animation.Play("raise");
+
+        core.MessageManager.Send(
+          new AddActorMessage(
+            new GolemActor(core, new Vector2(X + 200, 27))
+          ),
+          this
+        );
       }
     }
 
