@@ -108,7 +108,7 @@ namespace Chroma.States
     {
       var grass = core.SpriteManager.GetSprite("floor_grass");
 
-      for (var i = 0; i < 15; ++i)
+      for (var i = 0; i < 20; ++i)
       {
         core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i - groundScroll % grass.Width + 7, groundLevel - 3), Color.White);        
       }
@@ -116,6 +116,11 @@ namespace Chroma.States
 
     public override void Update(int ticks)
     {
+      if (ticks % 100 == 0)
+      {
+        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + 250, 27)));
+      }
+
       groundScroll += 1.0f;
 
       ActorManager.Update(ticks);

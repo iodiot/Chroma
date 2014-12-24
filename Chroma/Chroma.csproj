@@ -168,6 +168,7 @@
     <Compile Include="Particles\ParticleBehaviour.cs" />
     <Compile Include="Particles\DispersalParticleBehaviour.cs" />
     <Compile Include="Actors\CollidableActor.cs" />
+    <Compile Include="Actors\ProjectileActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

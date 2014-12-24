@@ -13,6 +13,7 @@ namespace Chroma.Actors
 
     private int jumpTtl;
     private int hurtTtl;
+    private int fireTtl;
 
     private float groundLevel;
 
@@ -30,6 +31,7 @@ namespace Chroma.Actors
 
       jumpTtl = 0;
       hurtTtl = 0;
+      fireTtl = 0;
       groundLevel = position.Y;
     }
 
@@ -40,12 +42,17 @@ namespace Chroma.Actors
       if (jumpTtl > 0)
       {
         --jumpTtl;
-        Y = groundLevel - 25.0f * (float)Math.Sin((double)jumpTtl / 25.0 * Math.PI);
+        Y = groundLevel - 30.0f * (float)Math.Sin((double)jumpTtl / 25.0 * Math.PI);
 
         if (jumpTtl == 0)
         {
           animation.Play("walk");
         }
+      }
+
+      if (fireTtl > 0)
+      {
+        --fireTtl;
       }
 
       if (hurtTtl > 0)
@@ -72,14 +79,24 @@ namespace Chroma.Actors
     {
       var touchState = TouchPanel.GetState();
 
-      if (touchState.Count == 1 && (jumpTtl == 0))
+      if (touchState.Count != 1)
+      {
+        return;
+      }
+
+      if ((touchState[0].Position.X < core.Renderer.ScreenWidth / 2) && (jumpTtl == 0))
       {
         jumpTtl = 25;
         animation.Play("raise");
+      }
+
+      if ((touchState[0].Position.X >= core.Renderer.ScreenWidth / 2) && (fireTtl == 0))
+      {
+        fireTtl = 25;
 
         core.MessageManager.Send(
           new AddActorMessage(
-            new GolemActor(core, new Vector2(X + 200, 27))
+            new ProjectileActor(core, Position + new Vector2(25, 10))
           ),
           this
         );

@@ -12,7 +12,7 @@ namespace Chroma.Actors
 
     public CollidableActor(Core core, Vector2 position) : base(core, position)
     {
-      debugDraw = true;
+      debugDraw = false;
       debugColor = Color.LightPink;
 
       boundingBox = Rectangle.Empty;

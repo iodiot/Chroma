@@ -10,7 +10,6 @@ namespace Chroma
   public class GolemActor : CollidableActor
   {
     private readonly Animation animation;
-    private int ttl = 50;
 
     public GolemActor(Core core, Vector2 position) : base(core, position)
     {
@@ -24,16 +23,6 @@ namespace Chroma
     {
       animation.Update(ticks);
 
-      if (ttl > 0)
-      {
-        --ttl;
-      }
-      else
-      {
-        core.MessageManager.Send(new RemoveActorMessage(this), this);
-        core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);
-      }
-
       base.Update(ticks);
     }
 
@@ -42,6 +31,17 @@ namespace Chroma
       core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, Color.White);
 
       base.Draw();
+    }
+
+    public override void OnCollide(CollidableActor other)
+    {
+      if (other is ProjectileActor)
+      {
+        core.MessageManager.Send(new RemoveActorMessage(this), this);
+        core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);
+      }
+
+      base.OnCollide(other);
     }
   }
 }

@@ -91,18 +91,27 @@ namespace Chroma.Actors
 
     public void CheckCollisions()
     {
-      var bodies = actors
-        .Where(actor => (actor is CollidableActor) && !(actor is PlayerActor))
+      var what = actors
+        .Where(actor => (actor is PlayerActor) || (actor is ProjectileActor))
         .Select(actor => actor as CollidableActor);
 
-      foreach (var body in bodies)
-      {
-        var rect = body.GetBoundingBox();
+      var with = actors
+        .Where(actor => (actor is CollidableActor) && !(actor is PlayerActor) && !(actor is ProjectileActor))
+        .Select(actor => actor as CollidableActor);
 
-        if (rect.Intersects(player.GetBoundingBox()))
+      foreach (var a in what)
+      {
+        var rectA = a.GetBoundingBox();
+
+        foreach (var b in with)
         {
-          player.OnCollide(body);
-          body.OnCollide(player);
+          var rectB = b.GetBoundingBox();
+
+          if (rectA.Intersects(rectB))
+          {
+            a.OnCollide(b);
+            b.OnCollide(a);
+          }
         }
       }
     }
