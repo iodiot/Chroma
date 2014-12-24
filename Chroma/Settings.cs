@@ -4,7 +4,7 @@ namespace Chroma
 {
   public sealed class Settings
   {
-    public const int ScaleFactor = 5;
+    public const float ScreenScale = 5.0f;
   }
 }
 

@@ -47,10 +47,7 @@ namespace Chroma.Graphics
 
     public void Update(int ticks)
     {
-      if (animations[CurrentPlay] == null)
-      {
-        return;
-      }
+      Debug.Assert(animations[CurrentPlay] != null, "Animation.Update() : Current play is missing");
 
       timeLine += Speed;
 
@@ -62,10 +59,7 @@ namespace Chroma.Graphics
 
     public Sprite GetCurrentFrame()
     {
-      if (animations[CurrentPlay] == null)
-      {
-        return null;
-      }
+      Debug.Assert(animations[CurrentPlay] != null, "Animation.GetCurrentFrame() : Current play is missing");
 
       return animations[CurrentPlay][(int)timeLine];
     }

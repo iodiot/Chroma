@@ -133,7 +133,6 @@
     <Compile Include="Log.cs" />
     <Compile Include="Actors\Actor.cs" />
     <Compile Include="Actors\PlayerActor.cs" />
-    <Compile Include="Actors\BodyActor.cs" />
     <Compile Include="States\PlayState.cs" />
     <Compile Include="SoundManager.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -163,9 +162,12 @@
     <Compile Include="FrameCounter.cs" />
     <Compile Include="Gui\Gui.cs" />
     <Compile Include="Gui\HealthGui.cs" />
-    <Compile Include="Graphics\Particle.cs" />
-    <Compile Include="Graphics\ParticleManager.cs" />
-    <Compile Include="Actors\ParticleActor.cs" />
+    <Compile Include="Actors\SwarmActor.cs" />
+    <Compile Include="Particles\ParticleManager.cs" />
+    <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\ParticleBehaviour.cs" />
+    <Compile Include="Particles\DispersalParticleBehaviour.cs" />
+    <Compile Include="Actors\CollidableActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -176,6 +178,7 @@
     <Folder Include="Content\Images\" />
     <Folder Include="Graphics\" />
     <Folder Include="Gui\" />
+    <Folder Include="Particles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\click1.wav">

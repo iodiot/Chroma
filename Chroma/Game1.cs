@@ -23,8 +23,8 @@ namespace Chroma
 
     protected override void Initialize()
     {
-      graphics.PreferredBackBufferWidth /= Settings.ScaleFactor;
-      graphics.PreferredBackBufferHeight /= Settings.ScaleFactor;
+      graphics.PreferredBackBufferWidth = (int)(graphics.PreferredBackBufferWidth / Settings.ScreenScale);
+      graphics.PreferredBackBufferHeight = (int)(graphics.PreferredBackBufferHeight / Settings.ScreenScale);
       graphics.ApplyChanges();
 
       base.Initialize();

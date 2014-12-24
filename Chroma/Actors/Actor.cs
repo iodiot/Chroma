@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Chroma.Messages;
 
 namespace Chroma.Actors
@@ -7,12 +8,17 @@ namespace Chroma.Actors
   public abstract class Actor : ISubscriber
   {
     public string Handle { get; protected set; }
+    public Vector2 Position;
+    public float X { get { return Position.X; } set { Position = new Vector2(value, Position.Y); } }
+    public float Y { get { return Position.Y; } set { Position = new Vector2(Position.X, value); } }
 
     protected readonly Core core;
 
-    public Actor(Core core)
+    public Actor(Core core, Vector2 position)
     {
       this.core = core;
+
+      Position = position;
 
       Handle = String.Empty;
     }

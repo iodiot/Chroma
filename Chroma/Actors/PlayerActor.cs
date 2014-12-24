@@ -7,7 +7,7 @@ using Chroma.Messages;
 
 namespace Chroma.Actors
 {
-  public class PlayerActor : BodyActor
+  public class PlayerActor : CollidableActor
   {
     private readonly Animation animation; 
 
@@ -18,10 +18,9 @@ namespace Chroma.Actors
 
     public PlayerActor(Core core, Vector2 position) : base(core, position)
     {
-      Width = 20;
-      Height = core.SpriteManager.GetSprite("druid_walk_1").Height;
-
       Handle = "player";
+
+      boundingBox = new Rectangle(5, 0, 12, 21);
 
       animation = new Animation();
       animation.Add("walk", core.SpriteManager.GetFrames("druid_walk_", new List<int>{ 1, 2, 3, 4 }));
@@ -87,14 +86,14 @@ namespace Chroma.Actors
       }
     }
 
-    public override void OnCollide(Actor actor)
+    public override void OnCollide(CollidableActor other)
     {
-      if ((actor is GolemActor) && (hurtTtl == 0))
+      if ((other is GolemActor) && (hurtTtl == 0))
       {
         hurtTtl = 25;
       }
 
-      base.OnCollide(actor);
+      base.OnCollide(other);
     }
   }
 }

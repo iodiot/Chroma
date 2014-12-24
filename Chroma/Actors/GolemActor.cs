@@ -7,18 +7,17 @@ using Chroma.Messages;
 
 namespace Chroma
 {
-  public class GolemActor : BodyActor
+  public class GolemActor : CollidableActor
   {
     private readonly Animation animation;
     private int ttl = 50;
 
     public GolemActor(Core core, Vector2 position) : base(core, position)
     {
+      boundingBox = new Rectangle(0, 0, 20, 28);
+
       animation = new Animation();
       animation.AddAndPlay("live", core.SpriteManager.GetFrames("golem_", new List<int>{ 1, 2, 3, 4, 5, 6 }));
-
-      Width = animation.GetCurrentFrame().Width;
-      Height = animation.GetCurrentFrame().Height;
     }
 
     public override void Update(int ticks)
@@ -32,7 +31,7 @@ namespace Chroma
       else
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
-        core.MessageManager.Send(new AddActorMessage(new ParticleActor(core, Position, animation.GetCurrentFrame())), this);
+        core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);
       }
 
       base.Update(ticks);

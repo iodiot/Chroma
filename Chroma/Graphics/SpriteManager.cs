@@ -115,5 +115,25 @@ namespace Chroma.Graphics
 
       return texturesData[name];
     }
+
+    public Sprite GetFontSprite(char ch)
+    {
+      const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?\"'/\\<>()[]{}abcdefghijklmnopqrstuvwxyz_               0123456789+-=*:;                          ";
+      const int CharsPerRow = 42;
+      const int CharWidth = 6;
+      const int CharHeight = 8;
+
+      var n = Chars.IndexOf(ch);
+
+      var sprite = new Sprite() {
+        X = (n % CharsPerRow) * CharWidth,
+        Y = (n / CharsPerRow) * CharHeight,
+        Width = CharWidth,
+        Height = CharHeight,
+        TextureName = "font"
+      };
+
+      return sprite;
+    }
   }
 }

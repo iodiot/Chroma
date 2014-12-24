@@ -39,7 +39,7 @@ namespace Chroma.Graphics
 
     public void Begin(BlendState blendState)
     {
-      var scale = Matrix.CreateScale(new Vector3(Settings.ScaleFactor, Settings.ScaleFactor, 1));
+      var scale = Matrix.CreateScale(new Vector3(Settings.ScreenScale, Settings.ScreenScale, 1));
       spriteBatch.Begin(SpriteSortMode.Deferred, blendState, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, null, scale);
     }
 
@@ -127,25 +127,17 @@ namespace Chroma.Graphics
 
     public void DrawTextS(string text, Vector2 position, Color tint, float scale = 1.0f)
     {
-      const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?\"'/\\<>()[]{}abcdefghijklmnopqrstuvwxyz_               0123456789+-=*:;                          ";
-      const int CharsPerRow = 42;
       const int CharWidth = 6;
-      const int CharHeight = 8;
 
       for (var i = 0; i < text.Length; ++i)
       {
-        var n = Chars.IndexOf(text[i]);
-
-        var sprite = new Sprite() {
-          X = (n % CharsPerRow) * CharWidth,
-          Y = (n / CharsPerRow) * CharHeight,
-          Width = CharWidth,
-          Height = CharHeight,
-          TextureName = "font"
-        };
-
-        DrawSpriteS(sprite, new Vector2(position.X + i * scale * CharWidth, position.Y), tint, scale);
+        DrawSpriteS(core.SpriteManager.GetFontSprite(text[i]), new Vector2(position.X + i * scale * CharWidth, position.Y), tint, scale);
       }
+    }
+
+    public void FillScreen(Color color)
+    {
+      core.Renderer.DrawRectangleS(Vector2.Zero, ScreenWidth, ScreenHeight, color);
     }
 
     #endregion

@@ -1,6 +1,8 @@
-﻿namespace Chroma.States
+﻿using Chroma.Messages;
+
+namespace Chroma.States
 {
-  public abstract class State
+  public abstract class State: ISubscriber
   {
     protected readonly Core core;
 
@@ -30,6 +32,10 @@
     }
 
     public virtual void Draw()
+    {
+    }
+
+    public virtual void OnMessage(Message message, object sender)
     {
     }
   }

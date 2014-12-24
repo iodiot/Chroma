@@ -8,14 +8,12 @@ namespace Chroma.UI
   public class HealthGui : Gui
   {
     private int hearts;
-    private Sprite sprite;
     private Animation animation;
 
     public HealthGui(Core core) : base(core)
     {
       hearts = 3;
 
-      sprite = core.SpriteManager.GetSprite("heart_1");
       animation = new Animation();
       animation.AddAndPlay("live", core.SpriteManager.GetFrames("heart_", new List<int> { 1, 2, 3, 4 }));
     }
@@ -31,7 +29,7 @@ namespace Chroma.UI
     {
       for (var i = 0; i < hearts; ++i)
       {
-        core.Renderer.DrawSpriteS(animation.GetCurrentFrame(), new Vector2(5 + 1.1f * i * sprite.Width, 5), Color.White);
+        core.Renderer.DrawSpriteS(animation.GetCurrentFrame(), new Vector2(5 + 1.1f * i * animation.GetCurrentFrame().Width, 5), Color.White);
       }
 
       base.Draw();

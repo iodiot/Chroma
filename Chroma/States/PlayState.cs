@@ -10,7 +10,7 @@ using Chroma.UI;
 
 namespace Chroma.States
 {
-  public class PlayState : State, ISubscriber
+  public class PlayState : State
   {
     public ActorManager ActorManager { get; private set; }
     private PlayerActor player;
@@ -38,7 +38,7 @@ namespace Chroma.States
       //{
       //  var y = (float)(10 * Math.Sin(i * 0.5));
       //  ActorManager.Add(new CoinActor(core, new Vector2(50 + i * 10, 25 + y)));
-      //}
+      // }
 
       //ActorManager.Add(new GolemActor(core, new Vector2(300, 27)));
 
@@ -76,6 +76,7 @@ namespace Chroma.States
     {
       var ground = core.SpriteManager.GetSprite("ground");
       var earth = core.SpriteManager.GetSprite("earth");
+      var floor = core.SpriteManager.GetSprite("floor");
 
       for (var i = 0; i < 10; ++i)
       {
@@ -84,7 +85,12 @@ namespace Chroma.States
 
       for (var i = 0; i < 15; ++i)
       {
-        core.Renderer.DrawSpriteS(ground, new Vector2(ground.Width * i - groundScroll % ground.Width, groundLevel), Color.White);        
+        core.Renderer.DrawSpriteS(floor, new Vector2(floor.Width * i - groundScroll % floor.Width, groundLevel - 9), Color.White);        
+      }
+
+      for (var i = 0; i < 15; ++i)
+      {
+        core.Renderer.DrawSpriteS(ground, new Vector2(ground.Width * i - groundScroll % ground.Width, groundLevel + 3), Color.White);        
       }
     }
 
@@ -94,17 +100,17 @@ namespace Chroma.States
 
       for (var i = 0; i < 10; ++i)
       {
-        core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i - (groundScroll * 0.75f) % grass.Width, groundLevel - grass.Height), Color.White);   
+        core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i - (groundScroll * 0.75f) % grass.Width, groundLevel - grass.Height - 3), Color.White);   
       }
     }
 
     private void DrawFgGrass()
     {
-      var grass = core.SpriteManager.GetSprite("fg_grass_1");
+      var grass = core.SpriteManager.GetSprite("floor_grass");
 
-      for (var i = 0; i < 5; ++i)
+      for (var i = 0; i < 15; ++i)
       {
-        core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i, core.Renderer.ScreenHeight - grass.Height), Color.White);   
+        core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i - groundScroll % grass.Width + 7, groundLevel - 3), Color.White);        
       }
     }
 
@@ -132,12 +138,12 @@ namespace Chroma.States
       );
 
       DrawTrees();
-      DrawGround();
       DrawGrass();
+      DrawGround();
 
       ActorManager.Draw();
 
-      //DrawFgGrass();
+      DrawFgGrass();
 
       health.Draw();
 
@@ -148,7 +154,7 @@ namespace Chroma.States
     {
     }
 
-    public void OnMessage(Message message, object sender)
+    public override void OnMessage(Message message, object sender)
     {
       switch (message.Type)
       {
@@ -159,6 +165,8 @@ namespace Chroma.States
           ActorManager.Remove((message as RemoveActorMessage).Actor);
           break;
       }
+
+      base.OnMessage(message, sender);
     }
   }
 }

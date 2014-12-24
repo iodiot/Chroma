@@ -7,7 +7,6 @@ using Chroma.States;
 using Chroma.Messages;
 using Chroma.Graphics;
 
-
 namespace Chroma.Actors
 {
   public enum CoinType
@@ -16,14 +15,13 @@ namespace Chroma.Actors
     Horizontal
   };
 
-  public class CoinActor : BodyActor
+  public class CoinActor : CollidableActor
   {
     private readonly Animation animation;
 
     public CoinActor(Core core, Vector2 position, CoinType type = CoinType.Vertical) : base(core, position)
     {
-      Width = core.SpriteManager.GetSprite("coin_v1").Width;
-      Height = core.SpriteManager.GetSprite("coin_v1").Height;
+      boundingBox = new Rectangle(0, 0, 5, 5);
 
       animation = new Animation();
       var prefix = String.Format("coin_{0}", type == CoinType.Vertical ? "v" : "h");
@@ -46,13 +44,13 @@ namespace Chroma.Actors
       base.Draw();
     }
 
-    public override void OnCollide(Actor actor)
+    public override void OnCollide(CollidableActor other)
     {
       core.SoundManager.Play("click");
 
       core.MessageManager.Send(new RemoveActorMessage(this), this);
 
-      base.OnCollide(actor);
+      base.OnCollide(other);
     }
   }
 }

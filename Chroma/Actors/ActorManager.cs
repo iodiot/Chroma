@@ -92,14 +92,14 @@ namespace Chroma.Actors
     public void CheckCollisions()
     {
       var bodies = actors
-        .Where(actor => (actor is BodyActor) && !(actor is PlayerActor))
-        .Select(actor => actor as BodyActor);
+        .Where(actor => (actor is CollidableActor) && !(actor is PlayerActor))
+        .Select(actor => actor as CollidableActor);
 
       foreach (var body in bodies)
       {
-        var rect = body.GetBoundingRect();
+        var rect = body.GetBoundingBox();
 
-        if (rect.Intersects(player.GetBoundingRect()))
+        if (rect.Intersects(player.GetBoundingBox()))
         {
           player.OnCollide(body);
           body.OnCollide(player);
@@ -116,9 +116,9 @@ namespace Chroma.Actors
 
       foreach (var actor in actors)
       {
-        if (actor is BodyActor)
+        if (actor is CollidableActor)
         {
-          var otherX = (actor as BodyActor).X;
+          var otherX = (actor as CollidableActor).X;
           if (x - otherX > criticalDistance)
           {
             Remove(actor);
@@ -127,10 +127,10 @@ namespace Chroma.Actors
         }
       }
 
-      if (n > 0)
-      {
-        Log.Print(String.Format("{0} offscreen actors were removed", n));
-      }
+      //if (n > 0)
+      //{
+      //  Log.Print(String.Format("{0} offscreen actors were removed", n));
+      //}
     }
   }
 }

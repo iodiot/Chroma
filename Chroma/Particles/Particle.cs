@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using Chroma.Graphics;
 
-namespace Chroma.Graphics
+namespace Chroma.Particles
 {
   public sealed class Particle
   {
