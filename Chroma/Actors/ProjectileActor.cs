@@ -39,6 +39,7 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
+      //core.Renderer.DrawSpriteW("glow", Position, Color.White);
       core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, Color.White);
 
       base.Draw();

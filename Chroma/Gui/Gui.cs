@@ -1,7 +1,7 @@
 ﻿using System;
 using Chroma;
 
-namespace Chroma.UI
+namespace Chroma.Gui
 {
   public abstract class Gui
   {

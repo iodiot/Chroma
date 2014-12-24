@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Chroma.Graphics;
 
-namespace Chroma.UI
+namespace Chroma.Gui
 {
   public class HealthGui : Gui
   {

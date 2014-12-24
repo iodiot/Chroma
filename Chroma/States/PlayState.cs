@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Actors;
 using Chroma.Messages;
 using Chroma.Graphics;
-using Chroma.UI;
+using Chroma.Gui;
 
 namespace Chroma.States
 {
@@ -19,6 +19,7 @@ namespace Chroma.States
     private int groundLevel;
 
     private HealthGui health;
+    private JoystickGui joystick;
 
     public PlayState(Core core) : base(core)
     {
@@ -43,6 +44,7 @@ namespace Chroma.States
       //ActorManager.Add(new GolemActor(core, new Vector2(300, 27)));
 
       health = new HealthGui(core);
+      joystick = new JoystickGui(core); 
     }
 
     public override void Load()
@@ -128,6 +130,7 @@ namespace Chroma.States
       core.Renderer.World = new Vector2(-player.Position.X + 10, 0);
 
       health.Update(ticks);
+      joystick.Update(ticks);
 
       base.Update(ticks);
     }
@@ -151,6 +154,7 @@ namespace Chroma.States
       DrawFgGrass();
 
       health.Draw();
+      joystick.Draw();
 
       base.Draw();
     }
