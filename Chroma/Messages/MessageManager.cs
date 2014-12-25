@@ -10,19 +10,20 @@ namespace Chroma.Messages
       public Message Message;
       public object Sender;
       public string Handle; 
+      public int Delay;
     };
 
     private readonly Core core;
     private readonly Dictionary<MessageType, List<ISubscriber>> subscribers;
     private readonly Dictionary<string, ISubscriber> handles;
-    private readonly Queue<MessageDesc> messageDescQueue;
+    private readonly List<MessageDesc> messagesDesc;
 
     public MessageManager(Core core)
     {
       this.core = core;
       subscribers = new Dictionary<MessageType, List<ISubscriber>>();
       handles = new Dictionary<string, ISubscriber>();
-      messageDescQueue = new Queue<MessageDesc>();
+      messagesDesc = new List<MessageDesc>();
     }
 
     public void Load()
@@ -49,15 +50,24 @@ namespace Chroma.Messages
       subscribers[messageType].Add(subscriber);
     }
 
-    public void Send(Message message, object sender)
+    public void Send(Message message, object sender, int delay = 0)
     {
-      messageDescQueue.Enqueue(new MessageDesc() { Message = message, Sender = sender, Handle = String.Empty });
+      messagesDesc.Add(new MessageDesc() { Message = message, Sender = sender, Handle = String.Empty, Delay = delay });
     }
 
     private void SendAll()
     {
-      foreach (var desc in messageDescQueue)
+      var delayed = new List<MessageDesc>();
+
+      foreach (var desc in messagesDesc)
       {
+        if (desc.Delay > 0)
+        {
+          desc.Delay -= 1;
+          delayed.Add(desc);
+          continue;
+        }
+
         // send by message ttype
         if (desc.Handle == String.Empty)
         {
@@ -79,7 +89,9 @@ namespace Chroma.Messages
           }
         }
       }
-      messageDescQueue.Clear();
+
+      messagesDesc.Clear();
+      messagesDesc.AddRange(delayed);
     }
 
     public void SubscribeByHandle(string handle, ISubscriber subscriber)
@@ -94,9 +106,9 @@ namespace Chroma.Messages
       handles.Remove(handle);
     }
 
-    public void SendByHandle(string handle, Message message, object sender)
+    public void SendByHandle(string handle, Message message, object sender, int delay = 0)
     {
-      messageDescQueue.Enqueue(new MessageDesc() { Message = message, Sender = sender, Handle = handle });
+      messagesDesc.Add(new MessageDesc() { Message = message, Sender = sender, Handle = handle, Delay = delay });
     }
   }
 }

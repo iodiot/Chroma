@@ -7,12 +7,10 @@ namespace Chroma.Actors
   {
     protected Rectangle boundingBox;
 
-    private bool debugDraw; 
     private Color debugColor;
 
     public CollidableActor(Core core, Vector2 position) : base(core, position)
     {
-      debugDraw = Settings.DrawBoundingBoxes;
       debugColor = Color.LightPink;
 
       boundingBox = Rectangle.Empty;
@@ -24,7 +22,7 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      if (debugDraw)
+      if (Settings.DrawBoundingBoxes)
       {
         var box = GetBoundingBox();
 

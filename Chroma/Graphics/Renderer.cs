@@ -88,9 +88,9 @@ namespace Chroma.Graphics
 
     #region World draw
 
-    public void DrawSpriteW(Sprite sprite, Vector2 position, Color tint, float scale = 1.0f)
+    public void DrawSpriteW(Sprite sprite, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
     {
-      DrawSpriteS(sprite, position + World, tint, scale);
+      DrawSpriteS(sprite, position + World, tint, scale, rotation);
     }
 
     public void DrawRectangleW(Vector2 position, float width, float height, Color color)
@@ -103,14 +103,19 @@ namespace Chroma.Graphics
       DrawLineS(from + World, to + World, color);
     }
 
-    public void DrawSpriteW(string spriteName, Vector2 position, Color tint, float scale = 1.0f)
+    public void DrawSpriteW(string spriteName, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
     {
-      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position + World, tint, scale);
+      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position + World, tint, scale, rotation);
     }
 
     #endregion
 
     #region Screen draw
+
+    public void DrawSpriteS(string spriteName, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
+    {
+      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position, tint, scale, rotation);
+    }
 
     public void DrawSpriteS(Sprite sprite, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
     {

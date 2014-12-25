@@ -41,6 +41,8 @@ namespace Chroma.Graphics
 
     public void Play(string name)
     {
+      Debug.Assert(animations[name] != null, String.Format("Animation.Play() : Play {0} is missing", name));
+
       CurrentPlay = name;
       Reset();
     }

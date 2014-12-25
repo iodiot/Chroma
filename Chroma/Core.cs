@@ -20,6 +20,7 @@ namespace Chroma
     public MessageManager MessageManager { get; private set; }
 
     private readonly Stack<State> states;
+    private readonly Random random;
 
     private FrameCounter frameCounter;
     private int ticks = 0;
@@ -31,12 +32,18 @@ namespace Chroma
       Renderer = new Renderer(this, spriteBatch, screenWidth, screenHeight);
       MessageManager = new MessageManager(this);
       Content = content;
+      random = new Random();
 
       states = new Stack<State>();
 
       frameCounter = new FrameCounter();
 
       Log.Print(String.Format("Screen size: {0}x{1}", screenWidth, screenHeight));
+    }
+
+    public int GetRandom(int from, int to)
+    {
+      return (random.Next() % (to - from + 1)) + from;
     }
 
     #region States

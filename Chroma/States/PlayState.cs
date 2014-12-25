@@ -118,15 +118,14 @@ namespace Chroma.States
 
     public override void Update(int ticks)
     {
-      if (ticks % 100 == 0)
+      if (ticks % core.GetRandom(75, 125) == 0)
       {
         ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + 250, 27)));
       }
 
-      if (ticks % 150 == 0)
+      if (ticks % core.GetRandom(100, 150) == 0)
       {
-        var random = new Random();
-        ActorManager.Add(new SpikeActor(core, new Vector2(player.Position.X + 250, 50), random.Next() % 4 + 1));
+        ActorManager.Add(new SpikeActor(core, new Vector2(player.Position.X + 250, 50), core.GetRandom(1, 4)));
       }
 
       groundScroll += 1.0f;
