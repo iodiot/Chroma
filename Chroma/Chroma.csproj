@@ -170,6 +170,7 @@
     <Compile Include="Actors\CollidableActor.cs" />
     <Compile Include="Actors\ProjectileActor.cs" />
     <Compile Include="Gui\JoystickGui.cs" />
+    <Compile Include="Actors\SpikeActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

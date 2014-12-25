@@ -5,7 +5,7 @@ using Chroma.Graphics;
 using Chroma.Messages;
 using Chroma.Particles;
 
-namespace Chroma
+namespace Chroma.Actors
 {
   public class SwarmActor : Actor
   {

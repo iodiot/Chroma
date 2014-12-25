@@ -120,9 +120,6 @@ namespace Chroma
       );
 
       Renderer.End();
-
-      //var blendState = BlendState.Additive;
-      //blendState.ColorSourceBlend = Blend.One;
     }
   }
 }

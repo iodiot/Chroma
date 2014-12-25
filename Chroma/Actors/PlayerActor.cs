@@ -105,7 +105,7 @@ namespace Chroma.Actors
 
     public override void OnCollide(CollidableActor other)
     {
-      if ((other is GolemActor) && (hurtTtl == 0))
+      if ((other is CollidableActor) && (hurtTtl == 0))
       {
         hurtTtl = 25;
       }

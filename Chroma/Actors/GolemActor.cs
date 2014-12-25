@@ -5,7 +5,7 @@ using Chroma.Actors;
 using Chroma.Graphics;
 using Chroma.Messages;
 
-namespace Chroma
+namespace Chroma.Actors
 {
   public class GolemActor : CollidableActor
   {
@@ -21,6 +21,8 @@ namespace Chroma
 
     public override void Update(int ticks)
     {
+      X -= 0.5f;
+
       animation.Update(ticks);
 
       base.Update(ticks);
@@ -39,6 +41,8 @@ namespace Chroma
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
         core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);
+
+        core.Renderer.ShakeScreen(5, 10);
       }
 
       base.OnCollide(other);

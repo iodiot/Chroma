@@ -58,6 +58,7 @@ namespace Chroma.Messages
     {
       foreach (var desc in messageDescQueue)
       {
+        // send by message ttype
         if (desc.Handle == String.Empty)
         {
           if (subscribers.ContainsKey(desc.Message.Type))
@@ -68,6 +69,8 @@ namespace Chroma.Messages
             }
           }
         }
+
+        // send by handle
         else
         {
           if (handles.ContainsKey(desc.Handle))

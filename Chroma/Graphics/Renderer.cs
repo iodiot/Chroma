@@ -11,17 +11,41 @@ namespace Chroma.Graphics
 {
   public sealed class Renderer
   {
-    public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth/2, ScreenHeight/2); } }
+    private class Layer
+    {
+      public string Name;
+      public int Z;
+      public BlendState Blend;
+    }
+      
+    // blending
+    public static readonly BlendState AlphaBlend;
+    public static readonly BlendState AdditiveBlend;
+
+    public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth * 0.5f, ScreenHeight * 0.5f); } }
 
     public Vector2 World;
 
-    public readonly int ScreenWidth;
-    public readonly int ScreenHeight;
+    public readonly float ScreenWidth;
+    public readonly float ScreenHeight;
 
     private readonly Core core;
     private readonly SpriteBatch spriteBatch;
 
-    public Renderer(Core core, SpriteBatch spriteBatch, int screenWidth, int screenHeight)
+    private float shakeAmplitude;
+    private int shakeTtl;
+
+    private Random random;
+
+    static Renderer()
+    {
+      AlphaBlend = BlendState.AlphaBlend;
+
+      AdditiveBlend = BlendState.Additive;
+      AdditiveBlend.ColorSourceBlend = Blend.One;
+    }
+
+    public Renderer(Core core, SpriteBatch spriteBatch, float screenWidth, float screenHeight)
     {
       this.core = core;
       this.spriteBatch = spriteBatch;
@@ -30,17 +54,31 @@ namespace Chroma.Graphics
       ScreenHeight = screenHeight;
 
       World = Vector2.Zero;
+
+      random = new Random();
+    }
+
+    public void ShakeScreen(float amplitude, int duration)
+    {
+      shakeAmplitude = amplitude;
+      shakeTtl = duration;
     }
 
     public void Update(int ticks)
     {
-      
+      if (shakeTtl > 0)
+      {
+        --shakeTtl;
+      }
     }
 
     public void Begin(BlendState blendState)
     {
+      var shake = shakeTtl > 0 ? 
+        Matrix.CreateTranslation((float)random.NextDouble() * shakeAmplitude - shakeAmplitude * 0.5f, (float)random.NextDouble() * shakeAmplitude - shakeAmplitude * 0.5f, 0) : Matrix.Identity;
+
       var scale = Matrix.CreateScale(new Vector3(Settings.ScreenScale, Settings.ScreenScale, 1));
-      spriteBatch.Begin(SpriteSortMode.Deferred, blendState, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, null, scale);
+      spriteBatch.Begin(SpriteSortMode.Deferred, blendState, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, null, scale * shake);
     }
 
     public void End()
@@ -67,14 +105,14 @@ namespace Chroma.Graphics
 
     public void DrawSpriteW(string spriteName, Vector2 position, Color tint, float scale = 1.0f)
     {
-      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position, tint, scale);
+      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position + World, tint, scale);
     }
 
     #endregion
 
     #region Screen draw
 
-    public void DrawSpriteS(Sprite sprite, Vector2 position, Color tint, float scale = 1.0f)
+    public void DrawSpriteS(Sprite sprite, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
     {
       var d = new Vector2(sprite.AnchorPoint.X * sprite.Width, sprite.AnchorPoint.Y * sprite.Height);
 
@@ -87,7 +125,7 @@ namespace Chroma.Graphics
         Vector2.Zero,
         scale,
         SpriteEffects.None,
-        0
+        rotation
        );
     }
 
