@@ -10,12 +10,16 @@ namespace Chroma.Actors
   public class PlayerActor : CollidableActor
   {
     private readonly Animation animation; 
+    private readonly List<string> quotes = new List<string>() { "fuck", "shit", "devil" };
+
 
     private int jumpTtl;
     private int hurtTtl;
     private int fireTtl;
+    private int textTtl;
 
     private float groundLevel;
+    private int currentQuote;
 
     public PlayerActor(Core core, Vector2 position) : base(core, position)
     {
@@ -32,11 +36,18 @@ namespace Chroma.Actors
       jumpTtl = 0;
       hurtTtl = 0;
       fireTtl = 0;
+      textTtl = 0;
       groundLevel = position.Y;
     }
 
     public override void Update(int ticks)
     {
+      if ((textTtl == 0) && core.GetRandom(0, 1000) == 0)
+      {
+        textTtl = 50;
+        currentQuote = core.GetRandom(0, quotes.Count - 1);
+      }
+
       HandleInput();
 
       if (jumpTtl > 0)
@@ -60,6 +71,11 @@ namespace Chroma.Actors
         --hurtTtl;
       }
 
+      if (textTtl > 0)
+      {
+        --textTtl;
+      }
+
       animation.Update(ticks);
 
       X += 1.0f;
@@ -71,6 +87,11 @@ namespace Chroma.Actors
     {
       var tint = (hurtTtl / 5) % 2 == 0 ? Color.White : Color.Red;
       core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, tint);
+
+      if (textTtl > 0)
+      {
+        core.Renderer.DrawTextW(quotes[currentQuote], Position + new Vector2(10, -10), Color.White);
+      }
 
       base.Draw();
     }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Chroma
+namespace Chroma.Graphics
 {
   public sealed class FrameCounter
   {

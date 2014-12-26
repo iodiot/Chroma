@@ -13,7 +13,6 @@ namespace Chroma.Graphics
   {
     private class Layer
     {
-      public string Name;
       public int Z;
       public BlendState Blend;
     }
@@ -22,9 +21,20 @@ namespace Chroma.Graphics
     public static readonly BlendState AlphaBlend;
     public static readonly BlendState AdditiveBlend;
 
-    public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth * 0.5f, ScreenHeight * 0.5f); } }
+    public Renderer this[string key]
+    {
+      get {
+        SetCurrentLayer(key);
+        return this;
+      }
+    }
 
+    public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth * 0.5f, ScreenHeight * 0.5f); } }
     public Vector2 World;
+
+    private string currentLayerName;
+    private readonly Dictionary<string, Layer> layers;
+    private readonly Dictionary<string, List<Sprite>> spritesPerLayer;
 
     public readonly float ScreenWidth;
     public readonly float ScreenHeight;
@@ -50,12 +60,33 @@ namespace Chroma.Graphics
       this.core = core;
       this.spriteBatch = spriteBatch;
 
+      layers = new Dictionary<string, Layer>();
+      spritesPerLayer = new Dictionary<string, List<Sprite>>();
+
       ScreenWidth = screenWidth;
       ScreenHeight = screenHeight;
 
       World = Vector2.Zero;
 
       random = new Random();
+    }
+
+    public void Load()
+    {
+      layers.Add("default", new Layer() { Z = 0, Blend = Renderer.AlphaBlend });
+      layers.Add("glow_bg", new Layer() { Z = -1, Blend = Renderer.AdditiveBlend });
+      layers.Add("gui", new Layer() { Z = 10, Blend = Renderer.AlphaBlend });
+    }
+
+    public void Unload()
+    {
+    }
+
+    private void SetCurrentLayer(string name)
+    {
+      Debug.Assert(layers.ContainsKey(name), String.Format("Renderer.SetCurrentLayer() : Layer {0} is missing", name));
+
+      currentLayerName = name;
     }
 
     public void ShakeScreen(float amplitude, int duration)
@@ -70,6 +101,9 @@ namespace Chroma.Graphics
       {
         --shakeTtl;
       }
+
+      // reset layer
+      SetCurrentLayer("default");
     }
 
     public void Begin(BlendState blendState)
@@ -87,6 +121,11 @@ namespace Chroma.Graphics
     }
 
     #region World draw
+
+    public void DrawTextW(string text, Vector2 position, Color tint, float scale = 1.0f)
+    {
+      DrawTextS(text, position + World, tint, scale);
+    }
 
     public void DrawSpriteW(Sprite sprite, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
     {

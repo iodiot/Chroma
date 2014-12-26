@@ -18,6 +18,7 @@ namespace Chroma
     public ContentManager Content { get; private set; }
     public SoundManager SoundManager { get; private set; }
     public MessageManager MessageManager { get; private set; }
+    public TimerManager TimerManager { get; private set; }
 
     private readonly Stack<State> states;
     private readonly Random random;
@@ -31,6 +32,8 @@ namespace Chroma
       SoundManager = new SoundManager(this);
       Renderer = new Renderer(this, spriteBatch, screenWidth, screenHeight);
       MessageManager = new MessageManager(this);
+      TimerManager = new TimerManager(this);
+
       Content = content;
       random = new Random();
 
@@ -39,6 +42,13 @@ namespace Chroma
       frameCounter = new FrameCounter();
 
       Log.Print(String.Format("Screen size: {0}x{1}", screenWidth, screenHeight));
+
+      TimerManager.CreateTimer(
+        startDelay: 0,
+        interval: 1,
+        loops: 10,
+        onTimer: timer => Log.Print("Hello")
+      );
     }
 
     public int GetRandom(int from, int to)
@@ -78,6 +88,7 @@ namespace Chroma
 
     public void Load()
     {
+      Renderer.Load();
       SpriteManager.Load();
       SoundManager.Load();
       MessageManager.Load();
@@ -92,10 +103,12 @@ namespace Chroma
       MessageManager.Unload();
       SoundManager.Unload();
       SpriteManager.Unload();
+      Renderer.Unload();
     }
 
     public void Update(GameTime gameTime)
     {
+      TimerManager.Update(ticks);
       Renderer.Update(ticks);
 
       if (GetCurrentState() != null)
@@ -120,11 +133,14 @@ namespace Chroma
         GetCurrentState().Draw();
       }
 
-      Renderer.DrawTextS(
-        String.Format("fps:{0}", Math.Round(frameCounter.AverageFramesPerSecond)), 
-        new Vector2(Renderer.ScreenWidth - 40, 3),
-        Color.White * 0.25f
-      );
+      if (Settings.DrawFps)
+      {
+        Renderer.DrawTextS(
+          String.Format("fps:{0}", Math.Round(frameCounter.AverageFramesPerSecond)), 
+          new Vector2(Renderer.ScreenWidth - 40, 3),
+          Color.White * 0.25f
+        );
+      }
 
       Renderer.End();
     }

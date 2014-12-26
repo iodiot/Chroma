@@ -148,7 +148,6 @@
     <Compile Include="Messages\TextMessage.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Renderer.cs" />
-    <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Graphics\SpriteManager.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -159,7 +158,6 @@
     </Compile>
     <Compile Include="Actors\GolemActor.cs" />
     <Compile Include="Debug.cs" />
-    <Compile Include="FrameCounter.cs" />
     <Compile Include="Gui\Gui.cs" />
     <Compile Include="Gui\HealthGui.cs" />
     <Compile Include="Actors\SwarmActor.cs" />
@@ -171,6 +169,8 @@
     <Compile Include="Actors\ProjectileActor.cs" />
     <Compile Include="Gui\JoystickGui.cs" />
     <Compile Include="Actors\SpikeActor.cs" />
+    <Compile Include="Graphics\FrameCounter.cs" />
+    <Compile Include="TimerManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
