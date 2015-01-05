@@ -91,8 +91,8 @@ namespace Chroma.Graphics
 
     public void ShakeScreen(float amplitude, int duration)
     {
-      shakeAmplitude = amplitude;
-      shakeTtl = duration;
+      //shakeAmplitude = amplitude;
+      //shakeTtl = duration;
     }
 
     public void Update(int ticks)

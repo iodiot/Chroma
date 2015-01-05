@@ -28,7 +28,7 @@ namespace Chroma.States
 
       groundScroll = 0;
 
-      groundLevel = core.SpriteManager.GetSprite("trees_l1").Height;
+      groundLevel = 85;
 
       player = new PlayerActor(core, new Vector2(25, groundLevel - 21));
 
@@ -59,18 +59,71 @@ namespace Chroma.States
 
     private void DrawTrees()
     {
-      var speed = 0.1f;
-
-      for (var n = 4; n >=1; --n)
+      var trees = core.SpriteManager.GetSprite("trees_l1");
+      for (var i = 0; i <= 2; i++)
       {
-        var trees = core.SpriteManager.GetSprite(String.Format("trees_l{0}", n));
+        core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.1f) % trees.Width, 31), Color.White);   
+      }
+      trees = core.SpriteManager.GetSprite("trees_l2");
+      for (var i = 0; i <= 2; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.2f) % trees.Width, 31), Color.White);   
+      }
+      trees = core.SpriteManager.GetSprite("trees_l3");
+      for (var i = 0; i <= 2; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.5f) % trees.Width, 17), Color.White);   
+      }
+      trees = core.SpriteManager.GetSprite("trees_l4");
+      for (var i = 0; i <= 2; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.7f) % trees.Width, 0), Color.White);   
+      }
 
-        for (var i = 0; i < 5; ++i)
-        {
-          core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * speed) % trees.Width, 0), Color.White);   
-        }
+      var offset = 120f; 
+      trees = core.SpriteManager.GetSprite("trees_l5_1");
+      for (var i = 0; i <= 3; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2(
+          (offset + trees.Width) * i - (groundScroll * 0.85f) % (offset + trees.Width), 0), Color.White); 
+      }
 
-        speed += 0.1f;
+      offset = 130f; 
+      trees = core.SpriteManager.GetSprite("trees_l5_1");
+      for (var i = 0; i <= 3; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2(
+          (offset + trees.Width) * i - (groundScroll * 0.9f) % (offset + trees.Width), 0), Color.White); 
+      }
+
+      offset = 90;
+      trees = core.SpriteManager.GetSprite("trees_l6");
+      for (var i = 0; i <= 5; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2((trees.Width + offset) * i - (groundScroll * .925f) % (trees.Width + offset), -5), Color.White); 
+      }
+
+      offset = 140; 
+      trees = core.SpriteManager.GetSprite("trees_l5_3");
+      for (var i = 0; i <= 3; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2(
+          (offset + trees.Width) * i - (groundScroll * 0.95f) % (offset + trees.Width), 0), Color.White); 
+      }
+
+      offset = 160; 
+      trees = core.SpriteManager.GetSprite("trees_l5_4");
+      for (var i = 0; i <= 3; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2(
+          (offset + trees.Width) * i - (groundScroll * 1.0f) % (offset + trees.Width), 0), Color.White); 
+      } 
+
+      offset = 90;
+      trees = core.SpriteManager.GetSprite("trees_l6");
+      for (var i = 0; i <= 5; i++)
+      {
+        core.Renderer.DrawSpriteS(trees, new Vector2((trees.Width + offset) * i - (groundScroll * 1.1f) % (trees.Width + offset), 0), Color.White); 
       }
     }
 
@@ -80,29 +133,19 @@ namespace Chroma.States
       var earth = core.SpriteManager.GetSprite("earth");
       var floor = core.SpriteManager.GetSprite("floor");
 
-      for (var i = 0; i < 10; ++i)
+      for (var i = 0; i <= (core.Renderer.ScreenWidth / earth.Width) + 1; ++i)
       {
         core.Renderer.DrawSpriteS(earth, new Vector2(earth.Width * i - groundScroll % earth.Width, groundLevel + 8), Color.White);   
       }
 
-      for (var i = 0; i < 15; ++i)
+      for (var i = 0; i <= (core.Renderer.ScreenWidth / floor.Width) + 1; ++i)
       {
         core.Renderer.DrawSpriteS(floor, new Vector2(floor.Width * i - groundScroll % floor.Width, groundLevel - 9), Color.White);        
       }
 
-      for (var i = 0; i < 15; ++i)
+      for (var i = 0; i <= (core.Renderer.ScreenWidth / ground.Width) + 1; ++i)
       {
         core.Renderer.DrawSpriteS(ground, new Vector2(ground.Width * i - groundScroll % ground.Width, groundLevel + 3), Color.White);        
-      }
-    }
-
-    private void DrawGrass()
-    {      
-      var grass = core.SpriteManager.GetSprite("grass");
-
-      for (var i = 0; i < 10; ++i)
-      {
-        core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i - (groundScroll * 0.75f) % grass.Width, groundLevel - grass.Height - 3), Color.White);   
       }
     }
 
@@ -110,7 +153,7 @@ namespace Chroma.States
     {
       var grass = core.SpriteManager.GetSprite("floor_grass");
 
-      for (var i = 0; i < 20; ++i)
+      for (var i = 0; i <= (core.Renderer.ScreenWidth / grass.Width) + 1; ++i)
       {
         core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i - groundScroll % grass.Width + 7, groundLevel - 3), Color.White);        
       }
@@ -120,13 +163,13 @@ namespace Chroma.States
     {
       if (ticks % core.GetRandom(75, 125) == 0)
       {
-        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + 250, 27)));
+        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 28)));
       }
 
-      if (ticks % core.GetRandom(100, 150) == 0)
-      {
-        ActorManager.Add(new SpikeActor(core, new Vector2(player.Position.X + 250, 50), core.GetRandom(1, 4)));
-      }
+//      if (ticks % core.GetRandom(100, 150) == 0)
+//      {
+//        ActorManager.Add(new SpikeActor(core, new Vector2(player.Position.X + 250, groundLevel - 28), core.GetRandom(1, 4)));
+//      }
 
       groundScroll += 1.0f;
 
@@ -142,24 +185,28 @@ namespace Chroma.States
 
     public override void Draw()
     {
-      // fill bottom space of screen
       core.Renderer.DrawRectangleS(
-        new Vector2(0, core.Renderer.ScreenHeight * 0.8f),
-        core.Renderer.ScreenWidth,
-        core.Renderer.ScreenHeight * 0.2f,
-        new Color(29, 33, 30)
+        new Vector2(0, 0),
+        core.Renderer.ScreenWidth + 1,
+        groundLevel,
+        new Color(17, 22, 42)
+      );
+      core.Renderer.DrawRectangleS(
+        new Vector2(0, groundLevel),
+        core.Renderer.ScreenWidth + 1,
+        core.Renderer.ScreenHeight - groundLevel + 1,
+        new Color(16, 19, 17)
       );
 
       DrawTrees();
-      DrawGrass();
       DrawGround();
 
       ActorManager.Draw();
 
       DrawFgGrass();
 
-      health.Draw();
-      joystick.Draw();
+      //health.Draw();
+      //joystick.Draw();
 
       base.Draw();
     }

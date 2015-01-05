@@ -15,7 +15,7 @@ namespace Chroma.Actors
     {
       particleManager = new ParticleManager(
         core,
-        new DispersalParticleBehaviour(new Vector2(0, 1.0f), 0.9f, 52.0f)
+        new DispersalParticleBehaviour(new Vector2(0, 1.0f), 0.9f, 85)
       );
       particleManager.AddParticlesFromSprite(sprite, position, new Vector2(5.0f, -5.0f), 1.0f, 3);
     }
