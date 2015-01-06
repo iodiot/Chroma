@@ -74,6 +74,12 @@ namespace Chroma.Actors
       {
         actor.Draw();
       }
+
+      core.Renderer.DrawTextS(
+        String.Format("actors: {0}", actors.Count),
+        new Vector2(core.Renderer.ScreenWidth - 75, 12),
+        Color.White * 0.25f
+      );
     }
 
     public void Add(Actor actor)
@@ -138,14 +144,10 @@ namespace Chroma.Actors
 
       foreach (var actor in actors)
       {
-        if (actor is CollidableActor)
+        if (x - actor.X > criticalDistance)
         {
-          var otherX = (actor as CollidableActor).X;
-          if (x - otherX > criticalDistance)
-          {
-            Remove(actor);
-            ++n;
-          }
+          Remove(actor);
+          ++n;
         }
       }
 
