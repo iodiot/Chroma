@@ -49,7 +49,7 @@ namespace Chroma.Graphics
 
     // layers
     private string currentLayerName;
-    private readonly Dictionary<string, Layer> layers;
+    private Dictionary<string, Layer> layers;
 
     public readonly float ScreenWidth;
     public readonly float ScreenHeight;
@@ -87,13 +87,35 @@ namespace Chroma.Graphics
 
     public void Load()
     {
-      layers.Add("default", new Layer() { Z = 0, Blend = Renderer.AlphaBlend, DrawsDesc = new List<DrawDesc>() });
-      layers.Add("glow_bg", new Layer() { Z = -1, Blend = Renderer.AdditiveBlend, DrawsDesc = new List<DrawDesc>() });
-      layers.Add("gui", new Layer() { Z = 10, Blend = Renderer.AlphaBlend, DrawsDesc = new List<DrawDesc>() });
+      AddLayer("default", 0, Renderer.AlphaBlend);
+      AddLayer("glow_bg", -1, Renderer.AdditiveBlend);
+      AddLayer("gui", 10, Renderer.AlphaBlend);
     }
 
     public void Unload()
     {
+    }
+
+    #region Layers
+
+    public void AddLayer(string name, int z, BlendState blend)
+    {
+      layers.Add(name, new Layer() { Z = z, Blend = blend, DrawsDesc = new List<DrawDesc>() });
+
+      // sort by z index
+      layers = layers.OrderBy(x => x.Value.Z).ToDictionary(x => x.Key, x => x.Value);
+    }
+
+    public void RemoveLayer(string name)
+    {
+      Debug.Assert(layers.ContainsKey(name), String.Format("Renderer.RemoveLayer() : Layer {0} is missing", name));
+
+      layers.Remove(name);
+    }
+
+    public void ClearLayers()
+    {
+      layers.Clear();
     }
       
     private void SetCurrentLayer(string name)
@@ -102,6 +124,8 @@ namespace Chroma.Graphics
 
       currentLayerName = name;
     }
+
+    #endregion
 
     #region Effects
 
@@ -130,13 +154,7 @@ namespace Chroma.Graphics
       var spritesCounter = 0;
       var drawCallsCounter = 0;
 
-      // TODO: not efficient to sort layers every draw call
-      var sortedLayers = layers.Values.ToList();
-      sortedLayers.Sort(
-        (left, right) => (left.Z == right.Z) ? 0 : ((left.Z > right.Z) ? 1 : -1)                
-      );
-
-      foreach (var layer in sortedLayers)
+      foreach (var layer in layers.Values)
       {
         if (layer.DrawsDesc.Count == 0)
         {
