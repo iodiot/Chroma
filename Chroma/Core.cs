@@ -134,6 +134,7 @@ namespace Chroma
         );
       }
 
+      // final draw
       Renderer.Draw();
     }
   }

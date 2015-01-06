@@ -171,6 +171,8 @@
     <Compile Include="Actors\SpikeActor.cs" />
     <Compile Include="Graphics\FrameCounter.cs" />
     <Compile Include="TimerManager.cs" />
+    <Compile Include="Level.cs" />
+    <Compile Include="Actors\SlimeWalkActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

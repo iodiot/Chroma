@@ -50,6 +50,8 @@ namespace Chroma.Actors
     {        
       core.MessageManager.Send(new RemoveActorMessage(this), this);
       core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);
+
+      core.Renderer.ShakeScreen(5.0f, 10);
     }
   }
 }

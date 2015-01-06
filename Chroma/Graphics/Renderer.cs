@@ -11,6 +11,8 @@ namespace Chroma.Graphics
 {
   public sealed class Renderer
   {
+    private const string DefaultLayerName = "default";
+
     #region Class definitions
 
     private class Layer
@@ -87,9 +89,11 @@ namespace Chroma.Graphics
 
     public void Load()
     {
-      AddLayer("default", 0, Renderer.AlphaBlend);
+      AddLayer(DefaultLayerName, 0, Renderer.AlphaBlend);
       AddLayer("glow_bg", -1, Renderer.AdditiveBlend);
       AddLayer("gui", 10, Renderer.AlphaBlend);
+
+      SetCurrentLayer(DefaultLayerName);
     }
 
     public void Unload()
@@ -143,9 +147,6 @@ namespace Chroma.Graphics
       {
         --shakeTtl;
       }
-
-      // reset layer
-      SetCurrentLayer("default");
     }
 
     public void Draw()
@@ -307,6 +308,9 @@ namespace Chroma.Graphics
         Rotation = rotation,
         Scale = scale
       });
+
+      // reset layer
+      SetCurrentLayer(DefaultLayerName);
     }
   }
 }
