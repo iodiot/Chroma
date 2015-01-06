@@ -68,7 +68,7 @@ namespace Chroma.Messages
           continue;
         }
 
-        // send by message ttype
+        // send by type
         if (desc.Handle == String.Empty)
         {
           if (subscribers.ContainsKey(desc.Message.Type))

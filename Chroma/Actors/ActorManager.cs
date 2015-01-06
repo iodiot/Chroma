@@ -44,6 +44,8 @@ namespace Chroma.Actors
         RemoveOffScreenActors();
       }
 
+      RemoveDeadActors();
+
       foreach (var actor in actorsToRemove)
       {
         actor.Unload();
@@ -112,6 +114,17 @@ namespace Chroma.Actors
             a.OnCollide(b);
             b.OnCollide(a);
           }
+        }
+      }
+    }
+
+    public void RemoveDeadActors()
+    {
+      foreach (var actor in actors)
+      {
+        if (actor.IsDead)
+        {
+          Remove(actor);
         }
       }
     }

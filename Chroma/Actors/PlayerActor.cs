@@ -12,7 +12,6 @@ namespace Chroma.Actors
     private readonly Animation animation; 
     private readonly List<string> quotes = new List<string>() { "fuck", "shit", "devil" };
 
-
     private int jumpTtl;
     private int hurtTtl;
     private int fireTtl;

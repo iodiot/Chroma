@@ -11,6 +11,9 @@ namespace Chroma.Actors
     public Vector2 Position;
     public float X { get { return Position.X; } set { Position = new Vector2(value, Position.Y); } }
     public float Y { get { return Position.Y; } set { Position = new Vector2(Position.X, value); } }
+    public int Ttl { get; protected set; }
+
+    public bool IsDead { get { return Ttl == 0; } }
 
     protected readonly Core core;
 
@@ -21,6 +24,8 @@ namespace Chroma.Actors
       Position = position;
 
       Handle = String.Empty;
+
+      Ttl = -1;
     }
       
     public virtual void Load()
@@ -41,6 +46,10 @@ namespace Chroma.Actors
 
     public virtual void Update(int ticks)
     {
+      if (Ttl > 0)
+      {
+        --Ttl;
+      }
     }
 
     public virtual void Draw()

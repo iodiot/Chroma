@@ -42,13 +42,6 @@ namespace Chroma
       frameCounter = new FrameCounter();
 
       Log.Print(String.Format("Screen size: {0}x{1}", screenWidth, screenHeight));
-
-      TimerManager.CreateTimer(
-        startDelay: 0,
-        interval: 1,
-        loops: 10,
-        onTimer: timer => Log.Print("Hello")
-      );
     }
 
     public int GetRandom(int from, int to)
@@ -109,7 +102,6 @@ namespace Chroma
     public void Update(GameTime gameTime)
     {
       TimerManager.Update(ticks);
-      Renderer.Update(ticks);
 
       if (GetCurrentState() != null)
       {
@@ -118,6 +110,8 @@ namespace Chroma
 
       MessageManager.Update(ticks);
 
+      Renderer.Update(ticks);
+
       ++ticks;
     }
 
@@ -125,8 +119,6 @@ namespace Chroma
     {
       var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
       frameCounter.Update(deltaTime);
-
-      Renderer.Begin(BlendState.AlphaBlend);
 
       if (GetCurrentState() != null)
       {
@@ -142,7 +134,7 @@ namespace Chroma
         );
       }
 
-      Renderer.End();
+      Renderer.Draw();
     }
   }
 }

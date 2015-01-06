@@ -9,7 +9,7 @@ namespace Chroma.Actors
   public enum ProjectileColor
   {
     Red,
-    Green,
+    Yellow,
     Blue
   };
 
@@ -21,6 +21,8 @@ namespace Chroma.Actors
     public ProjectileActor(Core core, Vector2 position) : base(core, position)
     {
       boundingBox = new Rectangle(0, 0, 14, 8);
+
+      Ttl = 200;
 
       color = ProjectileColor.Red;
 

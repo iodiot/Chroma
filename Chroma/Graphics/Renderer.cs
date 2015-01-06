@@ -11,11 +11,26 @@ namespace Chroma.Graphics
 {
   public sealed class Renderer
   {
+    #region Class definitions
+
     private class Layer
     {
       public int Z;
       public BlendState Blend;
+      public List<DrawDesc> DrawsDesc;
     }
+
+    private class DrawDesc
+    {
+      public Texture2D Texture;
+      public Vector2 Position;
+      public Rectangle Rect;
+      public Color Tint;
+      public float Rotation;
+      public float Scale;
+    }
+
+    #endregion
       
     // blending
     public static readonly BlendState AlphaBlend;
@@ -32,9 +47,9 @@ namespace Chroma.Graphics
     public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth * 0.5f, ScreenHeight * 0.5f); } }
     public Vector2 World;
 
+    // layers
     private string currentLayerName;
     private readonly Dictionary<string, Layer> layers;
-    private readonly Dictionary<string, List<Sprite>> spritesPerLayer;
 
     public readonly float ScreenWidth;
     public readonly float ScreenHeight;
@@ -61,7 +76,6 @@ namespace Chroma.Graphics
       this.spriteBatch = spriteBatch;
 
       layers = new Dictionary<string, Layer>();
-      spritesPerLayer = new Dictionary<string, List<Sprite>>();
 
       ScreenWidth = screenWidth;
       ScreenHeight = screenHeight;
@@ -73,15 +87,15 @@ namespace Chroma.Graphics
 
     public void Load()
     {
-      layers.Add("default", new Layer() { Z = 0, Blend = Renderer.AlphaBlend });
-      layers.Add("glow_bg", new Layer() { Z = -1, Blend = Renderer.AdditiveBlend });
-      layers.Add("gui", new Layer() { Z = 10, Blend = Renderer.AlphaBlend });
+      layers.Add("default", new Layer() { Z = 0, Blend = Renderer.AlphaBlend, DrawsDesc = new List<DrawDesc>() });
+      layers.Add("glow_bg", new Layer() { Z = -1, Blend = Renderer.AdditiveBlend, DrawsDesc = new List<DrawDesc>() });
+      layers.Add("gui", new Layer() { Z = 10, Blend = Renderer.AlphaBlend, DrawsDesc = new List<DrawDesc>() });
     }
 
     public void Unload()
     {
     }
-
+      
     private void SetCurrentLayer(string name)
     {
       Debug.Assert(layers.ContainsKey(name), String.Format("Renderer.SetCurrentLayer() : Layer {0} is missing", name));
@@ -89,11 +103,15 @@ namespace Chroma.Graphics
       currentLayerName = name;
     }
 
+    #region Effects
+
     public void ShakeScreen(float amplitude, int duration)
     {
-      //shakeAmplitude = amplitude;
-      //shakeTtl = duration;
+      shakeAmplitude = amplitude;
+      shakeTtl = duration;
     }
+
+    #endregion
 
     public void Update(int ticks)
     {
@@ -104,6 +122,52 @@ namespace Chroma.Graphics
 
       // reset layer
       SetCurrentLayer("default");
+    }
+
+    public void Draw()
+    {
+      // statistics
+      var spritesCounter = 0;
+      var drawCallsCounter = 0;
+
+      // TODO: not efficient to sort layers every draw call
+      var sortedLayers = layers.Values.ToList();
+      sortedLayers.Sort(
+        (left, right) => (left.Z == right.Z) ? 0 : ((left.Z > right.Z) ? 1 : -1)                
+      );
+
+      foreach (var layer in sortedLayers)
+      {
+        if (layer.DrawsDesc.Count == 0)
+        {
+          continue;
+        }
+
+        Begin(layer.Blend);
+
+        foreach (var dd in layer.DrawsDesc)
+        {
+          spriteBatch.Draw(
+            dd.Texture, 
+            dd.Position, 
+            dd.Rect, 
+            dd.Tint, 
+            dd.Rotation, 
+            Vector2.Zero, 
+            dd.Scale, 
+            SpriteEffects.None, 
+            0
+          );
+
+          ++spritesCounter;
+        }
+
+        End();
+
+        ++drawCallsCounter;
+
+        layer.DrawsDesc.Clear();
+      }
     }
 
     public void Begin(BlendState blendState)
@@ -160,17 +224,14 @@ namespace Chroma.Graphics
     {
       var d = new Vector2(sprite.AnchorPoint.X * sprite.Width, sprite.AnchorPoint.Y * sprite.Height);
 
-      spriteBatch.Draw(
+      InternalDrawSprite(
         core.SpriteManager.GetTexture(sprite.TextureName),
         position - d,
         new Rectangle(sprite.X, sprite.Y, sprite.Width, sprite.Height),
         tint,
-        0,
-        Vector2.Zero,
-        scale,
-        SpriteEffects.None,
-        rotation
-       );
+        rotation,
+        scale
+      );
     }
 
     public void DrawLineS(Vector2 from, Vector2 to, Color color)
@@ -179,31 +240,25 @@ namespace Chroma.Graphics
       var length = v.Length();
       var rect = new Rectangle(0, 0, (int)length, 1);
 
-      spriteBatch.Draw(
-        core.SpriteManager.OnePixel, 
-        from, 
-        rect, 
-        color, 
+      InternalDrawSprite(
+        core.SpriteManager.OnePixel,
+        from,
+        rect,
+        color,
         (float)Math.Atan(v.Y / v.X), 
-        Vector2.Zero, 
-        1.0f, 
-        SpriteEffects.None, 
-        0
+        1.0f
       );
     }
 
     public void DrawRectangleS(Vector2 position, float width, float height, Color color)
     {
-      spriteBatch.Draw(
-        core.SpriteManager.OnePixel, 
-        position, 
+      InternalDrawSprite(
+        core.SpriteManager.OnePixel,
+        position,
         new Rectangle(0, 0, (int)width, (int)height), 
         color, 
-        0, 
-        Vector2.Zero, 
-        1.0f, 
-        SpriteEffects.None, 
-        0
+        0,
+        1.0f
       );
     }
 
@@ -223,5 +278,17 @@ namespace Chroma.Graphics
     }
 
     #endregion
+  
+    private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle rect, Color tint, float rotation, float scale)
+    {
+      layers[currentLayerName].DrawsDesc.Add(new DrawDesc() {
+        Texture = texture,
+        Position = position,
+        Rect = rect,
+        Tint = tint,
+        Rotation = rotation,
+        Scale = scale
+      });
+    }
   }
 }

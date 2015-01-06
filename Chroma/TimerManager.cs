@@ -52,12 +52,12 @@ namespace Chroma
         }
       }
 
+      ++ElapsedTicks;
+
       if (Loops > 0 && ElapsedLoops == Loops)
       {
         IsFinished = true;
       }
-
-      ++ElapsedTicks;
     }
   }
 
