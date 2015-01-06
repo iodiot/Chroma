@@ -62,25 +62,48 @@ namespace Chroma.States
       var trees = core.SpriteManager.GetSprite("trees_l1");
       for (var i = 0; i <= 2; i++)
       {
-        core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.1f) % trees.Width, 31), Color.White);   
+        core.Renderer["bg"].DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.1f) % trees.Width, 31), Color.White);   
       }
       trees = core.SpriteManager.GetSprite("trees_l2");
       for (var i = 0; i <= 2; i++)
       {
-        core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.2f) % trees.Width, 31), Color.White);   
+        core.Renderer["bg"].DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.2f) % trees.Width, 31), Color.White);   
       }
       trees = core.SpriteManager.GetSprite("trees_l3");
       for (var i = 0; i <= 2; i++)
       {
-        core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.5f) % trees.Width, 17), Color.White);   
+        core.Renderer["bg"].DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.5f) % trees.Width, 17), Color.White);   
       }
       trees = core.SpriteManager.GetSprite("trees_l4");
       for (var i = 0; i <= 2; i++)
       {
-        core.Renderer.DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.7f) % trees.Width, 0), Color.White);   
+        core.Renderer["bg"].DrawSpriteS(trees, new Vector2(trees.Width * i - (groundScroll * 0.7f) % trees.Width, 0), Color.White);   
       }
 
-      var offset = 120f; 
+     
+      var offset = 60f; 
+      trees = core.SpriteManager.GetSprite("sun_ray_3");
+      for (var i = 0; i <= 3; i++)
+      {
+        core.Renderer["bg_add"].DrawSpriteS(trees, new Vector2(
+          (offset + trees.Width) * i - (groundScroll * 0.80f) % (offset + trees.Width), 0), Color.White); 
+      }
+      offset = 90; 
+      trees = core.SpriteManager.GetSprite("sun_ray_2");
+      for (var i = 0; i <= 3; i++)
+      {
+        core.Renderer["bg_add"].DrawSpriteS(trees, new Vector2(
+          (offset + trees.Width) * i - (groundScroll * 0.70f) % (offset + trees.Width), 0), Color.White); 
+      }
+      offset = 75; 
+      trees = core.SpriteManager.GetSprite("sun_ray_1");
+      for (var i = 0; i <= 3; i++)
+      {
+        core.Renderer["bg_add"].DrawSpriteS(trees, new Vector2(
+          (offset + trees.Width) * i - (groundScroll * 0.90f) % (offset + trees.Width), 0), Color.White); 
+      }
+
+      offset = 120; 
       trees = core.SpriteManager.GetSprite("trees_l5_1");
       for (var i = 0; i <= 3; i++)
       {
@@ -185,13 +208,13 @@ namespace Chroma.States
 
     public override void Draw()
     {
-      core.Renderer.DrawRectangleS(
+      core.Renderer["bg"].DrawRectangleS(
         new Vector2(0, 0),
         core.Renderer.ScreenWidth + 1,
         groundLevel,
         new Color(17, 22, 42)
       );
-      core.Renderer.DrawRectangleS(
+      core.Renderer["bg"].DrawRectangleS(
         new Vector2(0, groundLevel),
         core.Renderer.ScreenWidth + 1,
         core.Renderer.ScreenHeight - groundLevel + 1,

@@ -34,7 +34,7 @@ namespace Chroma.Actors
     public override void Draw()
     {
       core.Renderer.DrawSpriteW(walkAnimation.GetCurrentFrame(), Position, Color.White, 1.0f, 0);
-      core.Renderer.DrawSpriteW(legAnimation.GetCurrentFrame(), Position, Color.White, 1.0f, 0);
+      core.Renderer["fg"].DrawSpriteW(legAnimation.GetCurrentFrame(), Position, Color.White, 1.0f, 0);
 
       base.Draw();
     }

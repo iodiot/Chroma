@@ -89,8 +89,11 @@ namespace Chroma.Graphics
 
     public void Load()
     {
+      AddLayer("bg", -2, Renderer.AlphaBlend);
+      AddLayer("bg_add", -1, Renderer.AdditiveBlend);
       AddLayer(DefaultLayerName, 0, Renderer.AlphaBlend);
-      AddLayer("glow_bg", -1, Renderer.AdditiveBlend);
+      AddLayer("fg_add", 1, Renderer.AdditiveBlend);
+      AddLayer("fg", 2, Renderer.AlphaBlend);
       AddLayer("gui", 10, Renderer.AlphaBlend);
 
       SetCurrentLayer(DefaultLayerName);
