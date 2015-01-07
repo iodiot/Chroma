@@ -14,10 +14,10 @@ namespace Chroma.Actors
     {
       boundingBox = new Rectangle(15, 0, 18, 20);
 
-      walkAnimation = new Animation();
+      walkAnimation = new Animation(0.15f);
       walkAnimation.AddAndPlay("live", core.SpriteManager.GetFrames("slime_walk_", new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }));
 
-      legAnimation = new Animation();
+      legAnimation = new Animation(0.15f);
       legAnimation.AddAndPlay("live", core.SpriteManager.GetFrames("slime_walk_leg_", new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }));
     }
 
@@ -26,7 +26,7 @@ namespace Chroma.Actors
       walkAnimation.Update(ticks);
       legAnimation.Update(ticks);
 
-      X -= 0.5f;
+      X -= 1.0f;
 
       base.Update(ticks);
     }

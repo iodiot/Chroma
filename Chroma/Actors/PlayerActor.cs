@@ -112,7 +112,7 @@ namespace Chroma.Actors
 
       if ((touchState[0].Position.X >= core.Renderer.ScreenWidth / 2) && (fireTtl == 0))
       {
-        fireTtl = 25;
+        fireTtl = 5;
 
         core.MessageManager.Send(
           new AddActorMessage(

@@ -184,9 +184,13 @@ namespace Chroma.States
 
     public override void Update(int ticks)
     {
-      if (core.GetRandom(0, 150) == 0)
+      if (core.GetRandom(0, 70) == 0)
       {
         ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 53)));
+      }
+      if (core.GetRandom(0, 70) == 0)
+      {
+        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 28)));
       }
 
 //      if (core.GetRandom(0, 50) == 0)

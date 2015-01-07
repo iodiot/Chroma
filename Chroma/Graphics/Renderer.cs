@@ -94,7 +94,6 @@ namespace Chroma.Graphics
       AddLayer(DefaultLayerName, 0, Renderer.AlphaBlend);
       AddLayer("fg_add", 1, Renderer.AdditiveBlend);
       AddLayer("fg", 2, Renderer.AlphaBlend);
-      AddLayer("gui", 10, Renderer.AlphaBlend);
 
       SetCurrentLayer(DefaultLayerName);
     }
@@ -190,6 +189,8 @@ namespace Chroma.Graphics
 
         layer.DrawsDesc.Clear();
       }
+
+      //Log.Print(drawCallsCounter.ToString());
     }
 
     public void Begin(BlendState blendState)
