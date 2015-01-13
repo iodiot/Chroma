@@ -54,6 +54,8 @@
     <MtouchDebug>true</MtouchDebug>
     <IpaPackageName>
     </IpaPackageName>
+    <MtouchI18n>
+    </MtouchI18n>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>full</DebugType>
@@ -95,17 +97,17 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="Xamarin.iOS" />
     <Reference Include="Lidgren.Network">
       <HintPath>packages\ios\Lidgren.Network.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Framework.Net">
-      <HintPath>packages\ios\MonoGame.Framework.Net.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>packages\ios\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System.Json" />
+    <Reference Include="MonoGame.Framework.Net">
+      <HintPath>packages\ios\MonoGame.Framework.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json" />
