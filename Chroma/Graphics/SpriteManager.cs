@@ -16,6 +16,8 @@ namespace Chroma.Graphics
     public int Y;
     public int Width;
     public int Height;
+    public int LinkX;
+    public int LinkY;
     public Vector2 AnchorPoint;
   }
 
@@ -84,10 +86,17 @@ namespace Chroma.Graphics
         var y = sprite["y"];
         var width = sprite["width"];
         var height = sprite["height"];
+        var linkX = 0;
+        var linkY = 0;
+        if (sprite["link"] == "true")
+        {
+          linkX = sprite["link-x"];
+          linkY = sprite["link-y"];
+        }
 
         sprites.Add(
           name,
-          new Sprite() { X = x, Y = y, Width = width, Height = height, TextureName = textureName }
+          new Sprite() { X = x, Y = y, Width = width, Height = height, TextureName = textureName, LinkX = linkX, LinkY = linkY }
         );
       }
     }
@@ -97,7 +106,12 @@ namespace Chroma.Graphics
       Debug.Assert(sprites.ContainsKey(name), String.Format("SpriteManager.GetSprite() : Sprite {0} is missing", name));
 
       var s = sprites[name];
-      return new Sprite() { X = s.X, Y = s.Y, Width = s.Width, Height = s.Height, TextureName = s.TextureName };
+      return new Sprite() { 
+        X = s.X, Y = s.Y, 
+        Width = s.Width, Height = s.Height, 
+        TextureName = s.TextureName, 
+        LinkX = s.LinkX, LinkY = s.LinkY 
+      };
     }
 
     public Texture2D GetTexture(string name)

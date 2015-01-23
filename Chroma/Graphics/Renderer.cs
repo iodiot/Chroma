@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Chroma.Graphics
 {
+
   public sealed class Renderer
   {
     private const string DefaultLayerName = "default";

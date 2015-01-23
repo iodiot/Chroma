@@ -4,15 +4,18 @@ using Microsoft.Xna.Framework;
 using Chroma.Actors;
 using Chroma.Graphics;
 using Chroma.Messages;
+using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
   public class GolemActor : CollidableActor
   {
     private readonly Animation animation;
+    private MagicColor color;
 
-    public GolemActor(Core core, Vector2 position) : base(core, position)
+    public GolemActor(Core core, Vector2 position, MagicColor color) : base(core, position)
     {
+      this.color = color;
       boundingBox = new Rectangle(0, 0, 20, 28);
 
       animation = new Animation();
@@ -30,14 +33,16 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, Color.White);
+      Color color = MagicManager.MagicColors[this.color];
+      core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(20, 10), color * 0.3f);
+      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, color);
 
       base.Draw();
     }
 
     public override void OnCollide(CollidableActor other)
     {
-      if (other is ProjectileActor)
+      if (other is ProjectileActor && ((ProjectileActor)other).color == this.color)
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
         core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);

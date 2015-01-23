@@ -169,12 +169,14 @@
     <Compile Include="Particles\DispersalParticleBehaviour.cs" />
     <Compile Include="Actors\CollidableActor.cs" />
     <Compile Include="Actors\ProjectileActor.cs" />
-    <Compile Include="Gui\JoystickGui.cs" />
     <Compile Include="Actors\SpikeActor.cs" />
     <Compile Include="Graphics\FrameCounter.cs" />
     <Compile Include="TimerManager.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Actors\SlimeWalkActor.cs" />
+    <Compile Include="StateMachines\StateMachine.cs" />
+    <Compile Include="Gameplay\MagicManager.cs" />
+    <Compile Include="Gui\GameHUD.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -186,6 +188,8 @@
     <Folder Include="Graphics\" />
     <Folder Include="Gui\" />
     <Folder Include="Particles\" />
+    <Folder Include="StateMachines\" />
+    <Folder Include="Gameplay\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\click1.wav">

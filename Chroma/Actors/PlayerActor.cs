@@ -4,65 +4,99 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Graphics;
 using Chroma.Messages;
+using Chroma.StateMachines;
+using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
+
   public class PlayerActor : CollidableActor
   {
-    private readonly Animation animation; 
-    private readonly List<string> quotes = new List<string>() { "fuck", "shit", "devil" };
+    private readonly Animation animation, armAnimation; 
+
+    public MagicColor chargeColor;
+    public bool charging = false;
 
     private int jumpTtl;
     private int hurtTtl;
-    private int fireTtl;
-    private int textTtl;
 
     private float groundLevel;
-    private int currentQuote;
+
+    enum DruidState {
+      Running,
+      Jumping,
+      Falling,
+      Landing
+    }
+    enum DruidEvent {
+      Jump,
+      Fall,
+      Land
+    }
+    private StateMachine<DruidState, DruidEvent> sm;
 
     public PlayerActor(Core core, Vector2 position) : base(core, position)
     {
       Handle = "player";
-
+          
       boundingBox = new Rectangle(5, 0, 12, 21);
 
       animation = new Animation();
-      animation.Add("walk", core.SpriteManager.GetFrames("druid_walk_", new List<int>{ 1, 2, 3, 4 }));
-      animation.Add("raise", core.SpriteManager.GetFrames("druid_raise_", new List<int>{ 1, 2 }));
+      animation.Add("run", core.SpriteManager.GetFrames("druid_run_", new List<int>{ 1, 2, 3, 4, 5, 6, 7, 8 }));
+      animation.Add("fall", core.SpriteManager.GetFrames("druid_fall_", new List<int>{ 1, 2 }));
+      animation.Add("jump", core.SpriteManager.GetFrames("druid_jump_", new List<int>{ 1, 2 }));
+      animation.Add("land", new List<Sprite>{core.SpriteManager.GetSprite("druid_land")});
 
-      animation.Play("walk");
+      armAnimation = new Animation();
+      armAnimation.Add("run", core.SpriteManager.GetFrames("arm_run_", new List<int>{ 1, 2, 3, 4, 5, 4, 3, 2 }));
+
+      animation.Play("run");
+      armAnimation.Play("run");
 
       jumpTtl = 0;
       hurtTtl = 0;
-      fireTtl = 0;
-      textTtl = 0;
       groundLevel = position.Y;
+
+      sm = new StateMachine<DruidState, DruidEvent>();
+      sm.State(DruidState.Running)
+        .IsInitial()
+        .On(DruidEvent.Jump, DruidState.Jumping)
+        .On(DruidEvent.Fall, DruidState.Falling);
+      sm.State(DruidState.Jumping)
+        .On(DruidEvent.Fall, DruidState.Falling);
+      sm.State(DruidState.Falling)
+        .On(DruidEvent.Land, DruidState.Landing);
+      sm.State(DruidState.Landing)
+        .After(10).AutoTransitionTo(DruidState.Running);
+      sm.Start();
     }
 
     public override void Update(int ticks)
     {
-      if ((textTtl == 0) && core.GetRandom(0, 1000) == 0)
-      {
-        textTtl = 50;
-        currentQuote = core.GetRandom(0, quotes.Count - 1);
-      }
+      sm.Update(ticks);
 
-      HandleInput();
+      if (sm.currentState == DruidState.Running && sm.justEnteredState)
+      {
+        animation.Play("run");
+      }
 
       if (jumpTtl > 0)
       {
         --jumpTtl;
-        Y = groundLevel - 30.0f * (float)Math.Sin((double)jumpTtl / 25.0 * Math.PI);
+        float oldY = Y;
+        Y = groundLevel - 50.0f * (float)Math.Sin((double)jumpTtl / 50.0 * Math.PI);
+
+        if (oldY < Y)
+        {
+          animation.Play("fall");
+          sm.Trigger(DruidEvent.Fall);
+        }
 
         if (jumpTtl == 0)
         {
-          animation.Play("walk");
+          animation.Play("land");
+          sm.Trigger(DruidEvent.Land);
         }
-      }
-
-      if (fireTtl > 0)
-      {
-        --fireTtl;
       }
 
       if (hurtTtl > 0)
@@ -70,12 +104,8 @@ namespace Chroma.Actors
         --hurtTtl;
       }
 
-      if (textTtl > 0)
-      {
-        --textTtl;
-      }
-
       animation.Update(ticks);
+      armAnimation.Update(ticks);
 
       X += 1.0f;
 
@@ -85,42 +115,54 @@ namespace Chroma.Actors
     public override void Draw()
     {
       var tint = (hurtTtl / 5) % 2 == 0 ? Color.White : Color.Red;
-      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, tint);
 
-      if (textTtl > 0)
-      {
-        core.Renderer.DrawTextW(quotes[currentQuote], Position + new Vector2(10, -10), Color.White);
-      }
+      var pos = new Vector2(Position.X, Position.Y);
+      if (sm.currentState == DruidState.Landing)
+        pos.Y += 5;
+
+      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), pos, tint);
+
+      if (charging)
+        core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(22, 15),
+          MagicManager.MagicColors[chargeColor] * 0.8f);
+
+      pos.X += animation.GetCurrentFrame().LinkX - armAnimation.GetCurrentFrame().LinkX;
+      pos.Y += animation.GetCurrentFrame().LinkY - armAnimation.GetCurrentFrame().LinkY;
+      core.Renderer.DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
+
+      //core.Renderer.DrawTextW(sm.currentState.ToString() + animation.GetCurrentFrame().LinkX.ToString(), 
+      //  Position + new Vector2(10, -10), Color.White);
 
       base.Draw();
     }
 
-    private void HandleInput()
+    public void TryToJump()
     {
-      var touchState = TouchPanel.GetState();
-
-      if (touchState.Count != 1)
+      if (sm.currentState == DruidState.Running)
       {
-        return;
+        jumpTtl = 50;
+        animation.Play("jump");
+        sm.Trigger(DruidEvent.Jump);
       }
+    }
 
-      if ((touchState[0].Position.X < core.Renderer.ScreenWidth / 2) && (jumpTtl == 0))
-      {
-        jumpTtl = 25;
-        animation.Play("raise");
-      }
+    public void Charge(MagicColor first, MagicColor second)
+    {
+      chargeColor = MagicManager.Mix(first, second);
+      charging = true;
+    }
 
-      if ((touchState[0].Position.X >= core.Renderer.ScreenWidth / 2) && (fireTtl == 0))
-      {
-        fireTtl = 5;
+    public void Shoot()
+    {
+      core.MessageManager.Send(
+        new AddActorMessage(
+          new ProjectileActor(core, Position + new Vector2(10, 10), chargeColor)
+        ),
+        this
+      );
 
-        core.MessageManager.Send(
-          new AddActorMessage(
-            new ProjectileActor(core, Position + new Vector2(25, 10))
-          ),
-          this
-        );
-      }
+      charging = false;
+      chargeColor = 0;
     }
 
     public override void OnCollide(CollidableActor other)

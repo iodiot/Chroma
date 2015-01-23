@@ -3,45 +3,42 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Chroma.Graphics;
 using Chroma.Messages;
+using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
-  public enum ProjectileColor
-  {
-    Red,
-    Yellow,
-    Blue
-  };
-
   public class ProjectileActor : CollidableActor
   {
-    private readonly ProjectileColor color;
+    public readonly MagicColor color;
     private readonly Animation animation;
 
-    public ProjectileActor(Core core, Vector2 position) : base(core, position)
+    public ProjectileActor(Core core, Vector2 position, MagicColor color) : base(core, position)
     {
       boundingBox = new Rectangle(0, 0, 14, 8);
 
       Ttl = 200;
 
-      color = ProjectileColor.Red;
+      this.color = color;
 
       animation = new Animation();
-      animation.AddAndPlay("live", core.SpriteManager.GetFrames("projectile_red_", new List<int>() { 1, 2, 3, 4 }));
+      animation.AddAndPlay("live", core.SpriteManager.GetFrames("projectile_", new List<int>() { 1, 2, 3, 4 }));
     }
 
     public override void Update(int ticks)
     {
       animation.Update(ticks);
 
-      X += 3.0f;
+      X += 8.0f;
 
       base.Update(ticks);
     }
 
     public override void Draw()
     {
-      core.Renderer["fg_add"].DrawSpriteW(animation.GetCurrentFrame(), Position, Color.White);
+      Color color = MagicManager.MagicColors[this.color];
+      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, color * 0.5f);
+      core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(20, 23), color * 0.4f);
+      //core.Renderer["fg_add"].DrawSpriteW(animation.GetCurrentFrame(), Position, color);
 
       base.Draw();
     }

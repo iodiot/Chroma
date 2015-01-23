@@ -7,19 +7,23 @@ using Chroma.Actors;
 using Chroma.Messages;
 using Chroma.Graphics;
 using Chroma.Gui;
+using Chroma.Gameplay;
 
 namespace Chroma.States
 {
   public class PlayState : State
   {
     public ActorManager ActorManager { get; private set; }
+
+    public GameHUD GameControls { get; private set; }
+
     private PlayerActor player;
 
     private float groundScroll;
     private int groundLevel;
 
-    private HealthGui health;
-    private JoystickGui joystick;
+    private int toNextGolem = -1;
+    private int toNextSlime = -1;
 
     public PlayState(Core core) : base(core)
     {
@@ -35,16 +39,7 @@ namespace Chroma.States
       ActorManager = new ActorManager(core);
       ActorManager.Add(player);
 
-      //for (var i = 0; i < 100; ++i)
-      //{
-      //  var y = (float)(10 * Math.Sin(i * 0.5));
-      //  ActorManager.Add(new CoinActor(core, new Vector2(50 + i * 10, 25 + y)));
-      // }
-
-      //ActorManager.Add(new GolemActor(core, new Vector2(300, 27)));
-
-      health = new HealthGui(core);
-      joystick = new JoystickGui(core); 
+      GameControls = new GameHUD(core, this, player);
     }
 
     public override void Load()
@@ -184,28 +179,46 @@ namespace Chroma.States
 
     public override void Update(int ticks)
     {
-      if (core.GetRandom(0, 70) == 0)
+
+      #region Enemy spawning
+      if (toNextGolem < 0)
+        toNextGolem = core.GetRandom(80, 200);
+      if (toNextSlime < 0)
+        toNextSlime = core.GetRandom(200, 600);
+
+      if (toNextSlime == 0)
       {
-        ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 53)));
+        ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 53),
+          MagicManager.GetRandomColor(core, 0.2f)));
       }
-      if (core.GetRandom(0, 70) == 0)
+      if (toNextGolem == 0)
       {
-        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 28)));
+        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 28),
+          (MagicManager.GetRandomColor(core, 0.2f))));
+        if (core.ChanceRoll(0.3f))
+        {
+          ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 56),
+              MagicManager.GetRandomColor(core, 0)));
+          if (core.ChanceRoll(0.4f))
+          {
+            ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 84),
+                MagicManager.GetRandomColor(core, 0)));
+
+          }
+        }
       }
 
-//      if (core.GetRandom(0, 50) == 0)
-//      {
-//        ActorManager.Add(new SpikeActor(core, new Vector2(player.Position.X + 250, groundLevel - 28), core.GetRandom(1, 4)));
-//      }
+      toNextGolem--;
+      toNextSlime--;
+      #endregion
 
       groundScroll += 1.0f;
 
       ActorManager.Update(ticks);
 
-      core.Renderer.World = new Vector2(-player.Position.X + 10, 0);
+      core.Renderer.World = new Vector2(-player.Position.X + 25, 0);
 
-      health.Update(ticks);
-      joystick.Update(ticks);
+      GameControls.Update(ticks);
 
       base.Update(ticks);
     }
@@ -232,14 +245,9 @@ namespace Chroma.States
 
       DrawFgGrass();
 
-      //health.Draw();
-      //joystick.Draw();
+      GameControls.Draw();
 
       base.Draw();
-    }
-
-    private void HandleInput()
-    {
     }
 
     public override void OnMessage(Message message, object sender)

@@ -49,6 +49,11 @@ namespace Chroma
       return (random.Next() % (to - from + 1)) + from;
     }
 
+    public bool ChanceRoll(float chance = 0.5f)
+    {
+      return GetRandom(1, 100) <= chance * 100;
+    }
+
     #region States
 
     private void ClearStates()
