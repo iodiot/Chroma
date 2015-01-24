@@ -7,7 +7,7 @@ using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
-  public class SlimeWalkActor : CollidableActor
+  public class SlimeWalkActor : Actor
   {
     private readonly Animation walkAnimation, legAnimation; 
     public readonly MagicColor color;
@@ -15,13 +15,19 @@ namespace Chroma.Actors
     public SlimeWalkActor(Core core, Vector2 position, MagicColor color) : base(core, position)
     {
       this.color = color;
-      boundingBox = new Rectangle(15, 0, 18, 20);
+      boundingBox = new Rectangle(0, 0, 48, 53);
 
       walkAnimation = new Animation(0.15f);
       walkAnimation.AddAndPlay("live", core.SpriteManager.GetFrames("slime_walk_", new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }));
 
       legAnimation = new Animation(0.15f);
       legAnimation.AddAndPlay("live", core.SpriteManager.GetFrames("slime_walk_leg_", new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }));
+
+      AddCollider(new Collider() { Name = "heart", BoundingBox = new Rectangle(15, 0, 18, 20) });
+
+      IsStatic = false;
+      CanFall = true;
+      CanLick = true;
     }
 
     public override void Update(int ticks)
@@ -29,7 +35,7 @@ namespace Chroma.Actors
       walkAnimation.Update(ticks);
       legAnimation.Update(ticks);
 
-      X -= 1.0f;
+      Velocity.X -= 1.0f;
 
       base.Update(ticks);
     }
@@ -43,7 +49,7 @@ namespace Chroma.Actors
       base.Draw();
     }
 
-    public override void OnCollide(CollidableActor other)
+    public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
       if (other is ProjectileActor && ((ProjectileActor)other).color == this.color)
       {
@@ -51,7 +57,12 @@ namespace Chroma.Actors
         core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, walkAnimation.GetCurrentFrame())), this);
       }
 
-      base.OnCollide(other);
+      base.OnColliderTrigger(other, otherCollider, thisCollider);
+    }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      return !actor.IsStatic;
     }
   }
 }

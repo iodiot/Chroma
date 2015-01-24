@@ -8,7 +8,7 @@ using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
-  public class GolemActor : CollidableActor
+  public class GolemActor : Actor
   {
     private readonly Animation animation;
     private MagicColor color;
@@ -20,6 +20,12 @@ namespace Chroma.Actors
 
       animation = new Animation();
       animation.AddAndPlay("live", core.SpriteManager.GetFrames("golem_", new List<int>{ 1, 2, 3, 4, 5, 6 }));
+
+      IsStatic = false;
+      CanFall = true;
+      CanLick = true;
+
+      AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
     }
 
     public override void Update(int ticks)
@@ -40,7 +46,7 @@ namespace Chroma.Actors
       base.Draw();
     }
 
-    public override void OnCollide(CollidableActor other)
+    public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
       if (other is ProjectileActor && ((ProjectileActor)other).color == this.color)
       {
@@ -48,7 +54,12 @@ namespace Chroma.Actors
         core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);
       }
 
-      base.OnCollide(other);
+      base.OnColliderTrigger(other, otherCollider, thisCollider);
+    }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      return !actor.IsStatic;
     }
   }
 }

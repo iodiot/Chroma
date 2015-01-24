@@ -15,41 +15,126 @@ namespace Chroma.States
   {
     public ActorManager ActorManager { get; private set; }
 
-    public GameHUD GameControls { get; private set; }
+    public GameHudGui gameControls { get; private set; }
 
     private PlayerActor player;
 
     private float groundScroll;
-    private int groundLevel;
 
     private int toNextGolem = -1;
     private int toNextSlime = -1;
+
+    private readonly Level level;
+
+    private int currentX, currentY;
+    private PlatformActor lastPlatform;
 
     public PlayState(Core core) : base(core)
     {
       core.MessageManager.Subscribe(MessageType.AddActor, this);
       core.MessageManager.Subscribe(MessageType.RemoveActor, this);
 
+      level = new Level(core);
+
       groundScroll = 0;
 
-      groundLevel = 85;
-
-      player = new PlayerActor(core, new Vector2(25, groundLevel - 21));
-
       ActorManager = new ActorManager(core);
+
+      player = new PlayerActor(core, new Vector2(25, 0));
       ActorManager.Add(player);
 
-      GameControls = new GameHUD(core, this, player);
+      AddPlatform(0, 100, 500);
+
+      gameControls = new GameHudGui(core, this, player);
+    }
+
+    private void AddPlatform(int dx, int dy, int width)
+    {
+      currentX += dx;
+      currentY += dy;
+
+      lastPlatform = new PlatformActor(core, new Vector2(currentX, currentY), width);
+      ActorManager.Add(lastPlatform);
+
+      currentX += width;
+    }
+
+    private void UpdatePlatform()
+    {
+      if (lastPlatform.GetWorldBoundingBox().X + lastPlatform.GetWorldBoundingBox().Width - player.X < 500)
+      {
+        // random platform
+        if (core.GetRandom(0, 5) == 0)
+        {
+          ActorManager.Add(new PlatformActor(core, new Vector2(currentX + 50, currentY - 75), 50));
+          for (var i = 0; i < 3; ++i)
+          {
+            ActorManager.Add(new CoinActor(core, new Vector2(currentX + i * 10 + 60, currentY - 85)));
+          }
+
+          AddPlatform(0, 50, 250);
+          return;
+        }
+
+        // downfall
+        if (core.GetRandom(0, 5) == 0)
+        {
+          AddPlatform(50, 0, 100);
+          return;
+        }
+
+        // up steps
+        if (core.GetRandom(0, 5) == 0)
+        {
+          for (var i = 0; i < 3; ++i)
+          {
+            AddPlatform(0, -10, 25);
+          }
+          return;
+        }
+
+        // down steps
+        if (core.GetRandom(0, 5) == 0)
+        {
+          for (var i = 0; i < 3; ++i)
+          {
+            AddPlatform(0, 10, 25);
+          }
+          return;
+        }
+
+        // up rock
+        if (core.GetRandom(0, 5) == 0)
+        {
+          for (var i = 0; i < 5; ++i)
+          {
+            AddPlatform(0, -25, 250);
+          }
+          return;
+        }
+
+        // down rock
+        if (core.GetRandom(0, 5) == 0)
+        {
+          for (var i = 0; i < 5; ++i)
+          {
+            AddPlatform(0, 25, 250);
+          }
+          return;
+        }
+
+        AddPlatform(0, 0, 250);
+      }
     }
 
     public override void Load()
     {
-      ActorManager.Load();
+      ActorManager.Initialize();
     }
 
     public override void Unload()
     {
-      ActorManager.Unload();
+      ActorManager.Uninitialize();
     }
 
     private void DrawTrees()
@@ -145,41 +230,9 @@ namespace Chroma.States
       }
     }
 
-    private void DrawGround()
-    {
-      var ground = core.SpriteManager.GetSprite("ground");
-      var earth = core.SpriteManager.GetSprite("earth");
-      var floor = core.SpriteManager.GetSprite("floor");
-
-      for (var i = 0; i <= (core.Renderer.ScreenWidth / earth.Width) + 1; ++i)
-      {
-        core.Renderer.DrawSpriteS(earth, new Vector2(earth.Width * i - groundScroll % earth.Width, groundLevel + 8), Color.White);   
-      }
-
-      for (var i = 0; i <= (core.Renderer.ScreenWidth / floor.Width) + 1; ++i)
-      {
-        core.Renderer.DrawSpriteS(floor, new Vector2(floor.Width * i - groundScroll % floor.Width, groundLevel - 9), Color.White);        
-      }
-
-      for (var i = 0; i <= (core.Renderer.ScreenWidth / ground.Width) + 1; ++i)
-      {
-        core.Renderer.DrawSpriteS(ground, new Vector2(ground.Width * i - groundScroll % ground.Width, groundLevel + 3), Color.White);        
-      }
-    }
-
-    private void DrawFgGrass()
-    {
-      var grass = core.SpriteManager.GetSprite("floor_grass");
-
-      for (var i = 0; i <= (core.Renderer.ScreenWidth / grass.Width) + 1; ++i)
-      {
-        core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i - groundScroll % grass.Width + 7, groundLevel - 3), Color.White);        
-      }
-    }
-
     public override void Update(int ticks)
     {
-
+      /*
       #region Enemy spawning
       if (toNextGolem < 0)
         toNextGolem = core.GetRandom(80, 200);
@@ -210,7 +263,7 @@ namespace Chroma.States
 
       toNextGolem--;
       toNextSlime--;
-      #endregion
+      #endregion*/
 
       groundScroll += 1.0f;
 
@@ -218,7 +271,20 @@ namespace Chroma.States
 
       core.Renderer.World = new Vector2(-player.Position.X + 25, 0);
 
-      GameControls.Update(ticks);
+      UpdatePlatform();
+
+      if (core.GetRandom(0, 150) == 0)
+      {
+        ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, player.Position.Y - 100), MagicColor.Red));
+      }
+
+      groundScroll = player.Position.X;
+
+      ActorManager.Update(ticks);
+
+      core.Renderer.World = new Vector2(-player.Position.X + 10, -player.Position.Y + 75);
+
+      gameControls.Update(ticks);
 
       base.Update(ticks);
     }
@@ -228,24 +294,21 @@ namespace Chroma.States
       core.Renderer["bg"].DrawRectangleS(
         new Vector2(0, 0),
         core.Renderer.ScreenWidth + 1,
-        groundLevel,
+        level.GetGroundLevel(),
         new Color(17, 22, 42)
       );
       core.Renderer["bg"].DrawRectangleS(
-        new Vector2(0, groundLevel),
+        new Vector2(0, level.GetGroundLevel()),
         core.Renderer.ScreenWidth + 1,
-        core.Renderer.ScreenHeight - groundLevel + 1,
+        core.Renderer.ScreenHeight - level.GetGroundLevel() + 1,
         new Color(16, 19, 17)
       );
 
       DrawTrees();
-      DrawGround();
 
       ActorManager.Draw();
 
-      DrawFgGrass();
-
-      GameControls.Draw();
+      gameControls.Draw();
 
       base.Draw();
     }

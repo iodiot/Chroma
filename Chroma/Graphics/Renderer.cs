@@ -27,7 +27,7 @@ namespace Chroma.Graphics
     {
       public Texture2D Texture;
       public Vector2 Position;
-      public Rectangle Rect;
+      public Rectangle SourceRect;
       public Color Tint;
       public float Rotation;
       public float Scale;
@@ -171,13 +171,13 @@ namespace Chroma.Graphics
         {
           spriteBatch.Draw(
             dd.Texture, 
-            dd.Position, 
-            dd.Rect, 
-            dd.Tint, 
-            dd.Rotation, 
-            Vector2.Zero, 
-            dd.Scale, 
-            SpriteEffects.None, 
+            dd.Position,
+            dd.SourceRect,
+            dd.Tint,
+            dd.Rotation,
+            Vector2.Zero,
+            new Vector2(dd.Scale, dd.Scale),
+            SpriteEffects.None,
             0
           );
 
@@ -303,12 +303,12 @@ namespace Chroma.Graphics
 
     #endregion
   
-    private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle rect, Color tint, float rotation, float scale)
+    private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, Color tint, float rotation, float scale)
     {
       layers[currentLayerName].DrawsDesc.Add(new DrawDesc() {
         Texture = texture,
         Position = position,
-        Rect = rect,
+        SourceRect = sourceRect,
         Tint = tint,
         Rotation = rotation,
         Scale = scale

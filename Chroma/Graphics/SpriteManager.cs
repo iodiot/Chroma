@@ -19,6 +19,13 @@ namespace Chroma.Graphics
     public int LinkX;
     public int LinkY;
     public Vector2 AnchorPoint;
+
+    public Sprite ClampWidth(int maxWidth)
+    {
+      var result = this.MemberwiseClone() as Sprite;
+      result.Width = Math.Min(Width, maxWidth);
+      return result;
+    }
   }
 
   public sealed class SpriteManager

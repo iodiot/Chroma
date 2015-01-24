@@ -7,13 +7,27 @@ namespace Chroma.Actors
 {
   public abstract class Actor : ISubscriber
   {
-    public string Handle { get; protected set; }
+    #region Fields 
+
     public Vector2 Position;
     public float X { get { return Position.X; } set { Position = new Vector2(value, Position.Y); } }
     public float Y { get { return Position.Y; } set { Position = new Vector2(Position.X, value); } }
-    public int Ttl { get; protected set; }
 
+    public Vector2 Velocity;
+
+    public string Handle { get; protected set; }
+
+    public bool IsStatic { get; protected set; }
+    public bool CanFall { get; protected set; }
+    public bool CanLick { get; protected set; }
+
+    private readonly List<Collider> colliders;
+    protected Rectangle boundingBox;
+
+    public int Ttl { get; protected set; }
     public bool IsDead { get { return Ttl == 0; } }
+
+    #endregion
 
     protected readonly Core core;
 
@@ -25,23 +39,19 @@ namespace Chroma.Actors
 
       Handle = String.Empty;
 
+      colliders = new List<Collider>();
+
       Ttl = -1;
     }
       
-    public virtual void Load()
+    public virtual void Initialize()
     {
-      if (Handle != String.Empty)
-      {
-        core.MessageManager.SubscribeByHandle(Handle, this);
-      }
+
     }
 
-    public virtual void Unload()
+    public virtual void Uninitialize()
     {
-      if (Handle != String.Empty)
-      {
-        core.MessageManager.UnsubscribeByHandle(Handle);
-      }
+
     }
 
     public virtual void Update(int ticks)
@@ -54,11 +64,85 @@ namespace Chroma.Actors
 
     public virtual void Draw()
     {
+      if (Settings.DrawBoundingBoxes)
+      {
+        var box = GetWorldBoundingBox();
+        core.Renderer.DrawRectangleW(new Vector2(box.X, box.Y), box.Width, box.Height, Color.Red * 0.25f);
+      }
+
+      if (Settings.DrawColliders)
+      {
+        for (var i = 0; i < GetCollidersCount(); ++i)
+        {
+          var box = GetWorldCollider(i).BoundingBox;
+          core.Renderer.DrawRectangleW(new Vector2(box.X, box.Y), box.Width, box.Height, Color.Yellow * 0.25f);
+        }
+      }
     }
 
     public virtual void OnMessage(Message message, object sender)
     {
     }
+
+    #region Collision detection
+
+    public Rectangle GetWorldBoundingBox()
+    {
+      return new Rectangle(
+        (int)(Position.X + boundingBox.X),
+        (int)(Position.Y + boundingBox.Y),
+        boundingBox.Width,
+        boundingBox.Height
+      );
+    }
+
+    public Rectangle GetBoundingBox()
+    {
+      return boundingBox;
+    }
+
+    public int GetCollidersCount()
+    {
+      return colliders.Count;
+    }
+
+    public Collider GetWorldCollider(int n)
+    {
+      var box = colliders[n].BoundingBox;
+
+      var collider = new Collider()
+        {
+          Name = colliders[n].Name,
+          BoundingBox = new Rectangle((int)(Position.X + box.X), (int)(Position.Y + box.Y), box.Width, box.Height)
+        };
+
+      return collider;
+    }
+
+    public Collider GetCollider(int n)
+    {
+      return colliders[n];
+    }
+
+    public virtual bool IsPassableFor(Actor actor)
+    {
+      return false;
+    }
+
+    public virtual void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
+    {
+    }
+
+    public virtual void OnBoundingBoxTrigger(Actor other)
+    {
+    } 
+
+    public void AddCollider(Collider collider)
+    {
+      colliders.Add(collider);
+    }
+
+    #endregion
   }
 }
 

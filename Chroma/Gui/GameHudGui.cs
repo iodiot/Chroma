@@ -23,7 +23,7 @@ namespace Chroma.Gui
     public Button Second;
   }
     
-  public class GameHUD : Gui
+  public class GameHudGui : Gui
   {
     private PlayState playState;
     private PlayerActor player;
@@ -32,7 +32,7 @@ namespace Chroma.Gui
     private Dictionary<int, ButtonSwipe> swipes;
     private int jumpTouch = -1;
 
-    public GameHUD(Core core, PlayState playState, PlayerActor player) : base(core)
+    public GameHudGui(Core core, PlayState playState, PlayerActor player) : base(core)
     {
       this.playState = playState;
       this.player = player;

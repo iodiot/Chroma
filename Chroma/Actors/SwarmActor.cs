@@ -13,11 +13,18 @@ namespace Chroma.Actors
 
     public SwarmActor(Core core, Vector2 position, Sprite sprite) : base(core, position)
     {
+      boundingBox = Rectangle.Empty;
+
       particleManager = new ParticleManager(
         core,
-        new DispersalParticleBehaviour(new Vector2(0, 1.0f), 0.9f, 85)
+        new DispersalParticleBehaviour(new Vector2(0, 1.0f), 0.9f, position.Y + sprite.Height)
       );
       particleManager.AddParticlesFromSprite(sprite, position, new Vector2(5.0f, -5.0f), 1.0f, 3);
+
+      IsStatic = false;
+      CanFall = true;
+
+      Ttl = 100;
     }
 
     public override void Update(int ticks)
@@ -32,6 +39,11 @@ namespace Chroma.Actors
       particleManager.Draw(2.0f);
 
       base.Draw();
+    }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      return true;
     }
   }
 }

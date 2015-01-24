@@ -139,9 +139,6 @@
     <Compile Include="SoundManager.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Actors\CoinActor.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\MessageManager.cs" />
     <Compile Include="Messages\ISubscriber.cs" />
@@ -153,30 +150,33 @@
     <Compile Include="Graphics\SpriteManager.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Actors\ActorManager.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Game1.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Actors\GolemActor.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Gui\Gui.cs" />
     <Compile Include="Gui\HealthGui.cs" />
-    <Compile Include="Actors\SwarmActor.cs" />
     <Compile Include="Particles\ParticleManager.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleBehaviour.cs" />
     <Compile Include="Particles\DispersalParticleBehaviour.cs" />
-    <Compile Include="Actors\CollidableActor.cs" />
     <Compile Include="Actors\ProjectileActor.cs" />
     <Compile Include="Actors\SpikeActor.cs" />
     <Compile Include="Graphics\FrameCounter.cs" />
     <Compile Include="TimerManager.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Collider.cs" />
+    <Compile Include="ActorManager.cs" />
+    <Compile Include="Actors\PlatformActor.cs" />
+    <Compile Include="States\SandboxState.cs" />
+    <Compile Include="Actors\GolemActor.cs" />
+    <Compile Include="Actors\SwarmActor.cs" />
+    <Compile Include="Actors\CoinActor.cs" />
     <Compile Include="Actors\SlimeWalkActor.cs" />
     <Compile Include="StateMachines\StateMachine.cs" />
     <Compile Include="Gameplay\MagicManager.cs" />
-    <Compile Include="Gui\GameHUD.cs" />
+    <Compile Include="Gui\GameHudGui.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

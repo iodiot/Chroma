@@ -7,28 +7,34 @@ using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
-  public class ProjectileActor : CollidableActor
+  public class ProjectileActor : Actor
   {
     public readonly MagicColor color;
     private readonly Animation animation;
 
     public ProjectileActor(Core core, Vector2 position, MagicColor color) : base(core, position)
     {
-      boundingBox = new Rectangle(0, 0, 14, 8);
-
-      Ttl = 200;
-
       this.color = color;
+
+      boundingBox = new Rectangle(0, 0, 14, 8);
 
       animation = new Animation();
       animation.AddAndPlay("live", core.SpriteManager.GetFrames("projectile_", new List<int>() { 1, 2, 3, 4 }));
+
+      IsStatic = false;
+      CanFall = false;
+      CanLick = false;
+
+      AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
+
+      Ttl = 250;
     }
 
     public override void Update(int ticks)
     {
       animation.Update(ticks);
 
-      X += 8.0f;
+      Velocity.X += 3.0f;
 
       base.Update(ticks);
     }
@@ -43,12 +49,30 @@ namespace Chroma.Actors
       base.Draw();
     }
 
-    public override void OnCollide(CollidableActor other)
-    {        
-      core.MessageManager.Send(new RemoveActorMessage(this), this);
-      core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);
+    public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
+    {
+      if (!(other is ProjectileActor))
+      {
+        core.MessageManager.Send(new RemoveActorMessage(this), this);
+        core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, animation.GetCurrentFrame())), this);
+      }
 
-      core.Renderer.ShakeScreen(5.0f, 10);
+      base.OnColliderTrigger(other, otherCollider, thisCollider);
+    }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      return !actor.IsStatic;
+    }
+
+    public override void OnBoundingBoxTrigger(Actor other)
+    {
+      if (other is PlatformActor)
+      {
+        core.MessageManager.Send(new RemoveActorMessage(this), this);
+      }
+
+      base.OnBoundingBoxTrigger(other);
     }
   }
 }

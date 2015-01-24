@@ -15,7 +15,7 @@ namespace Chroma.Actors
     Horizontal
   };
 
-  public class CoinActor : CollidableActor
+  public class CoinActor : Actor
   {
     private readonly Animation animation;
 
@@ -28,6 +28,11 @@ namespace Chroma.Actors
       animation.Add("live", core.SpriteManager.GetFrames(prefix, new List<int>{ 1, 2, 3 }));
 
       animation.Play("live");
+
+      IsStatic = true;
+      CanFall = false;
+
+      AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
     }
       
     public override void Update(int ticks)
@@ -44,13 +49,21 @@ namespace Chroma.Actors
       base.Draw();
     }
 
-    public override void OnCollide(CollidableActor other)
+    public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-      core.SoundManager.Play("click");
+      if (other is PlayerActor)
+      {
+        core.SoundManager.Play("click");
 
-      core.MessageManager.Send(new RemoveActorMessage(this), this);
+        core.MessageManager.Send(new RemoveActorMessage(this), this);
+      }
 
-      base.OnCollide(other);
+      base.OnColliderTrigger(other, otherCollider, thisCollider);
+    }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      return !actor.IsStatic;
     }
   }
 }

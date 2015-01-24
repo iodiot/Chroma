@@ -16,7 +16,7 @@ namespace Chroma
 
     public Game1()
       : base()
-    {
+    { 
       graphics = new GraphicsDeviceManager(this);
       Content.RootDirectory = "Content";
     }

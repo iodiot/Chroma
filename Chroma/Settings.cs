@@ -6,7 +6,9 @@ namespace Chroma
   {
     public const float ScreenScale = 3.0f;
     public const bool DrawBoundingBoxes = false;
+    public const bool DrawColliders = false;
     public const bool DrawFps = true;
+    public const float Eps = 0.001f;
   }
 }
 

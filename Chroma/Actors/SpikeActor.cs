@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Chroma.Actors
 {
-  public class SpikeActor : CollidableActor
+  public class SpikeActor : Actor
   {
     private readonly int spikesNumber;
 
@@ -12,6 +12,8 @@ namespace Chroma.Actors
       this.spikesNumber = spikesNumber;
 
       boundingBox = new Rectangle(0, 0, 5 * spikesNumber, 5);
+
+      IsStatic = true;
     }
 
     public override void Draw()

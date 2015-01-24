@@ -9,8 +9,7 @@ using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
-
-  public class PlayerActor : CollidableActor
+  public class PlayerActor : Actor
   {
     private readonly Animation animation, armAnimation; 
 
@@ -19,8 +18,6 @@ namespace Chroma.Actors
 
     private int jumpTtl;
     private int hurtTtl;
-
-    private float groundLevel;
 
     enum DruidState {
       Running,
@@ -37,8 +34,6 @@ namespace Chroma.Actors
 
     public PlayerActor(Core core, Vector2 position) : base(core, position)
     {
-      Handle = "player";
-          
       boundingBox = new Rectangle(5, 0, 12, 21);
 
       animation = new Animation();
@@ -53,10 +48,6 @@ namespace Chroma.Actors
       animation.Play("run");
       armAnimation.Play("run");
 
-      jumpTtl = 0;
-      hurtTtl = 0;
-      groundLevel = position.Y;
-
       sm = new StateMachine<DruidState, DruidEvent>();
       sm.State(DruidState.Running)
         .IsInitial()
@@ -69,6 +60,10 @@ namespace Chroma.Actors
       sm.State(DruidState.Landing)
         .After(10).AutoTransitionTo(DruidState.Running);
       sm.Start();
+
+      IsStatic = false;
+      CanFall = true;
+      CanLick = true;
     }
 
     public override void Update(int ticks)
@@ -83,16 +78,17 @@ namespace Chroma.Actors
       if (jumpTtl > 0)
       {
         --jumpTtl;
-        float oldY = Y;
-        Y = groundLevel - 50.0f * (float)Math.Sin((double)jumpTtl / 50.0 * Math.PI);
 
-        if (oldY < Y)
+        if (jumpTtl > 25)
+        {
+          Velocity.Y -= 10.0f;
+        }
+        else if (jumpTtl > 0)
         {
           animation.Play("fall");
           sm.Trigger(DruidEvent.Fall);
         }
-
-        if (jumpTtl == 0)
+        else
         {
           animation.Play("land");
           sm.Trigger(DruidEvent.Land);
@@ -107,7 +103,7 @@ namespace Chroma.Actors
       animation.Update(ticks);
       armAnimation.Update(ticks);
 
-      X += 1.0f;
+      Velocity.X += 1.0f;
 
       base.Update(ticks);
     }
@@ -129,9 +125,6 @@ namespace Chroma.Actors
       pos.X += animation.GetCurrentFrame().LinkX - armAnimation.GetCurrentFrame().LinkX;
       pos.Y += animation.GetCurrentFrame().LinkY - armAnimation.GetCurrentFrame().LinkY;
       core.Renderer.DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
-
-      //core.Renderer.DrawTextW(sm.currentState.ToString() + animation.GetCurrentFrame().LinkX.ToString(), 
-      //  Position + new Vector2(10, -10), Color.White);
 
       base.Draw();
     }
@@ -165,14 +158,19 @@ namespace Chroma.Actors
       chargeColor = 0;
     }
 
-    public override void OnCollide(CollidableActor other)
+    public override void OnBoundingBoxTrigger(Actor other)
     {
-      if ((other is CollidableActor) && (hurtTtl == 0))
+      if (!other.IsStatic && (hurtTtl == 0))
       {
         hurtTtl = 25;
       }
 
-      base.OnCollide(other);
+      base.OnBoundingBoxTrigger(other);
+    }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      return !actor.IsStatic;
     }
   }
 }
