@@ -44,12 +44,12 @@ namespace Chroma.Actors
       Ttl = -1;
     }
       
-    public virtual void Initialize()
+    public virtual void Load()
     {
 
     }
 
-    public virtual void Uninitialize()
+    public virtual void Unload()
     {
 
     }

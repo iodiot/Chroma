@@ -24,8 +24,6 @@ namespace Chroma.States
     private int toNextGolem = -1;
     private int toNextSlime = -1;
 
-    private readonly Level level;
-
     private int currentX, currentY;
     private PlatformActor lastPlatform;
 
@@ -33,8 +31,6 @@ namespace Chroma.States
     {
       core.MessageManager.Subscribe(MessageType.AddActor, this);
       core.MessageManager.Subscribe(MessageType.RemoveActor, this);
-
-      level = new Level(core);
 
       groundScroll = 0;
 
@@ -294,13 +290,13 @@ namespace Chroma.States
       core.Renderer["bg"].DrawRectangleS(
         new Vector2(0, 0),
         core.Renderer.ScreenWidth + 1,
-        level.GetGroundLevel(),
+        85,
         new Color(17, 22, 42)
       );
       core.Renderer["bg"].DrawRectangleS(
-        new Vector2(0, level.GetGroundLevel()),
+        new Vector2(0, 85),
         core.Renderer.ScreenWidth + 1,
-        core.Renderer.ScreenHeight - level.GetGroundLevel() + 1,
+        core.Renderer.ScreenHeight - 85 + 1,
         new Color(16, 19, 17)
       );
 

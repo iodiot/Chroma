@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace Chroma.StateMachines
 {
-
   public class StateMachine<TState, TEvent> 
     where TState : struct
     where TEvent : struct
   {
-
     public class StateConfig {
       public readonly TState state;
       public readonly StateMachine<TState, TEvent> owner;

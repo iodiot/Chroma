@@ -132,7 +132,6 @@
     <Compile Include="Core.cs" />
     <Compile Include="States\MenuState.cs" />
     <Compile Include="States\State.cs" />
-    <Compile Include="Log.cs" />
     <Compile Include="Actors\Actor.cs" />
     <Compile Include="Actors\PlayerActor.cs" />
     <Compile Include="States\PlayState.cs" />
@@ -165,7 +164,6 @@
     <Compile Include="Actors\SpikeActor.cs" />
     <Compile Include="Graphics\FrameCounter.cs" />
     <Compile Include="TimerManager.cs" />
-    <Compile Include="Level.cs" />
     <Compile Include="Collider.cs" />
     <Compile Include="ActorManager.cs" />
     <Compile Include="Actors\PlatformActor.cs" />
@@ -177,6 +175,7 @@
     <Compile Include="StateMachines\StateMachine.cs" />
     <Compile Include="Gameplay\MagicManager.cs" />
     <Compile Include="Gui\GameHudGui.cs" />
+    <Compile Include="Physics\Physics.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -190,6 +189,7 @@
     <Folder Include="Particles\" />
     <Folder Include="StateMachines\" />
     <Folder Include="Gameplay\" />
+    <Folder Include="Physics\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\click1.wav">

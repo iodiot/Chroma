@@ -31,7 +31,7 @@ namespace Chroma
     {
       foreach (var actor in actors)
       {
-        actor.Uninitialize();
+        actor.Unload();
       }
 
       actors.Clear();
@@ -48,7 +48,7 @@ namespace Chroma
       // remove actors
       foreach (var actor in actorsToRemove)
       {
-        actor.Uninitialize();
+        actor.Unload();
         actors.Remove(actor);
       }
       actorsToRemove.Clear();
@@ -56,7 +56,7 @@ namespace Chroma
       // add actors
       foreach (var actor in actorsToAdd)
       {
-        actor.Initialize();
+        actor.Load();
         actors.Add(actor);
       }
       actorsToAdd.Clear();

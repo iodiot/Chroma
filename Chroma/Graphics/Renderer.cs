@@ -191,7 +191,7 @@ namespace Chroma.Graphics
         layer.DrawsDesc.Clear();
       }
 
-      //Log.Print(drawCallsCounter.ToString());
+      //Debug.Print(drawCallsCounter.ToString());
     }
 
     public void Begin(BlendState blendState)

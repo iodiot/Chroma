@@ -35,10 +35,13 @@ namespace Chroma.Gameplay
     public static MagicColor Mix(MagicColor first, MagicColor second) 
     {
       MagicColor result = first;
+
       if (second == 0) 
       {
         result = first;
-      } else {
+      } 
+      else 
+      {
         if (second < first)
         {
           MagicColor temp;
@@ -46,6 +49,7 @@ namespace Chroma.Gameplay
           second = first;
           first = temp;
         }
+
         if (first == MagicColor.Red && second == MagicColor.Yellow)
           result = MagicColor.Orange;
         if (first == MagicColor.Red && second == MagicColor.Blue)
@@ -56,7 +60,6 @@ namespace Chroma.Gameplay
 
       return result;
     }
-
   }
 }
 

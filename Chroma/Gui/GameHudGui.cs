@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Chroma.Gui
 {
-
   public class Button 
   {
     public MagicColor color;
