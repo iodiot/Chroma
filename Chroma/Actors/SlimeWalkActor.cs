@@ -25,7 +25,7 @@ namespace Chroma.Actors
 
       AddCollider(new Collider() { Name = "heart", BoundingBox = new Rectangle(15, 0, 18, 20) });
 
-      IsStatic = false;
+      CanMove = true;
       CanFall = true;
       CanLick = true;
     }
@@ -62,7 +62,7 @@ namespace Chroma.Actors
 
     public override bool IsPassableFor(Actor actor)
     {
-      return !actor.IsStatic;
+      return actor.CanMove;
     }
   }
 }

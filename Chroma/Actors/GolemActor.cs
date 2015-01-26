@@ -21,7 +21,7 @@ namespace Chroma.Actors
       animation = new Animation();
       animation.AddAndPlay("live", core.SpriteManager.GetFrames("golem_", new List<int>{ 1, 2, 3, 4, 5, 6 }));
 
-      IsStatic = false;
+      CanMove = true;
       CanFall = true;
       CanLick = true;
 
@@ -59,7 +59,7 @@ namespace Chroma.Actors
 
     public override bool IsPassableFor(Actor actor)
     {
-      return !actor.IsStatic;
+      return actor.CanMove;
     }
   }
 }

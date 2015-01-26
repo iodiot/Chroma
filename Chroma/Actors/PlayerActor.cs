@@ -61,7 +61,7 @@ namespace Chroma.Actors
         .After(10).AutoTransitionTo(DruidState.Running);
       sm.Start();
 
-      IsStatic = false;
+      CanMove = true;
       CanFall = true;
       CanLick = true;
     }
@@ -103,7 +103,7 @@ namespace Chroma.Actors
       animation.Update(ticks);
       armAnimation.Update(ticks);
 
-      Velocity.X += 1.0f;
+      Velocity.X += 0.5f;
 
       base.Update(ticks);
     }
@@ -160,7 +160,7 @@ namespace Chroma.Actors
 
     public override void OnBoundingBoxTrigger(Actor other)
     {
-      if (!other.IsStatic && (hurtTtl == 0))
+      if (other.CanMove && (hurtTtl == 0))
       {
         hurtTtl = 25;
       }
@@ -170,7 +170,7 @@ namespace Chroma.Actors
 
     public override bool IsPassableFor(Actor actor)
     {
-      return !actor.IsStatic;
+      return actor.CanMove;
     }
   }
 }

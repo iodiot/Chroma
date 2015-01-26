@@ -21,7 +21,7 @@ namespace Chroma.Actors
       animation = new Animation();
       animation.AddAndPlay("live", core.SpriteManager.GetFrames("projectile_", new List<int>() { 1, 2, 3, 4 }));
 
-      IsStatic = false;
+      CanMove = true;
       CanFall = false;
       CanLick = false;
 
@@ -62,7 +62,7 @@ namespace Chroma.Actors
 
     public override bool IsPassableFor(Actor actor)
     {
-      return !actor.IsStatic;
+      return actor.CanMove;
     }
 
     public override void OnBoundingBoxTrigger(Actor other)

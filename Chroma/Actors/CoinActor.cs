@@ -29,7 +29,7 @@ namespace Chroma.Actors
 
       animation.Play("live");
 
-      IsStatic = true;
+      CanMove = false;
       CanFall = false;
 
       AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
@@ -63,7 +63,7 @@ namespace Chroma.Actors
 
     public override bool IsPassableFor(Actor actor)
     {
-      return !actor.IsStatic;
+      return actor.CanMove;
     }
   }
 }

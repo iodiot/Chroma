@@ -13,7 +13,7 @@ namespace Chroma.Actors
 
       boundingBox = new Rectangle(0, 0, 5 * spikesNumber, 5);
 
-      IsStatic = true;
+      CanMove = false;
     }
 
     public override void Draw()

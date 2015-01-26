@@ -21,7 +21,7 @@ namespace Chroma.Actors
       );
       particleManager.AddParticlesFromSprite(sprite, position, new Vector2(5.0f, -5.0f), 1.0f, 3);
 
-      IsStatic = false;
+      CanMove = true;
       CanFall = true;
 
       Ttl = 100;

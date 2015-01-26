@@ -17,7 +17,7 @@ namespace Chroma.Actors
 
     public string Handle { get; protected set; }
 
-    public bool IsStatic { get; protected set; }
+    public bool CanMove { get; protected set; }
     public bool CanFall { get; protected set; }
     public bool CanLick { get; protected set; }
 

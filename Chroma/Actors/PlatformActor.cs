@@ -13,7 +13,7 @@ namespace Chroma.Actors
 
       boundingBox = new Rectangle(0, 3, width, core.SpriteManager.GetSprite("earth").Height + 5);
 
-      IsStatic = true;
+      CanMove = false;
       CanFall = true;
     }
 

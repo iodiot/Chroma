@@ -131,12 +131,12 @@ namespace Chroma
     private void Step()
     {
       const float G = 5.0f;
-      const float Eps = 0.01f;
+      const float DragFactor = 0.5f;
 
       // apply gravity
       foreach (var a in actors)
       {
-        if (!a.IsStatic && a.CanFall)
+        if (a.CanMove && a.CanFall)
         {
           a.Velocity.Y += G;
         }
@@ -144,15 +144,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (!a.IsStatic)
-        {
-          ResolveColliders(a);
-        }
-      }
-
-      foreach (var a in actors)
-      {
-        if (!a.IsStatic)
+        if (a.CanMove)
         {
           ResolveBoundingBoxes(a);
         }
@@ -160,28 +152,33 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (!a.IsStatic)
+        if (a.CanMove)
         {
-          LimitVelocity(a);
+          MoveActor(a);
         }
       }
 
-      // add velocity
       foreach (var a in actors)
       {
-        if (a.IsStatic)
+        if (a.CanMove)
         {
-          continue;
+          ResolveColliders(a);
         }
+      }
 
-        if (a.Velocity.Length() < Eps)
+      // drag velocity
+      foreach (var a in actors)
+      {
+        if (a.CanMove)
         {
-          a.Velocity = Vector2.Zero;
-          continue;
-        }
+          a.Velocity *= DragFactor;
 
-        a.Position += a.Velocity;
-        a.Velocity = Vector2.Zero;
+          if (a.Velocity.Length() < Settings.Eps)
+          {
+            a.Velocity = Vector2.Zero;
+            continue;
+          }
+        }
       }
     }
 
@@ -225,18 +222,20 @@ namespace Chroma
       }
     }
 
-    private void LimitVelocity(Actor actor)
+    private void MoveActor(Actor actor)
     {
-      const float Eps = 0.01f;
-      const float LickStep = -10.0f;
-
-      if (actor.Velocity.Length() < Eps)
+      if (actor.Velocity.Length() < Settings.Eps)
       {
         return;
       }
 
+      const float LickStep = -10.0f;
+
+      var dx = actor.Velocity.X;
+      var dy = actor.Velocity.Y;
+
       // y-axis
-      if (Math.Abs(actor.Velocity.Y) > Eps)
+      if (Math.Abs(actor.Velocity.Y) > Settings.Eps)
       {
         var obstaclesY = GetObstacles(actor, 0, actor.Velocity.Y);
         if (obstaclesY.Count > 0)
@@ -257,12 +256,12 @@ namespace Chroma
             }
           }
 
-          actor.Velocity.Y = minY * Math.Sign(actor.Velocity.Y);
+          dy = minY * Math.Sign(actor.Velocity.Y);
         }
       }
 
       // x-axis
-      if (Math.Abs(actor.Velocity.X) > Eps)
+      if (Math.Abs(actor.Velocity.X) > Settings.Eps)
       {
         var obstaclesX = GetObstacles(actor, actor.Velocity.X, 0);
         if (obstaclesX.Count > 0)
@@ -286,31 +285,36 @@ namespace Chroma
           // try to lick
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, LickStep).Count == 0)
           {
-            actor.Velocity.Y = LickStep;
+            actor.Position.Y += LickStep;
             return;
           }
 
-          actor.Velocity.X = minX * Math.Sign(actor.Velocity.X);
+          dx = minX * Math.Sign(actor.Velocity.X);
         }
       }
 
       // final check
-      if (actor.Velocity.Length() > Eps && GetObstacles(actor, actor.Velocity.X, actor.Velocity.Y).Count > 0)
+      if (actor.Velocity.Length() > Settings.Eps && GetObstacles(actor, dx, dy).Count > 0)
       {
         // try to lick 
         if (actor.CanLick && GetObstacles(actor, actor.Velocity.X, -1.0f).Count == 0)
         {
-          actor.Velocity.Y = -1.0f;
+          actor.Position.Y -= 1.0f;
         }
         else if (actor.CanLick && GetObstacles(actor, actor.Velocity.X, 1.0f).Count == 0)
         {
-          actor.Velocity.Y = 1.0f;
+          actor.Position.Y += 1.0f;
         }
         else
         {
           actor.Velocity = Vector2.Zero;
         }
+
+        return;
       }
+
+      actor.Position.X += dx;
+      actor.Position.Y += dy;
     }
 
     public List<Actor> GetObstacles(Actor actor, float dx, float dy)
