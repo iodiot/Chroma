@@ -33,11 +33,6 @@ namespace Chroma.Actors
     {
       pm.Update(ticks);
 
-      if (ticks % 200 == 0)
-      {
-        SpawnParticlesFromSprite(new Vector2(50, 50), core.SpriteManager.GetSprite("druid_fall_1"));
-      }
-
       base.Update(ticks);
     }
 
