@@ -25,8 +25,6 @@ namespace Chroma.Actors
       CanLick = false;
 
       Ttl = 100;
-
-      groundLevel = position.Y + sprite.Height;
     }
 
     public override void Update(int ticks)
@@ -75,7 +73,7 @@ namespace Chroma.Actors
           p.Ttl = 100 + random.Next() % 25;
           p.Sprite = core.SpriteManager.OnePixelSprite;
           p.Scale = new Vector2(Scale, Scale);
-          p.RotationSpeed = ((float)random.NextDouble() * 2.0f - 1.0f) * 0.25f;
+          //p.RotationSpeed = ((float)random.NextDouble() * 2.0f - 1.0f) * 0.25f;
 
           p.Velocity.X = (float)random.NextDouble() * 2.0f - 1.0f;
           p.Velocity.Y = (float)random.NextDouble() * -2.0f;
@@ -89,7 +87,7 @@ namespace Chroma.Actors
     {
       particle.Color *= 0.99f;
 
-      if (particle.Position.Y >= groundLevel)
+      if (particle.Position.Y >= Position.Y + boundingBox.Height)
       {
         particle.Velocity = Vector2.Zero;
       }

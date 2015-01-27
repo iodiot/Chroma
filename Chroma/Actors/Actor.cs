@@ -87,8 +87,8 @@ namespace Chroma.Actors
     public Rectangle GetWorldBoundingBox()
     {
       return new Rectangle(
-        (int)(Position.X + boundingBox.X),
-        (int)(Position.Y + boundingBox.Y),
+        (int)Math.Round(Position.X + boundingBox.X),
+        (int)Math.Round(Position.Y + boundingBox.Y),
         boundingBox.Width,
         boundingBox.Height
       );
@@ -111,7 +111,7 @@ namespace Chroma.Actors
       var collider = new Collider()
         {
           Name = colliders[n].Name,
-          BoundingBox = new Rectangle((int)(Position.X + box.X), (int)(Position.Y + box.Y), box.Width, box.Height)
+          BoundingBox = new Rectangle((int)Math.Round(Position.X + box.X), (int)Math.Round(Position.Y + box.Y), box.Width, box.Height)
         };
 
       return collider;

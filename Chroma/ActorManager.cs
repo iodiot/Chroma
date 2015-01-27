@@ -282,11 +282,11 @@ namespace Chroma
             }
           }
 
-          if (actor is GolemActor)
+          if (minX != 0)
           {
-            Console.WriteLine("hello");
+            Console.WriteLine(minX);
           }
-
+            
           // try to lick
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, LickStep).Count == 0)
           {
@@ -294,13 +294,13 @@ namespace Chroma
             actor.Position.Y += LickStep;
             return;
           }
-
+            
           dx = minX * Math.Sign(actor.Velocity.X);
         }
       }
 
       // final check
-      if (actor.Velocity.Length() > Settings.Eps && GetObstacles(actor, dx, dy).Count > 0)
+      if ((dx != 0 && dy != 0) && GetObstacles(actor, dx, dy).Count > 0)
       {
         // try to lick 
         if (actor.CanLick && GetObstacles(actor, actor.Velocity.X, -1.0f).Count == 0)
