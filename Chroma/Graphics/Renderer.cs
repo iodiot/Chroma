@@ -225,6 +225,11 @@ namespace Chroma.Graphics
       DrawRectangleS(position + World, width, height, color);
     }
 
+    public void DrawRectangleW(Rectangle rect, Color color)
+    {
+      DrawRectangleS(new Rectangle((int)(rect.X + World.X), (int)(rect.Y + World.Y), rect.Width, rect.Height), color);
+    }
+
     public void DrawLineW(Vector2 from, Vector2 to, Color color)
     {
       DrawLineS(from + World, to + World, color);
@@ -280,6 +285,18 @@ namespace Chroma.Graphics
         core.SpriteManager.OnePixel,
         position,
         new Rectangle(0, 0, (int)width, (int)height), 
+        color, 
+        0,
+        1.0f
+      );
+    }
+
+    public void DrawRectangleS(Rectangle rect, Color color)
+    {
+      InternalDrawSprite(
+        core.SpriteManager.OnePixel,
+        new Vector2(rect.X, rect.Y),
+        new Rectangle(0, 0, rect.Width, rect.Height), 
         color, 
         0,
         1.0f

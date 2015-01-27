@@ -33,6 +33,7 @@ namespace Chroma.Graphics
     // shortcuts
     public Texture2D OnePixel { get; private set; }
     public Texture2D Font { get; private set; }
+    public Sprite OnePixelSprite { get; private set; }
 
     private readonly Core core;
     private readonly Dictionary<string, Sprite> sprites;
@@ -57,6 +58,8 @@ namespace Chroma.Graphics
 
       AddTexture("one", OnePixel);
       AddTexture("font", Font);
+
+      OnePixelSprite = new Sprite() { Width = 1, Height = 1, TextureName = "one" };
     }
 
     public void Unload()

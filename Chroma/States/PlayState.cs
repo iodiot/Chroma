@@ -288,15 +288,11 @@ namespace Chroma.States
     public override void Draw()
     {
       core.Renderer["bg"].DrawRectangleS(
-        new Vector2(0, 0),
-        core.Renderer.ScreenWidth + 1,
-        85,
+        new Rectangle(0, 0, (int)core.Renderer.ScreenWidth + 1, 85),
         new Color(17, 22, 42)
       );
       core.Renderer["bg"].DrawRectangleS(
-        new Vector2(0, 85),
-        core.Renderer.ScreenWidth + 1,
-        core.Renderer.ScreenHeight - 85 + 1,
+        new Rectangle(0, 85, (int)core.Renderer.ScreenWidth + 1, (int)core.Renderer.ScreenHeight - 85 + 1),
         new Color(16, 19, 17)
       );
 

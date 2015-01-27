@@ -78,7 +78,7 @@ namespace Chroma.Actors
           p.Position = position + new Vector2(x - sprite.X, y - sprite.Y);
           p.Color = color;
           p.Ttl = 100 + random.Next() % 25;
-          p.Sprite = new Sprite() { Width = 1, Height = 1, TextureName = "one" };
+          p.Sprite = core.SpriteManager.OnePixelSprite;
           p.Scale = new Vector2(Scale, Scale);
           p.RotationSpeed = ((float)random.NextDouble() * 2.0f - 1.0f) * 0.25f;
 

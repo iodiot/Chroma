@@ -66,16 +66,14 @@ namespace Chroma.Actors
     {
       if (Settings.DrawBoundingBoxes)
       {
-        var box = GetWorldBoundingBox();
-        core.Renderer.DrawRectangleW(new Vector2(box.X, box.Y), box.Width, box.Height, Color.Red * 0.25f);
+        core.Renderer.DrawRectangleW(GetWorldBoundingBox(), Color.Red * 0.25f);
       }
 
       if (Settings.DrawColliders)
       {
         for (var i = 0; i < GetCollidersCount(); ++i)
         {
-          var box = GetWorldCollider(i).BoundingBox;
-          core.Renderer.DrawRectangleW(new Vector2(box.X, box.Y), box.Width, box.Height, Color.Yellow * 0.25f);
+          core.Renderer.DrawRectangleW(GetWorldCollider(i).BoundingBox, Color.Yellow * 0.25f);
         }
       }
     }
