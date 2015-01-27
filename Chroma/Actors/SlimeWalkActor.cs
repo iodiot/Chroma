@@ -54,7 +54,7 @@ namespace Chroma.Actors
       if (other is ProjectileActor && ((ProjectileActor)other).color == this.color)
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
-        core.MessageManager.Send(new AddActorMessage(new SwarmActor(core, Position, walkAnimation.GetCurrentFrame())), this);
+        core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, walkAnimation.GetCurrentFrame())), this);
       }
 
       base.OnColliderTrigger(other, otherCollider, thisCollider);

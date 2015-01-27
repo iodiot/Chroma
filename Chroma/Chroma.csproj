@@ -156,10 +156,6 @@
     <Compile Include="Debug.cs" />
     <Compile Include="Gui\Gui.cs" />
     <Compile Include="Gui\HealthGui.cs" />
-    <Compile Include="Particles\ParticleManager.cs" />
-    <Compile Include="Particles\Particle.cs" />
-    <Compile Include="Particles\ParticleBehaviour.cs" />
-    <Compile Include="Particles\DispersalParticleBehaviour.cs" />
     <Compile Include="Actors\ProjectileActor.cs" />
     <Compile Include="Actors\SpikeActor.cs" />
     <Compile Include="Graphics\FrameCounter.cs" />
@@ -169,13 +165,13 @@
     <Compile Include="Actors\PlatformActor.cs" />
     <Compile Include="States\SandboxState.cs" />
     <Compile Include="Actors\GolemActor.cs" />
-    <Compile Include="Actors\SwarmActor.cs" />
     <Compile Include="Actors\CoinActor.cs" />
     <Compile Include="Actors\SlimeWalkActor.cs" />
     <Compile Include="StateMachines\StateMachine.cs" />
     <Compile Include="Gameplay\MagicManager.cs" />
     <Compile Include="Gui\GameHudGui.cs" />
-    <Compile Include="Physics\Physics.cs" />
+    <Compile Include="Actors\SpriteDestroyerActor.cs" />
+    <Compile Include="ParticleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -186,10 +182,8 @@
     <Folder Include="Content\Images\" />
     <Folder Include="Graphics\" />
     <Folder Include="Gui\" />
-    <Folder Include="Particles\" />
     <Folder Include="StateMachines\" />
     <Folder Include="Gameplay\" />
-    <Folder Include="Physics\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\click1.wav">

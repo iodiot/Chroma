@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Graphics;
-using Chroma.Particles;
 
 namespace Chroma.States
 {
@@ -15,25 +14,10 @@ namespace Chroma.States
     private static readonly float TitleScale = 4.0f;
     private static readonly Vector2 Indent = new Vector2(45, 45);
 
-    private readonly ParticleManager particleManager; 
-
     private bool wasTouched = false;
 
     public MenuState(Core core) : base(core)
     {
-     // particleManager = new ParticleManager(
-     //   core, 
-      //);
-
-      for (var i = 0; i < Title.Length; ++i)
-      {
-        particleManager.AddParticlesFromSprite(
-          core.SpriteManager.GetFontSprite(Title[i]), 
-          new Vector2(Indent.X + i * TitleScale * 6, Indent.Y),
-          Vector2.Zero,
-          TitleScale
-        );
-      }
     }
 
 
@@ -43,7 +27,6 @@ namespace Chroma.States
 
       if (wasTouched)
       {
-        particleManager.Update(ticks);
       }
 
       base.Update(ticks);
@@ -55,7 +38,6 @@ namespace Chroma.States
 
       if (wasTouched)
       {
-        particleManager.Draw(TitleScale);
       }
       else
       {
