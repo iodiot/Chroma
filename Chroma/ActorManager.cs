@@ -285,6 +285,7 @@ namespace Chroma
           // try to lick
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, LickStep).Count == 0)
           {
+            actor.Position.X += actor.Velocity.X;
             actor.Position.Y += LickStep;
             return;
           }
@@ -299,15 +300,13 @@ namespace Chroma
         // try to lick 
         if (actor.CanLick && GetObstacles(actor, actor.Velocity.X, -1.0f).Count == 0)
         {
+          actor.Position.X += actor.Velocity.X;
           actor.Position.Y -= 1.0f;
         }
         else if (actor.CanLick && GetObstacles(actor, actor.Velocity.X, 1.0f).Count == 0)
         {
+          actor.Position.X += actor.Velocity.X;
           actor.Position.Y += 1.0f;
-        }
-        else
-        {
-          actor.Velocity = Vector2.Zero;
         }
 
         return;

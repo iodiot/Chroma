@@ -11,15 +11,12 @@ namespace Chroma.States
   public class MenuState : State
   {
     private static readonly string Title = "CHROMA";
-    private static readonly float TitleScale = 4.0f;
-    private static readonly Vector2 Indent = new Vector2(45, 45);
 
     private bool wasTouched = false;
 
     public MenuState(Core core) : base(core)
     {
     }
-
 
     public override void Update(int ticks)
     {
@@ -43,6 +40,7 @@ namespace Chroma.States
       {
         core.Renderer.DrawTextS(Title, new Vector2(45, 45), Color.White, 4);
       }
+
       base.Draw();
     }
 
