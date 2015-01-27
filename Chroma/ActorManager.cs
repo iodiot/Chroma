@@ -282,6 +282,11 @@ namespace Chroma
             }
           }
 
+          if (actor is GolemActor)
+          {
+            Console.WriteLine("hello");
+          }
+
           // try to lick
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, LickStep).Count == 0)
           {
@@ -322,8 +327,8 @@ namespace Chroma
 
       var box = actor.GetBoundingBox();
 
-      box.X = (int)(box.X + dx + actor.Position.X);
-      box.Y = (int)(box.Y + dy + actor.Position.Y);
+      box.X = (int)Math.Round(box.X + dx + actor.Position.X);
+      box.Y = (int)Math.Round(box.Y + dy + actor.Position.Y);
 
       //var actorsInRadius = actorMap.FetchActors(box);
 
