@@ -79,7 +79,7 @@ namespace Chroma
 
       core.Renderer.DrawTextS(
         String.Format("actors: {0}", actors.Count),
-        new Vector2(core.Renderer.ScreenWidth - 75, 12),
+        new Vector2(core.Renderer.ScreenWidth - 70, 12),
         Color.White * 0.25f
       );
     }
@@ -184,7 +184,7 @@ namespace Chroma
 
     private void ResolveBoundingBoxes(Actor actor)
     {
-      var obstacles = GetObstacles(actor, actor.Velocity.X, actor.Velocity.Y);
+      var obstacles = GetObstacles(actor, actor.Velocity.X, actor.Velocity.Y, true);
 
       foreach (var obstacle in obstacles)
       {
@@ -229,15 +229,14 @@ namespace Chroma
         return;
       }
 
-      const float LickStep = -10.0f;
+      const float LickStep = 10.0f;
 
-      var dx = actor.Velocity.X;
-      var dy = actor.Velocity.Y;
+      var v = actor.Velocity;
 
       // y-axis
       if (Math.Abs(actor.Velocity.Y) > Settings.Eps)
       {
-        var obstaclesY = GetObstacles(actor, 0, actor.Velocity.Y);
+        var obstaclesY = GetObstacles(actor, 0, actor.Velocity.Y, true);
         if (obstaclesY.Count > 0)
         {
           var minY = (int)Math.Abs(actor.Velocity.Y);
@@ -255,15 +254,17 @@ namespace Chroma
               minY = y;
             }
           }
-
-          dy = minY * Math.Sign(actor.Velocity.Y);
+            
+          v.Y = minY * Math.Sign(actor.Velocity.Y);
         }
       }
+
+      var licking = false;
 
       // x-axis
       if (Math.Abs(actor.Velocity.X) > Settings.Eps)
       {
-        var obstaclesX = GetObstacles(actor, actor.Velocity.X, 0);
+        var obstaclesX = GetObstacles(actor, actor.Velocity.X, 0, true);
         if (obstaclesX.Count > 0)
         {
           var minX = (int)Math.Abs(actor.Velocity.X);
@@ -282,53 +283,66 @@ namespace Chroma
             }
           }
 
-          if (minX != 0)
-          {
-            Console.WriteLine(minX);
-          }
+          v.X = minX * Math.Sign(actor.Velocity.X);
             
           // try to lick
-          if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, LickStep).Count == 0)
+          if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep, false).Count == 0)
           {
-            actor.Position.X += actor.Velocity.X;
-            actor.Position.Y += LickStep;
-            return;
+            v.X = actor.Velocity.X;
+            v.Y = -LickStep;
+            licking = true;
           }
-            
-          dx = minX * Math.Sign(actor.Velocity.X);
         }
       }
 
       // final check
-      if ((dx != 0 && dy != 0) && GetObstacles(actor, dx, dy).Count > 0)
+      if (!licking && v.Length() > Settings.Eps && GetObstacles(actor, v.X, v.Y, true).Count > 0)
       {
-        // try to lick 
-        if (actor.CanLick && GetObstacles(actor, actor.Velocity.X, -1.0f).Count == 0)
-        {
-          actor.Position.X += actor.Velocity.X;
-          actor.Position.Y -= 1.0f;
-        }
-        else if (actor.CanLick && GetObstacles(actor, actor.Velocity.X, 1.0f).Count == 0)
-        {
-          actor.Position.X += actor.Velocity.X;
-          actor.Position.Y += 1.0f;
-        }
-
+        actor.Velocity *= 0.75f;
+        MoveActor(actor);
         return;
       }
 
-      actor.Position.X += dx;
-      actor.Position.Y += dy;
+      actor.Velocity = v;
+      actor.Position += v;
     }
 
-    public List<Actor> GetObstacles(Actor actor, float dx, float dy)
+    public List<Actor> GetObstacles(Actor actor, float dx, float dy, bool continuous)
     {
       var result = new List<Actor>();
 
       var box = actor.GetBoundingBox();
 
-      box.X = (int)Math.Round(box.X + dx + actor.Position.X);
-      box.Y = (int)Math.Round(box.Y + dy + actor.Position.Y);
+     
+      if (continuous)
+      {
+        if (dx < 0)
+        {
+          box.X = (int)Math.Round(box.X + dx + actor.Position.X);
+          box.Width = (int)Math.Round(box.Width - dx);
+        }
+        else
+        {
+          box.X = (int)Math.Round(box.X + actor.Position.X);
+          box.Width = (int)Math.Round(box.Width + dx);
+        }
+
+        if (dy < 0)
+        {
+          box.Y = (int)Math.Round(box.Y + dy + actor.Position.Y);
+          box.Height = (int)Math.Round(box.Height - dy);
+        }
+        else
+        {
+          box.Y = (int)Math.Round(box.Y + actor.Position.Y);
+          box.Height = (int)Math.Round(box.Height + dy);
+        }
+      }
+      else
+      {
+        box.X = (int)Math.Round(box.X + dx + actor.Position.X);
+        box.Y = (int)Math.Round(box.Y + dy + actor.Position.Y);
+      }
 
       //var actorsInRadius = actorMap.FetchActors(box);
 

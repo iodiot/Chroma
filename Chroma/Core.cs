@@ -133,8 +133,8 @@ namespace Chroma
       if (Settings.DrawFps)
       {
         Renderer.DrawTextS(
-          String.Format("fps:{0}", Math.Round(frameCounter.AverageFramesPerSecond)), 
-          new Vector2(Renderer.ScreenWidth - 40, 3),
+          String.Format("fps:    {0}", Math.Round(frameCounter.AverageFramesPerSecond)), 
+          new Vector2(Renderer.ScreenWidth - 70, 3),
           Color.White * 0.25f
         );
       }

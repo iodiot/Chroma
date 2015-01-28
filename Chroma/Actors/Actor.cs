@@ -27,6 +27,8 @@ namespace Chroma.Actors
     public int Ttl { get; protected set; }
     public bool IsDead { get { return Ttl == 0; } }
 
+    protected Color boundingBoxColor = Color.Red;
+
     #endregion
 
     protected readonly Core core;
@@ -66,7 +68,7 @@ namespace Chroma.Actors
     {
       if (Settings.DrawBoundingBoxes)
       {
-        core.Renderer.DrawRectangleW(GetWorldBoundingBox(), Color.Red * 0.25f);
+        core.Renderer.DrawRectangleW(GetWorldBoundingBox(), boundingBoxColor * 0.25f);
       }
 
       if (Settings.DrawColliders)
@@ -111,7 +113,7 @@ namespace Chroma.Actors
       var collider = new Collider()
         {
           Name = colliders[n].Name,
-          BoundingBox = new Rectangle((int)Math.Round(Position.X + box.X), (int)Math.Round(Position.Y + box.Y), box.Width, box.Height)
+          BoundingBox = new Rectangle((int)Position.X + box.X, (int)Position.Y + box.Y, box.Width, box.Height)
         };
 
       return collider;

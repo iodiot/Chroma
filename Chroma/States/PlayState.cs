@@ -59,8 +59,9 @@ namespace Chroma.States
     {
       if (lastPlatform.GetWorldBoundingBox().X + lastPlatform.GetWorldBoundingBox().Width - player.X < 500)
       {
+
         // random platform
-        if (core.GetRandom(0, 5) == 0)
+        /*if (core.GetRandom(0, 5) == 0)
         {
           ActorManager.Add(new PlatformActor(core, new Vector2(currentX + 50, currentY - 75), 50));
           for (var i = 0; i < 3; ++i)
@@ -70,29 +71,29 @@ namespace Chroma.States
 
           AddPlatform(0, 50, 250);
           return;
-        }
-
+        }*/
+          
         // downfall
-        if (core.GetRandom(0, 5) == 0)
+        /*if (core.GetRandom(0, 5) == 0)
         {
           AddPlatform(50, 0, 100);
           return;
-        }
+        }*/
 
         // up steps
-        if (core.GetRandom(0, 5) == 0)
+        if (core.GetRandom(0, 3) == 0)
         {
-          for (var i = 0; i < 3; ++i)
+          for (var i = 0; i < 10; ++i)
           {
-            AddPlatform(0, -10, 25);
+            AddPlatform(0, -10, 30);
           }
           return;
         }
 
         // down steps
-        if (core.GetRandom(0, 5) == 0)
+        if (core.GetRandom(0, 2) == 0)
         {
-          for (var i = 0; i < 3; ++i)
+          for (var i = 0; i < 5; ++i)
           {
             AddPlatform(0, 10, 25);
           }
@@ -100,24 +101,18 @@ namespace Chroma.States
         }
 
         // up rock
-        if (core.GetRandom(0, 5) == 0)
+        /*if (core.GetRandom(0, 5) == 0)
         {
-          for (var i = 0; i < 5; ++i)
-          {
-            AddPlatform(0, -25, 250);
-          }
+          AddPlatform(0, -50, 250);
           return;
         }
 
         // down rock
         if (core.GetRandom(0, 5) == 0)
         {
-          for (var i = 0; i < 5; ++i)
-          {
-            AddPlatform(0, 25, 250);
-          }
+          AddPlatform(0, 50, 250);
           return;
-        }
+        }*/
 
         AddPlatform(0, 0, 250);
       }
@@ -271,7 +266,7 @@ namespace Chroma.States
 
       if (core.GetRandom(0, 150) == 0)
       {
-        ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, player.Position.Y - 100), MagicColor.Red));
+        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, player.Position.Y - 300), MagicColor.Red));
       }
 
       groundScroll = player.Position.X;
