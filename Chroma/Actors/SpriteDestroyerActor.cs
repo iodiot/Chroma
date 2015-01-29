@@ -9,7 +9,6 @@ namespace Chroma.Actors
   public class SpriteDestroyerActor : Actor
   {
     private readonly ParticleManager pm;
-    private float groundLevel;
 
     public SpriteDestroyerActor(Core core, Vector2 position, Sprite sprite) : base(core, position)
     {

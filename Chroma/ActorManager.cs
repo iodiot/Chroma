@@ -130,7 +130,7 @@ namespace Chroma
 
     private void Step()
     {
-      const float G = 5.0f;
+      const float G = 6.15f;
       const float DragFactor = 0.5f;
 
       // apply gravity
@@ -184,7 +184,7 @@ namespace Chroma
 
     private void ResolveBoundingBoxes(Actor actor)
     {
-      var obstacles = GetObstacles(actor, actor.Velocity.X, actor.Velocity.Y, true);
+      var obstacles = GetObstacles(actor, actor.Velocity.X, actor.Velocity.Y);
 
       foreach (var obstacle in obstacles)
       {
@@ -234,12 +234,12 @@ namespace Chroma
       var v = actor.Velocity;
 
       // y-axis
-      if (Math.Abs(actor.Velocity.Y) > Settings.Eps)
+      if (Math.Abs(v.Y) > Settings.Eps)
       {
-        var obstaclesY = GetObstacles(actor, 0, actor.Velocity.Y, true);
+        var obstaclesY = GetObstacles(actor, 0, v.Y);
         if (obstaclesY.Count > 0)
         {
-          var minY = (int)Math.Abs(actor.Velocity.Y);
+          var minY = (int)Math.Abs(v.Y);
           var box = actor.GetWorldBoundingBox();
           foreach (var o in obstaclesY)
           {
@@ -255,17 +255,17 @@ namespace Chroma
             }
           }
             
-          v.Y = minY * Math.Sign(actor.Velocity.Y);
+          v.Y = minY * Math.Sign(v.Y);
         }
       }
 
       // x-axis
-      if (Math.Abs(actor.Velocity.X) > Settings.Eps)
+      if (Math.Abs(v.X) > Settings.Eps)
       {
-        var obstaclesX = GetObstacles(actor, actor.Velocity.X, 0, true);
+        var obstaclesX = GetObstacles(actor, v.X, 0);
         if (obstaclesX.Count > 0)
         {
-          var minX = (int)Math.Abs(actor.Velocity.X);
+          var minX = (int)Math.Abs(v.X);
           var box = actor.GetWorldBoundingBox();
           foreach (var o in obstaclesX)
           {
@@ -282,65 +282,40 @@ namespace Chroma
           }
                         
           // try to lick
-          if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep, false).Count == 0)
+          if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep).Count == 0)
           {
-            actor.Position += new Vector2(actor.Velocity.X, -LickStep);
+            actor.Position += new Vector2(v.X, -LickStep);
             actor.Velocity = Vector2.Zero;
             return;
           }
 
-          v.X = minX * Math.Sign(actor.Velocity.X);
+          v.X = minX * Math.Sign(v.X);
         }
       }
 
       // final check
-      if (v.Length() > Settings.Eps && GetObstacles(actor, v.X, v.Y, true).Count > 0)
+      if (v.Length() > Settings.Eps && GetObstacles(actor, v.X, v.Y).Count > 0)
       {
-        actor.Velocity = v * 0.75f;
+        Debug.Print("deeper");
+        v = Vector2.Zero;
+     
+        /*actor.Velocity = v * 0.75f;
         MoveActor(actor);
-        return;
+        return;*/
       }
 
       actor.Velocity = v;
       actor.Position += v;
     }
 
-    public List<Actor> GetObstacles(Actor actor, float dx, float dy, bool continuous)
+    public List<Actor> GetObstacles(Actor actor, float dx, float dy)
     {
       var result = new List<Actor>();
 
       var box = actor.GetBoundingBox();
-
      
-      if (continuous)
-      {
-        if (dx < 0)
-        {
-          box.X = (int)Math.Round(box.X + dx + actor.Position.X);
-          box.Width = (int)Math.Round(box.Width - dx);
-        }
-        else
-        {
-          box.X = (int)Math.Round(box.X + actor.Position.X);
-          box.Width = (int)Math.Round(box.Width + dx);
-        }
-
-        if (dy < 0)
-        {
-          box.Y = (int)Math.Round(box.Y + dy + actor.Position.Y);
-          box.Height = (int)Math.Round(box.Height - dy);
-        }
-        else
-        {
-          box.Y = (int)Math.Round(box.Y + actor.Position.Y);
-          box.Height = (int)Math.Round(box.Height + dy);
-        }
-      }
-      else
-      {
-        box.X = (int)Math.Round(box.X + dx + actor.Position.X);
-        box.Y = (int)Math.Round(box.Y + dy + actor.Position.Y);
-      }
+      box.X = (int)Math.Round(box.X + dx + actor.Position.X);
+      box.Y = (int)Math.Round(box.Y + dy + actor.Position.Y);
 
       //var actorsInRadius = actorMap.FetchActors(box);
 
@@ -354,7 +329,6 @@ namespace Chroma
         if (box.Intersects(other.GetWorldBoundingBox()))
         {
           result.Add(other); 
-          //other.TintTtl = 5;
         }
       }
 
