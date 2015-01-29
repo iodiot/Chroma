@@ -259,8 +259,6 @@ namespace Chroma
         }
       }
 
-      var licking = false;
-
       // x-axis
       if (Math.Abs(actor.Velocity.X) > Settings.Eps)
       {
@@ -282,23 +280,23 @@ namespace Chroma
               minX = x;
             }
           }
-
-          v.X = minX * Math.Sign(actor.Velocity.X);
-            
+                        
           // try to lick
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep, false).Count == 0)
           {
-            v.X = actor.Velocity.X;
-            v.Y = -LickStep;
-            licking = true;
+            actor.Position += new Vector2(actor.Velocity.X, -LickStep);
+            actor.Velocity = Vector2.Zero;
+            return;
           }
+
+          v.X = minX * Math.Sign(actor.Velocity.X);
         }
       }
 
       // final check
-      if (!licking && v.Length() > Settings.Eps && GetObstacles(actor, v.X, v.Y, true).Count > 0)
+      if (v.Length() > Settings.Eps && GetObstacles(actor, v.X, v.Y, true).Count > 0)
       {
-        actor.Velocity *= 0.75f;
+        actor.Velocity = v * 0.75f;
         MoveActor(actor);
         return;
       }

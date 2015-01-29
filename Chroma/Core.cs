@@ -41,7 +41,7 @@ namespace Chroma
 
       frameCounter = new FrameCounter();
 
-      Debug.Print(String.Format("Screen size: {0}x{1}", screenWidth, screenHeight));
+      Debug.Print(String.Format("screen size: {0}x{1}", screenWidth, screenHeight));
     }
 
     public int GetRandom(int from, int to)
