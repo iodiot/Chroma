@@ -12,9 +12,9 @@ namespace Chroma.Graphics
 
   public enum SpriteFlip
   {
-    None = 0,
-    Horizontal = 1,
-    Vertical = 2
+    None =        SpriteEffects.None,
+    Horizontal =  SpriteEffects.FlipHorizontally,
+    Vertical =    SpriteEffects.FlipVertically
   }
 
   public sealed class Renderer
