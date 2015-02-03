@@ -72,6 +72,50 @@ namespace Chroma
 
     public void Draw()
     {
+      var earth = core.SpriteManager.GetSprite("earth");
+      foreach (var actor in actors)
+      {
+        if (actor is PlatformActor || actor is SlopedPlatformActor || actor is InvisiblePlatformActor)
+        {
+          var box = actor.GetWorldBoundingBox();
+
+          int offx = Math.Abs(box.Left) % earth.Width;
+          if (box.Left < 0)
+            offx = earth.Width - offx;
+
+          int offy = Math.Abs(box.Top) % earth.Height;
+          if (box.Top < 0)
+            offy = earth.Height - offy;
+            
+          int x = box.Left - offx;
+          do
+          {
+            int y = box.Top - offy;
+            do {
+              var reducedEarth = earth.Reduce(
+                Math.Max(box.Left - x, 0),
+                Math.Max(box.Top - y, 0),
+                Math.Max(x + earth.Width - box.Right, 0),
+                Math.Max(y + earth.Height - box.Bottom, 0)
+              );
+
+
+              var pos = new Vector2();
+              pos.X = Math.Max(x, box.Left);
+              pos.Y = Math.Max(y, box.Top);
+
+              core.Renderer.DrawSpriteW(reducedEarth, pos);
+
+              y += earth.Height;
+            } while (y < box.Bottom);
+
+            x += earth.Width;
+          } while (x < box.Right);
+
+        }
+      }
+
+
       foreach (var actor in actors)
       {
         actor.Draw();
@@ -101,7 +145,7 @@ namespace Chroma
 
     public void RemoveOffScreenActors()
     {
-      const float criticalDistance = 25.0f;
+      const float criticalDistance = 30.0f;
 
       var x = player.Position.X;
 
@@ -130,8 +174,9 @@ namespace Chroma
 
     private void Step()
     {
-      const float G = 6.15f;
-      const float DragFactor = 0.5f;
+
+      const float G = 0.05f;
+      const float DragFactor = 0.99f;
 
       // apply gravity
       foreach (var a in actors)
@@ -229,7 +274,7 @@ namespace Chroma
         return;
       }
 
-      const float LickStep = 10.0f;
+      const float LickStep = 2.0f;
 
       var v = actor.Velocity;
 
@@ -285,7 +330,7 @@ namespace Chroma
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep).Count == 0)
           {
             actor.Position += new Vector2(v.X, -LickStep);
-            actor.Velocity = Vector2.Zero;
+          //  actor.Velocity = Vector2.Zero;
             return;
           }
 

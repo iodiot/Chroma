@@ -172,6 +172,8 @@
     <Compile Include="Gui\GameHudGui.cs" />
     <Compile Include="Actors\SpriteDestroyerActor.cs" />
     <Compile Include="ParticleManager.cs" />
+    <Compile Include="Actors\SlopedPlatformActor.cs" />
+    <Compile Include="Actors\InvisiblePlatformActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

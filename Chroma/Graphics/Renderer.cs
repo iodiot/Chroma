@@ -10,6 +10,13 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Chroma.Graphics
 {
 
+  public enum SpriteFlip
+  {
+    None = 0,
+    Horizontal = 1,
+    Vertical = 2
+  }
+
   public sealed class Renderer
   {
     private const string DefaultLayerName = "default";
@@ -31,6 +38,7 @@ namespace Chroma.Graphics
       public Color Tint;
       public float Rotation;
       public float Scale;
+      public SpriteEffects Flip;
     }
 
     #endregion
@@ -177,7 +185,7 @@ namespace Chroma.Graphics
             dd.Rotation,
             Vector2.Zero,
             new Vector2(dd.Scale, dd.Scale),
-            SpriteEffects.None,
+            dd.Flip,
             0
           );
 
@@ -215,7 +223,7 @@ namespace Chroma.Graphics
       DrawTextS(text, position + World, tint, scale);
     }
 
-    public void DrawSpriteW(Sprite sprite, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
+    public void DrawSpriteW(Sprite sprite, Vector2 position, Color? tint = null, float scale = 1.0f, float rotation = 0.0f)
     {
       DrawSpriteS(sprite, position + World, tint, scale, rotation);
     }
@@ -235,21 +243,27 @@ namespace Chroma.Graphics
       DrawLineS(from + World, to + World, color);
     }
 
-    public void DrawSpriteW(string spriteName, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
+    public void DrawSpriteW(string spriteName, Vector2 position, Color? tint = null, 
+      float scale = 1.0f, float rotation = 0.0f,
+      SpriteFlip flip = SpriteFlip.None)
     {
-      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position + World, tint, scale, rotation);
+      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position + World, tint, scale, rotation, flip);
     }
 
     #endregion
 
     #region Screen draw
 
-    public void DrawSpriteS(string spriteName, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
+    public void DrawSpriteS(string spriteName, Vector2 position, Color? tint = null, 
+      float scale = 1.0f, float rotation = 0.0f, 
+      SpriteFlip flip = SpriteFlip.None)
     {
-      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position, tint, scale, rotation);
+      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position, tint ?? Color.White, scale, rotation, flip);
     }
 
-    public void DrawSpriteS(Sprite sprite, Vector2 position, Color tint, float scale = 1.0f, float rotation = 0.0f)
+    public void DrawSpriteS(Sprite sprite, Vector2 position, Color? tint = null,
+      float scale = 1.0f, float rotation = 0.0f, 
+      SpriteFlip flip = SpriteFlip.None)
     {
       var d = new Vector2(sprite.AnchorPoint.X * sprite.Width, sprite.AnchorPoint.Y * sprite.Height);
 
@@ -257,9 +271,10 @@ namespace Chroma.Graphics
         core.SpriteManager.GetTexture(sprite.TextureName),
         position - d,
         new Rectangle(sprite.X, sprite.Y, sprite.Width, sprite.Height),
-        tint,
+        tint ?? Color.White,
         rotation,
-        scale
+        scale,
+        (SpriteEffects)flip
       );
     }
 
@@ -275,7 +290,8 @@ namespace Chroma.Graphics
         rect,
         color,
         (float)Math.Atan(v.Y / v.X), 
-        1.0f
+        1.0f,
+        SpriteEffects.None
       );
     }
 
@@ -287,7 +303,8 @@ namespace Chroma.Graphics
         new Rectangle(0, 0, (int)width, (int)height), 
         color, 
         0,
-        1.0f
+        1.0f,
+        SpriteEffects.None
       );
     }
 
@@ -299,7 +316,8 @@ namespace Chroma.Graphics
         new Rectangle(0, 0, rect.Width, rect.Height), 
         color, 
         0,
-        1.0f
+        1.0f,
+        SpriteEffects.None
       );
     }
 
@@ -320,7 +338,7 @@ namespace Chroma.Graphics
 
     #endregion
   
-    private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, Color tint, float rotation, float scale)
+    private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, Color tint, float rotation, float scale, SpriteEffects flip)
     {
       layers[currentLayerName].DrawsDesc.Add(new DrawDesc() {
         Texture = texture,
@@ -328,7 +346,8 @@ namespace Chroma.Graphics
         SourceRect = sourceRect,
         Tint = tint,
         Rotation = rotation,
-        Scale = scale
+        Scale = scale,
+        Flip = flip
       });
 
       // reset layer

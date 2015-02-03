@@ -30,7 +30,7 @@ namespace Chroma.Actors
 
     public override void Update(int ticks)
     {
-      Velocity.X -= 0.5f;
+      Velocity.X = -0.5f;
 
       animation.Update(ticks);
 

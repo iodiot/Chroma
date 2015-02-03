@@ -16,8 +16,8 @@ namespace Chroma.Actors
     public MagicColor chargeColor;
     public bool charging = false;
 
-    private int jumpTtl;
     private int hurtTtl;
+    public float platformY { get; private set; }
 
     enum DruidState {
       Running,
@@ -74,26 +74,17 @@ namespace Chroma.Actors
       {
         animation.Play("run");
       }
-
-      if (jumpTtl > 0)
-      {
-        --jumpTtl;
-
-        if (jumpTtl > 25)
-        {
-          Velocity.Y -= 10.0f;
-        }
-        else if (jumpTtl > 0)
-        {
-          animation.Play("fall");
-          sm.Trigger(DruidEvent.Fall);
-        }
-        else
-        {
-          animation.Play("land");
-          sm.Trigger(DruidEvent.Land);
-        }
-      }
+        
+//      if (jumpTtl > 0)
+//      {
+//        animation.Play("fall");
+//        sm.Trigger(DruidEvent.Fall);
+//      }
+//      else
+//      {
+//        animation.Play("land");
+//        sm.Trigger(DruidEvent.Land);
+//      }
 
       if (hurtTtl > 0)
       {
@@ -103,7 +94,7 @@ namespace Chroma.Actors
       animation.Update(ticks);
       armAnimation.Update(ticks);
 
-      Velocity.X += 0.5f;
+      Velocity.X = 1.1f;
 
       base.Update(ticks);
     }
@@ -131,11 +122,13 @@ namespace Chroma.Actors
 
     public void TryToJump()
     {
-      if (sm.currentState == DruidState.Running)
+      //if (sm.currentState == DruidState.Running)
       {
-        jumpTtl = 50;
-        animation.Play("jump");
-        sm.Trigger(DruidEvent.Jump);
+        Velocity.Y = -3.0f;
+        //Velocity.X = 2f;
+
+        //animation.Play("jump");
+        //sm.Trigger(DruidEvent.Jump);
       }
     }
 
@@ -163,6 +156,11 @@ namespace Chroma.Actors
       if (other.CanMove && (hurtTtl == 0))
       {
         hurtTtl = 25;
+      }
+
+      if (!other.CanMove)
+      {
+        platformY = other.GetWorldBoundingBox().Top;
       }
 
       base.OnBoundingBoxTrigger(other);

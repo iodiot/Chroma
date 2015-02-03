@@ -35,16 +35,16 @@ namespace Chroma.Actors
       walkAnimation.Update(ticks);
       legAnimation.Update(ticks);
 
-      Velocity.X -= 1.0f;
+      Velocity.X = -1.0f;
 
       base.Update(ticks);
     }
 
     public override void Draw()
     {
-      core.Renderer.DrawSpriteW(walkAnimation.GetCurrentFrame(), Position, MagicManager.MagicColors[color], 1.0f, 0);
+      core.Renderer.DrawSpriteW(walkAnimation.GetCurrentFrame(), Position, MagicManager.MagicColors[color]);
       core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(10, 15), MagicManager.MagicColors[color] * 0.6f);
-      core.Renderer["fg"].DrawSpriteW(legAnimation.GetCurrentFrame(), Position, Color.White, 1.0f, 0);
+      core.Renderer["fg"].DrawSpriteW(legAnimation.GetCurrentFrame(), Position);
 
       base.Draw();
     }

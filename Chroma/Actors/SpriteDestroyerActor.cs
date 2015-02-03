@@ -74,8 +74,8 @@ namespace Chroma.Actors
           p.Scale = new Vector2(Scale, Scale);
           //p.RotationSpeed = ((float)random.NextDouble() * 2.0f - 1.0f) * 0.25f;
 
-          p.Velocity.X = (float)random.NextDouble() * 2.0f - 1.0f;
-          p.Velocity.Y = (float)random.NextDouble() * -2.0f;
+          p.Velocity.X = ((float)random.NextDouble() * 2.0f - 1.0f) * 3.0f;
+          p.Velocity.Y = (float)random.NextDouble() * -10.0f;
 
           pm.Spawn(p);
         }

@@ -20,7 +20,7 @@ namespace Chroma.Actors
     {
       for (var i = 0; i < spikesNumber; ++i)
       {
-        core.Renderer.DrawSpriteW("spike", Position + new Vector2(i * 5, 0), Color.White);
+        core.Renderer.DrawSpriteW("spike", Position + new Vector2(i * 5, 0));
       }
 
       base.Draw();

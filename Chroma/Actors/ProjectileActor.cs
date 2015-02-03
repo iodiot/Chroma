@@ -34,7 +34,7 @@ namespace Chroma.Actors
     {
       animation.Update(ticks);
 
-      Velocity.X += 6.0f;
+      Velocity.X = 7.0f;
 
       base.Update(ticks);
     }

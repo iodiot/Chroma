@@ -26,6 +26,16 @@ namespace Chroma.Graphics
       result.Width = Math.Min(Width, maxWidth);
       return result;
     }
+
+    public Sprite Reduce(int left, int top, int right, int bottom)
+    {
+      var result = this.MemberwiseClone() as Sprite;
+      result.X += Math.Min(left, Width);
+      result.Y += Math.Min(top, Height);
+      result.Width = Math.Max(Width - left - right, 0);
+      result.Height = Math.Max(Height - top - bottom, 0);
+      return result;
+    }
   }
 
   public sealed class SpriteManager

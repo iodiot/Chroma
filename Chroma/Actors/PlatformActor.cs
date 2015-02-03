@@ -11,7 +11,7 @@ namespace Chroma.Actors
     {
       this.width = width;
 
-      boundingBox = new Rectangle(0, 3, width, core.SpriteManager.GetSprite("earth").Height + 5);
+      boundingBox = new Rectangle(0, 0, width, 300);
 
       CanMove = false;
       CanFall = true;
@@ -26,50 +26,23 @@ namespace Chroma.Actors
 
     private void DrawGround()
     {
-      var ground = core.SpriteManager.GetSprite("ground");
-      var earth = core.SpriteManager.GetSprite("earth");
       var floor = core.SpriteManager.GetSprite("floor");
+      var grass = core.SpriteManager.GetSprite("floor_grass");
 
-      var n = width / earth.Width;
-      for (var i = 0; i <= n; ++i)
-      {
-        core.Renderer.DrawSpriteW(
-          i == n ? earth.ClampWidth(width % earth.Width) : earth, 
-          new Vector2(Position.X + earth.Width * i, Position.Y + 8), 
-          Color.White
-        );        
-      }
-
-      n = width / floor.Width;
+      var n = width / floor.Width;
       for (var i = 0; i <= n; ++i)
       {
         core.Renderer.DrawSpriteW(
           i == n ? floor.ClampWidth(width % floor.Width) : floor, 
-          new Vector2(Position.X + floor.Width * i, Position.Y - 9), 
-          Color.White
-        ); 
-      }
-
-      n = width / ground.Width;
-      for (var i = 0; i <= n; ++i)
-      {
+          new Vector2(Position.X + floor.Width * i, Position.Y - 11)
+        );
         core.Renderer.DrawSpriteW(
-          i == n ? ground.ClampWidth(width % ground.Width) : ground, 
-          new Vector2(Position.X + ground.Width * i, Position.Y + 3), 
-          Color.White
-        );     
+          i == n ? grass.ClampWidth(width % grass.Width) : grass, 
+          new Vector2(Position.X + grass.Width * i, Position.Y - 4)
+        );
       }
+
     }
-
-    /*private void DrawFgGrass()
-    {
-      var grass = core.SpriteManager.GetSprite("floor_grass");
-
-      for (var i = 0; i <= (core.Renderer.ScreenWidth / grass.Width) + 1; ++i)
-      {
-        core.Renderer.DrawSpriteS(grass, new Vector2(grass.Width * i - groundScroll % grass.Width + 7, level.GetGroundLevel() - 3), Color.White);        
-      }
-    }*/
   }
 }
 

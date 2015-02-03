@@ -25,7 +25,6 @@ namespace Chroma.States
     private int toNextSlime = -1;
 
     private int currentX, currentY;
-    private PlatformActor lastPlatform;
 
     public PlayState(Core core) : base(core)
     {
@@ -49,72 +48,37 @@ namespace Chroma.States
       currentX += dx;
       currentY += dy;
 
-      lastPlatform = new PlatformActor(core, new Vector2(currentX, currentY), width);
-      ActorManager.Add(lastPlatform);
+      var newPlatform = new PlatformActor(core, new Vector2(currentX, currentY), width);
+      ActorManager.Add(newPlatform);
 
       currentX += width;
     }
 
+    private void AddSlope(int sections){
+      bool down = core.ChanceRoll(0.5f);
+
+      var newSlope = new SlopedPlatformActor(
+        core, new Vector2(currentX, currentY), 
+        down ? SlopeDirection.Down : SlopeDirection.Up, sections
+      );
+      ActorManager.Add(newSlope);
+
+      currentX += newSlope.width;
+      currentY += (down ? 1 : -1) * sections * 16;
+    }
+
     private void UpdatePlatform()
     {
-      if (lastPlatform.GetWorldBoundingBox().X + lastPlatform.GetWorldBoundingBox().Width - player.X < 500)
+      if (currentX - player.X < 500)
       {
 
-        // random platform
-        /*if (core.GetRandom(0, 5) == 0)
+        if (core.ChanceRoll(0.5f))
         {
-          ActorManager.Add(new PlatformActor(core, new Vector2(currentX + 50, currentY - 75), 50));
-          for (var i = 0; i < 3; ++i)
-          {
-            ActorManager.Add(new CoinActor(core, new Vector2(currentX + i * 10 + 60, currentY - 85)));
-          }
-
-          AddPlatform(0, 50, 250);
-          return;
-        }*/
-          
-        // downfall
-        /*if (core.GetRandom(0, 5) == 0)
-        {
-          AddPlatform(50, 0, 100);
-          return;
-        }*/
-
-        // up steps
-        if (core.GetRandom(0, 3) == 0)
-        {
-          for (var i = 0; i < 10; ++i)
-          {
-            AddPlatform(0, -10, 30);
-          }
+          AddSlope(3);
           return;
         }
 
-        // down steps
-        if (core.GetRandom(0, 2) == 0)
-        {
-          for (var i = 0; i < 5; ++i)
-          {
-            AddPlatform(0, 10, 25);
-          }
-          return;
-        }
-
-        // up rock
-        /*if (core.GetRandom(0, 5) == 0)
-        {
-          AddPlatform(0, -50, 250);
-          return;
-        }
-
-        // down rock
-        if (core.GetRandom(0, 5) == 0)
-        {
-          AddPlatform(0, 50, 250);
-          return;
-        }*/
-
-        AddPlatform(0, 0, 250);
+        AddPlatform(0, 0, 100);
       }
     }
 
@@ -174,6 +138,7 @@ namespace Chroma.States
           (offset + trees.Width) * i - (groundScroll * 0.90f) % (offset + trees.Width), 0), Color.White); 
       }
 
+
       offset = 120; 
       trees = core.SpriteManager.GetSprite("trees_l5_1");
       for (var i = 0; i <= 3; i++)
@@ -223,7 +188,7 @@ namespace Chroma.States
 
     public override void Update(int ticks)
     {
-      /*
+
       #region Enemy spawning
       if (toNextGolem < 0)
         toNextGolem = core.GetRandom(80, 200);
@@ -232,48 +197,42 @@ namespace Chroma.States
 
       if (toNextSlime == 0)
       {
-        ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 53),
+        ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, player.Position.Y - 100),
           MagicManager.GetRandomColor(core, 0.2f)));
       }
       if (toNextGolem == 0)
       {
-        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 28),
+        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, player.Position.Y - 100),
           (MagicManager.GetRandomColor(core, 0.2f))));
-        if (core.ChanceRoll(0.3f))
-        {
-          ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 56),
-              MagicManager.GetRandomColor(core, 0)));
-          if (core.ChanceRoll(0.4f))
-          {
-            ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, groundLevel - 84),
-                MagicManager.GetRandomColor(core, 0)));
-
-          }
-        }
+       
       }
 
       toNextGolem--;
       toNextSlime--;
-      #endregion*/
+      #endregion
 
       groundScroll += 1.0f;
 
       ActorManager.Update(ticks);
-
-      core.Renderer.World = new Vector2(-player.Position.X + 25, 0);
-
       UpdatePlatform();
 
-      if (core.GetRandom(0, 150) == 0)
-      {
-        ActorManager.Add(new GolemActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, player.Position.Y - 300), MagicColor.Red));
-      }
-
+//      if (core.GetRandom(0, 150) == 0)
+//      {
+//        ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, player.Position.Y - 100), MagicColor.Red));
+//      }
+//
       groundScroll = player.Position.X;
 
       ActorManager.Update(ticks);
 
-      core.Renderer.World = new Vector2(-player.Position.X + 10, -player.Position.Y + 75);
+      float targetWorldY = (core.Renderer.ScreenHeight - 120) * 0.9f - (player.platformY + player.Position.Y) / 2;
+      float currentWorldY = core.Renderer.World.Y;
+      core.Renderer.World = new Vector2(
+        25 - player.Position.X, 
+        currentWorldY + (targetWorldY - currentWorldY) * 0.05f
+       );
+      core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - player.Position.Y);
+      core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
 
       gameControls.Update(ticks);
 
