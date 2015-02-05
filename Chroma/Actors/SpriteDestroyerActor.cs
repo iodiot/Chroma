@@ -3,16 +3,21 @@ using Microsoft.Xna.Framework;
 using Chroma.Actors;
 using Chroma.Graphics;
 using Chroma.Messages;
+using Chroma.States;
 
 namespace Chroma.Actors
 {
   public class SpriteDestroyerActor : Actor
   {
     private readonly ParticleManager pm;
+    private float groundLevel;
 
     public SpriteDestroyerActor(Core core, Vector2 position, Sprite sprite) : base(core, position)
     {
-      boundingBox = Rectangle.Empty;
+      boundingBox = new Rectangle(0, 0, sprite.Width, sprite.Height);
+
+      var platform = (core.GetCurrentState() as PlayState).ActorManager.FindPlatformUnder(position);
+      groundLevel = (platform != null) ? platform.GetWorldBoundingBox().Y : 100500f;
 
       pm = new ParticleManager(core, 0.0f);
       pm.OnPreUpdate = OnParticlePreUpdate;
@@ -47,7 +52,7 @@ namespace Chroma.Actors
 
     private void SpawnParticlesFromSprite(Vector2 position, Sprite sprite)
     {
-      const float PixelRate = 0.5f;
+      const float PixelRate = 0.25f;
       const float Scale = 2.0f;
 
       var texture = core.SpriteManager.GetTexture(sprite.TextureName);
@@ -74,8 +79,8 @@ namespace Chroma.Actors
           p.Scale = new Vector2(Scale, Scale);
           //p.RotationSpeed = ((float)random.NextDouble() * 2.0f - 1.0f) * 0.25f;
 
-          p.Velocity.X = ((float)random.NextDouble() * 2.0f - 1.0f) * 3.0f;
-          p.Velocity.Y = (float)random.NextDouble() * -10.0f;
+          p.Velocity.X = ((float)random.NextDouble() * 2.0f - 1.0f);
+          p.Velocity.Y = (float)random.NextDouble() * -5.0f;
 
           pm.Spawn(p);
         }
@@ -86,14 +91,14 @@ namespace Chroma.Actors
     {
       particle.Color *= 0.99f;
 
-      if (particle.Position.Y >= Position.Y + boundingBox.Height)
+      if (particle.Position.Y >= groundLevel)
       {
         particle.Velocity = Vector2.Zero;
       }
       else
       {
         // apply gravity
-        particle.Velocity.Y += 0.1f;
+        particle.Velocity.Y += 0.2f;
       }
     }
   }
