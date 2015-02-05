@@ -6,6 +6,7 @@ using Chroma.Graphics;
 using Chroma.Messages;
 using Chroma.StateMachines;
 using Chroma.Gameplay;
+using Chroma.States;
 
 namespace Chroma.Actors
 {
@@ -34,7 +35,7 @@ namespace Chroma.Actors
 
     public PlayerActor(Core core, Vector2 position) : base(core, position)
     {
-      boundingBox = new Rectangle(5, 0, 12, 21);
+      boundingBox = new Rectangle(3, 2, 12, 21);
 
       animation = new Animation();
       animation.Add("run", core.SpriteManager.GetFrames("druid_run_", new List<int>{ 1, 2, 3, 4, 5, 6, 7, 8 }));
@@ -64,6 +65,8 @@ namespace Chroma.Actors
       CanMove = true;
       CanFall = true;
       CanLick = true;
+
+      boundingBoxColor = Color.Yellow;
     }
 
     public override void Update(int ticks)
@@ -110,12 +113,22 @@ namespace Chroma.Actors
       core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), pos, tint);
 
       if (charging)
+      {
         core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(22, 15),
           MagicManager.MagicColors[chargeColor] * 0.8f);
+      }
 
       pos.X += animation.GetCurrentFrame().LinkX - armAnimation.GetCurrentFrame().LinkX;
       pos.Y += animation.GetCurrentFrame().LinkY - armAnimation.GetCurrentFrame().LinkY;
       core.Renderer.DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
+
+      var box = GetWorldBoundingBox();
+      var point = new Vector2(box.X + box.Width, box.Y + box.Height);
+      var platform = (core.GetCurrentState() as PlayState).ActorManager.FindPlatformUnder(point);
+      if (platform != null)
+      {
+        core.Renderer.DrawTextW((platform.Y - point.Y).ToString(), Position + new Vector2(25.0f, -25.0f), Color.White);
+      }
 
       base.Draw();
     }

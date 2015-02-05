@@ -22,12 +22,12 @@ namespace Chroma
       actorsToRemove = new List<Actor>();
     }
 
-    public void Initialize()
+    public void Load()
     {
 
     }
 
-    public void Uninitialize()
+    public void Unload()
     {
       foreach (var actor in actors)
       {
@@ -341,12 +341,9 @@ namespace Chroma
       // final check
       if (v.Length() > Settings.Eps && GetObstacles(actor, v.X, v.Y).Count > 0)
       {
-        Debug.Print("deeper");
-        v = Vector2.Zero;
-     
-        /*actor.Velocity = v * 0.75f;
+        actor.Velocity = v * 0.75f;
         MoveActor(actor);
-        return;*/
+        return;
       }
 
       actor.Velocity = v;
@@ -378,6 +375,35 @@ namespace Chroma
       }
 
       return result;
+    }
+
+    public Actor FindPlatformUnder(Vector2 position)
+    {
+      Actor closestActor = null;
+      var minY = 100500.0f;
+
+      foreach (var a in actors)
+      {
+        if ((a is PlatformActor) || (a is InvisiblePlatformActor))
+        {
+          var box = a.GetWorldBoundingBox();
+
+          if ((position.X < box.X) || (position.X > box.X + box.Width) || (position.Y > box.Y))
+          {
+            continue;
+          }
+
+          var y = box.Y - position.Y;
+
+          if (y < minY)
+          {
+            minY = y;
+            closestActor = a;
+          }
+        }
+      }
+
+      return closestActor;
     }
 
     #endregion

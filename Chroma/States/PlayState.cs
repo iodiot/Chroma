@@ -84,12 +84,12 @@ namespace Chroma.States
 
     public override void Load()
     {
-      ActorManager.Initialize();
+      ActorManager.Load();
     }
 
     public override void Unload()
     {
-      ActorManager.Uninitialize();
+      ActorManager.Unload();
     }
 
     private void DrawTrees()
@@ -216,11 +216,6 @@ namespace Chroma.States
       ActorManager.Update(ticks);
       UpdatePlatform();
 
-//      if (core.GetRandom(0, 150) == 0)
-//      {
-//        ActorManager.Add(new SlimeWalkActor(core, new Vector2(player.Position.X + core.Renderer.ScreenWidth, player.Position.Y - 100), MagicColor.Red));
-//      }
-//
       groundScroll = player.Position.X;
 
       ActorManager.Update(ticks);
