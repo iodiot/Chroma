@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Chroma.Actors
 {
-  public class InvisiblePlatformActor: Actor
+  public class InvisiblePlatformActor: PlatformActor
   {
     public InvisiblePlatformActor(Core core, Vector2 position, int width, int height) : base(core, position)
     {

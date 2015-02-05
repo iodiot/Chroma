@@ -75,7 +75,7 @@ namespace Chroma
       var earth = core.SpriteManager.GetSprite("earth");
       foreach (var actor in actors)
       {
-        if (actor is PlatformActor || actor is SlopedPlatformActor || actor is InvisiblePlatformActor)
+        if (actor is PlatformActor)
         {
           var box = actor.GetWorldBoundingBox();
 
@@ -175,7 +175,7 @@ namespace Chroma
     private void Step()
     {
 
-      const float G = 0.05f;
+      const float G = 0.08f;
       const float DragFactor = 0.99f;
 
       // apply gravity

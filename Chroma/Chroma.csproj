@@ -161,7 +161,6 @@
     <Compile Include="Graphics\FrameCounter.cs" />
     <Compile Include="TimerManager.cs" />
     <Compile Include="ActorManager.cs" />
-    <Compile Include="Actors\PlatformActor.cs" />
     <Compile Include="States\SandboxState.cs" />
     <Compile Include="Actors\GolemActor.cs" />
     <Compile Include="Actors\CoinActor.cs" />
@@ -173,6 +172,9 @@
     <Compile Include="ParticleManager.cs" />
     <Compile Include="Actors\SlopedPlatformActor.cs" />
     <Compile Include="Actors\InvisiblePlatformActor.cs" />
+    <Compile Include="Actors\PlatformActor.cs" />
+    <Compile Include="States\LevelGenerator.cs" />
+    <Compile Include="Actors\FlatPlatformActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

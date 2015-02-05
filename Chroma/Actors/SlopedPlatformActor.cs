@@ -11,7 +11,7 @@ namespace Chroma.Actors
     Down
   }
 
-  public class SlopedPlatformActor: Actor
+  public class SlopedPlatformActor: PlatformActor
   {
     public readonly int sections;
     public readonly int width;
@@ -29,12 +29,15 @@ namespace Chroma.Actors
       CanMove = false;
       CanFall = true;
 
+      dir = (direction == SlopeDirection.Up) ? -1 : 1;
+
       boundingBox = new Rectangle(0, (direction == SlopeDirection.Up) ? 0 : 16 * sections, width, 300);
+      LeftY = (int)position.Y;
+      RightY = (int)position.Y + dir * 16 * sections;
 
       int steps = 8;
       int stepHeight = 16 / steps;
       int stepWidth = 33 / steps;
-      dir = (direction == SlopeDirection.Up) ? -1 : 1;
 
       for (int i = 1; i < steps * sections; i++)
       {
@@ -64,6 +67,7 @@ namespace Chroma.Actors
       
     public override void Draw()
     {
+      DrawEdges();
       DrawGround();
 
       base.Draw();

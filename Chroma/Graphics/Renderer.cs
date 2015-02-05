@@ -223,9 +223,11 @@ namespace Chroma.Graphics
       DrawTextS(text, position + World, tint, scale);
     }
 
-    public void DrawSpriteW(Sprite sprite, Vector2 position, Color? tint = null, float scale = 1.0f, float rotation = 0.0f)
+    public void DrawSpriteW(Sprite sprite, Vector2 position, Color? tint = null, 
+      float scale = 1.0f, float rotation = 0.0f,
+      SpriteFlip flip = SpriteFlip.None)
     {
-      DrawSpriteS(sprite, position + World, tint, scale, rotation);
+      DrawSpriteS(sprite, position + World, tint, scale, rotation, flip);
     }
 
     public void DrawRectangleW(Vector2 position, float width, float height, Color color)

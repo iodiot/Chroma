@@ -67,7 +67,7 @@ namespace Chroma.Actors
 
     public override void OnBoundingBoxTrigger(Actor other)
     {
-      if (other is PlatformActor)
+      if (other is FlatPlatformActor)
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
       }
