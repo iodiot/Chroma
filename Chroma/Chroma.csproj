@@ -160,7 +160,6 @@
     <Compile Include="Actors\SpikeActor.cs" />
     <Compile Include="Graphics\FrameCounter.cs" />
     <Compile Include="TimerManager.cs" />
-    <Compile Include="Collider.cs" />
     <Compile Include="ActorManager.cs" />
     <Compile Include="Actors\PlatformActor.cs" />
     <Compile Include="States\SandboxState.cs" />

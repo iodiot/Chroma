@@ -5,6 +5,12 @@ using Chroma.Messages;
 
 namespace Chroma.Actors
 {
+  public class Collider
+  {
+    public string Name;
+    public Rectangle BoundingBox;
+  }
+
   public abstract class Actor : ISubscriber
   {
     #region Fields 
