@@ -4,37 +4,37 @@ using Chroma.Graphics;
 
 namespace Chroma.Actors
 {
-  abstract public class PlatformActor : Actor
+  public abstract class PlatformActor : Actor
   {
-    public PlatformActor previousPlatform { get; set; }
-    public PlatformActor nextPlatform { get; set; }
+    public PlatformActor PreviousPlatform { get; set; }
+    public PlatformActor NextPlatform { get; set; }
     public int LeftY { get; protected set; }
     public int RightY { get; protected set; }
 
 
     public PlatformActor(Core core, Vector2 position) : base(core, position) {
-      previousPlatform = null;
-      nextPlatform = null;
+      PreviousPlatform = null;
+      NextPlatform = null;
     }
 
     protected void DrawEdges()
     {
 
-      Sprite grass = core.SpriteManager.GetSprite("edge_grass");
-      Sprite earth = core.SpriteManager.GetSprite("edge_earth");
-      Sprite earth_bottom = core.SpriteManager.GetSprite("edge_earth_bottom");
+      var grass = core.SpriteManager.GetSprite("edge_grass");
+      var earth = core.SpriteManager.GetSprite("edge_earth");
+      var earthBottom = core.SpriteManager.GetSprite("edge_earth_bottom");
 
       // Right edge
-      if (nextPlatform == null || nextPlatform.LeftY > RightY)
+      if (NextPlatform == null || NextPlatform.LeftY > RightY)
       {
-        int bottom = 0;
-        if (nextPlatform != null)
-          bottom = nextPlatform.LeftY;
+        var bottom = 0;
+        if (NextPlatform != null)
+          bottom = NextPlatform.LeftY;
         else
           bottom = GetWorldBoundingBox().Bottom;
 
-        int i = bottom + 20;
-        Sprite edge = earth_bottom;
+        var i = bottom + 20;
+        var edge = earthBottom;
         do
         {
           i -= edge.Height;
@@ -48,16 +48,16 @@ namespace Chroma.Actors
       }
 
       // Left edge
-      if (previousPlatform == null || previousPlatform.RightY > LeftY)
+      if (PreviousPlatform == null || PreviousPlatform.RightY > LeftY)
       {
-        int bottom = 0;
-        if (previousPlatform != null)
-          bottom = previousPlatform.RightY;
+        var bottom = 0;
+        if (PreviousPlatform != null)
+          bottom = PreviousPlatform.RightY;
         else
           bottom = GetWorldBoundingBox().Bottom;
 
-        int i = bottom + 20;
-        Sprite edge = earth_bottom;
+        var i = bottom + 20;
+        var edge = earthBottom;
         do
         {
           i -= edge.Height;
@@ -71,7 +71,6 @@ namespace Chroma.Actors
           new Vector2(GetWorldBoundingBox().Left - grass.Width + 1, Y - 9), 
           flip: SpriteFlip.Horizontal);
       }
-     
     }
   }
 }

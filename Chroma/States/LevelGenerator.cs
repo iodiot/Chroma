@@ -50,8 +50,8 @@ namespace Chroma.States
     {
       if (lastPlatform != null)
       {
-        newPlatform.previousPlatform = lastPlatform;
-        lastPlatform.nextPlatform = newPlatform;
+        newPlatform.PreviousPlatform = lastPlatform;
+        lastPlatform.NextPlatform = newPlatform;
       }
       lastPlatform = newPlatform;
     }

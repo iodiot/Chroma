@@ -34,7 +34,7 @@ namespace Chroma.Gameplay
 
     public static MagicColor Mix(MagicColor first, MagicColor second) 
     {
-      MagicColor result = first;
+      var result = first;
 
       if (second == 0) 
       {
@@ -44,8 +44,7 @@ namespace Chroma.Gameplay
       {
         if (second < first)
         {
-          MagicColor temp;
-          temp = second;
+          var temp = second;
           second = first;
           first = temp;
         }

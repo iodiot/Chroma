@@ -91,7 +91,7 @@ namespace Chroma.Actors
     {
       particle.Color *= 0.99f;
 
-      if (particle.Position.Y >= groundLevel)
+      if (particle.Position.Y > groundLevel)
       {
         particle.Velocity = Vector2.Zero;
       }
