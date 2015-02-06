@@ -17,7 +17,7 @@ namespace Chroma.Actors
       boundingBox = new Rectangle(0, 0, sprite.Width, sprite.Height);
 
       var platform = (core.GetCurrentState() as PlayState).ActorManager.FindPlatformUnder(position);
-      groundLevel = (platform != null) ? platform.GetWorldBoundingBox().Y : 100500f;
+      groundLevel = (platform != null) ? platform.GetBoundingBoxW().Y : 100500f;
 
       pm = new ParticleManager(core, 0.0f);
       pm.OnPreUpdate = OnParticlePreUpdate;

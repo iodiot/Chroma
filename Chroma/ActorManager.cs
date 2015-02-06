@@ -77,7 +77,7 @@ namespace Chroma
       {
         if (actor is PlatformActor)
         {
-          var box = actor.GetWorldBoundingBox();
+          var box = actor.GetBoundingBoxW();
 
           int offx = Math.Abs(box.Left) % earth.Width;
           if (box.Left < 0)
@@ -151,7 +151,7 @@ namespace Chroma
 
       foreach (var actor in actors)
       {
-        var otherX = actor.GetWorldBoundingBox().X + actor.GetWorldBoundingBox().Width;
+        var otherX = actor.GetBoundingBoxW().X + actor.GetBoundingBoxW().Width;
         if (x - otherX > criticalDistance)
         {
           Remove(actor);
@@ -242,7 +242,7 @@ namespace Chroma
     {
       for (var i = 0; i < actor.GetCollidersCount(); ++i)
       {
-        var collider = actor.GetWorldCollider(i);
+        var collider = actor.GetColliderW(i);
 
         //var actorsInRadius = actorMap.FetchActors(collider.BoundingBox);
 
@@ -255,7 +255,7 @@ namespace Chroma
 
           for (var j = 0; j < other.GetCollidersCount(); ++j)
           {
-            var otherCollider = other.GetWorldCollider(j);
+            var otherCollider = other.GetColliderW(j);
 
             if (collider.BoundingBox.Intersects(otherCollider.BoundingBox))
             {
@@ -285,10 +285,10 @@ namespace Chroma
         if (obstaclesY.Count > 0)
         {
           var minY = (int)Math.Abs(v.Y);
-          var box = actor.GetWorldBoundingBox();
+          var box = actor.GetBoundingBoxW();
           foreach (var o in obstaclesY)
           {
-            var otherBox = o.GetWorldBoundingBox();
+            var otherBox = o.GetBoundingBoxW();
 
             var topBox = box.Y < otherBox.Y ? box : otherBox;
             var bottomBox = box.Y < otherBox.Y ? otherBox : box;
@@ -311,10 +311,10 @@ namespace Chroma
         if (obstaclesX.Count > 0)
         {
           var minX = (int)Math.Abs(v.X);
-          var box = actor.GetWorldBoundingBox();
+          var box = actor.GetBoundingBoxW();
           foreach (var o in obstaclesX)
           {
-            var otherBox = o.GetWorldBoundingBox();
+            var otherBox = o.GetBoundingBoxW();
 
             var leftBox = box.X < otherBox.X ? box : otherBox;
             var rightBox = box.X < otherBox.X ? otherBox : box;
@@ -368,7 +368,7 @@ namespace Chroma
           continue;
         }
 
-        if (box.Intersects(other.GetWorldBoundingBox()))
+        if (box.Intersects(other.GetBoundingBoxW()))
         {
           result.Add(other); 
         }
@@ -386,7 +386,7 @@ namespace Chroma
       {
         if ((a is PlatformActor) || (a is InvisiblePlatformActor))
         {
-          var box = a.GetWorldBoundingBox();
+          var box = a.GetBoundingBoxW();
 
           if ((position.X < box.X) || (position.X > box.X + box.Width) || (position.Y > box.Y))
           {

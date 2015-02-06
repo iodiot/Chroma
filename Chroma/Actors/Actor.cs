@@ -5,7 +5,7 @@ using Chroma.Messages;
 
 namespace Chroma.Actors
 {
-  public class Collider
+  public sealed class Collider
   {
     public string Name;
     public Rectangle BoundingBox;
@@ -74,14 +74,14 @@ namespace Chroma.Actors
     {
       if (Settings.DrawBoundingBoxes)
       {
-        core.Renderer.DrawRectangleW(GetWorldBoundingBox(), boundingBoxColor * 0.25f);
+        core.Renderer.DrawRectangleW(GetBoundingBoxW(), boundingBoxColor * 0.25f);
       }
 
       if (Settings.DrawColliders)
       {
         for (var i = 0; i < GetCollidersCount(); ++i)
         {
-          core.Renderer.DrawRectangleW(GetWorldCollider(i).BoundingBox, Color.Yellow * 0.25f);
+          core.Renderer.DrawRectangleW(GetColliderW(i).BoundingBox, Color.Yellow * 0.25f);
         }
       }
     }
@@ -92,7 +92,7 @@ namespace Chroma.Actors
 
     #region Collision detection
 
-    public Rectangle GetWorldBoundingBox()
+    public Rectangle GetBoundingBoxW()
     {
       return new Rectangle(
         (int)Math.Round(Position.X + boundingBox.X),
@@ -112,7 +112,7 @@ namespace Chroma.Actors
       return colliders.Count;
     }
 
-    public Collider GetWorldCollider(int n)
+    public Collider GetColliderW(int n)
     {
       var box = colliders[n].BoundingBox;
 

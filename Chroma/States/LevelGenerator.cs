@@ -76,7 +76,7 @@ namespace Chroma.States
       AttachToLast(newSlope);
 
       currentY = (int)newSlope.RightY;
-      currentX += newSlope.width;
+      currentX += newSlope.Width;
     }
 
     private void AddGap(int length)

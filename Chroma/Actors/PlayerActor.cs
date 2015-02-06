@@ -122,7 +122,7 @@ namespace Chroma.Actors
       pos.Y += animation.GetCurrentFrame().LinkY - armAnimation.GetCurrentFrame().LinkY;
       core.Renderer.DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
 
-      var box = GetWorldBoundingBox();
+      var box = GetBoundingBoxW();
       var point = new Vector2(box.X + box.Width, box.Y + box.Height);
       var platform = (core.GetCurrentState() as PlayState).ActorManager.FindPlatformUnder(point);
       if (platform != null)
@@ -173,7 +173,7 @@ namespace Chroma.Actors
 
       if (!other.CanMove)
       {
-        platformY = other.GetWorldBoundingBox().Top;
+        platformY = other.GetBoundingBoxW().Top;
       }
 
       base.OnBoundingBoxTrigger(other);

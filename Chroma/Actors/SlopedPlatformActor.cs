@@ -13,25 +13,24 @@ namespace Chroma.Actors
 
   public class SlopedPlatformActor: PlatformActor
   {
-    public readonly int sections;
-    public readonly int width;
-    public readonly SlopeDirection direction;
+    public readonly int Sections;
+    public readonly int Width;
+    public readonly SlopeDirection Direction;
 
     private readonly int dir;
 
     public SlopedPlatformActor(Core core, Vector2 position, SlopeDirection direction, int sections = 1) : base(core, position)
     {
-      this.sections = sections;
-      this.width = sections * 33;
-
-      this.direction = direction;
+      Sections = sections;
+      Width = sections * 33;
+      Direction = direction;
 
       CanMove = false;
       CanFall = true;
 
       dir = (direction == SlopeDirection.Up) ? -1 : 1;
 
-      boundingBox = new Rectangle(0, (direction == SlopeDirection.Up) ? 0 : 16 * sections, width, 300);
+      boundingBox = new Rectangle(0, (direction == SlopeDirection.Up) ? 0 : 16 * sections, Width, 300);
       LeftY = (int)position.Y;
       RightY = (int)position.Y + dir * 16 * sections;
 
@@ -74,21 +73,21 @@ namespace Chroma.Actors
     }
 
     private void DrawGround() {
-      for (int i = 0; i < sections; i++) {
+      for (int i = 0; i < Sections; i++) {
 
         var yPos = dir * i * 16;
-        if (direction == SlopeDirection.Down)
+        if (Direction == SlopeDirection.Down)
           yPos += 16;
 
         core.Renderer.DrawSpriteW(
           "slope",
           new Vector2(Position.X + i * 33, Position.Y + yPos - 24),
-          flip: direction == SlopeDirection.Up ? SpriteFlip.None : SpriteFlip.Horizontal
+          flip: Direction == SlopeDirection.Up ? SpriteFlip.None : SpriteFlip.Horizontal
         );
         core.Renderer.DrawSpriteW(
           "slope_grass",
           new Vector2(Position.X + i * 33, Position.Y + yPos - 18),
-          flip: direction == SlopeDirection.Up ? SpriteFlip.None : SpriteFlip.Horizontal
+          flip: Direction == SlopeDirection.Up ? SpriteFlip.None : SpriteFlip.Horizontal
         );
       }
     }

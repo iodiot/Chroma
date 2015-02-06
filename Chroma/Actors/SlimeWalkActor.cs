@@ -10,11 +10,11 @@ namespace Chroma.Actors
   public class SlimeWalkActor : Actor
   {
     private readonly Animation walkAnimation, legAnimation; 
-    public readonly MagicColor color;
+    public readonly MagicColor Color;
 
     public SlimeWalkActor(Core core, Vector2 position, MagicColor color) : base(core, position)
     {
-      this.color = color;
+      Color = color;
       boundingBox = new Rectangle(0, 0, 48, 53);
 
       walkAnimation = new Animation(0.15f);
@@ -42,8 +42,8 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      core.Renderer.DrawSpriteW(walkAnimation.GetCurrentFrame(), Position, MagicManager.MagicColors[color]);
-      core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(10, 15), MagicManager.MagicColors[color] * 0.6f);
+      core.Renderer.DrawSpriteW(walkAnimation.GetCurrentFrame(), Position, MagicManager.MagicColors[Color]);
+      core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(10, 15), MagicManager.MagicColors[Color] * 0.6f);
       core.Renderer["fg"].DrawSpriteW(legAnimation.GetCurrentFrame(), Position);
 
       base.Draw();
@@ -51,7 +51,7 @@ namespace Chroma.Actors
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-      if (other is ProjectileActor && ((ProjectileActor)other).color == this.color)
+      if (other is ProjectileActor && ((ProjectileActor)other).color == this.Color)
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
         core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, walkAnimation.GetCurrentFrame())), this);
