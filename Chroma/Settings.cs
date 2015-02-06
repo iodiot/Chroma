@@ -8,6 +8,7 @@ namespace Chroma
     public const bool DrawBoundingBoxes = false;
     public const bool DrawColliders = false;
     public const bool DrawFps = true;
+    public const bool DrawActorsCount = true;
     public const float Eps = 0.001f;
   }
 }

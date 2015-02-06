@@ -79,18 +79,18 @@ namespace Chroma
         {
           var box = actor.GetBoundingBoxW();
 
-          int offx = Math.Abs(box.Left) % earth.Width;
+          var offx = Math.Abs(box.Left) % earth.Width;
           if (box.Left < 0)
             offx = earth.Width - offx;
 
-          int offy = Math.Abs(box.Top) % earth.Height;
+          var offy = Math.Abs(box.Top) % earth.Height;
           if (box.Top < 0)
             offy = earth.Height - offy;
             
-          int x = box.Left - offx;
+          var x = box.Left - offx;
           do
           {
-            int y = box.Top - offy;
+            var y = box.Top - offy;
             do {
               var reducedEarth = earth.Reduce(
                 Math.Max(box.Left - x, 0),
@@ -99,10 +99,10 @@ namespace Chroma
                 Math.Max(y + earth.Height - box.Bottom, 0)
               );
 
-
-              var pos = new Vector2();
-              pos.X = Math.Max(x, box.Left);
-              pos.Y = Math.Max(y, box.Top);
+              var pos = new Vector2(
+                Math.Max(x, box.Left), 
+                Math.Max(y, box.Top)
+              );
 
               core.Renderer.DrawSpriteW(reducedEarth, pos);
 
@@ -111,24 +111,25 @@ namespace Chroma
 
             x += earth.Width;
           } while (x < box.Right);
-
         }
       }
-
 
       foreach (var actor in actors)
       {
         actor.Draw();
       }
 
-      core.Renderer.DrawTextS(
-        String.Format("actors: {0}", actors.Count),
-        new Vector2(core.Renderer.ScreenWidth - 70, 12),
-        Color.White * 0.25f
-      );
+      if (Settings.DrawActorsCount)
+      {
+        core.Renderer.DrawTextS(
+          String.Format("actors: {0}", actors.Count),
+          new Vector2(core.Renderer.ScreenWidth - 70, 12),
+          Color.White * 0.25f
+        );
+      }
     }
 
-    public void Add(Actor actor)
+    public Actor Add(Actor actor)
     {
       actorsToAdd.Add(actor);
 
@@ -136,6 +137,8 @@ namespace Chroma
       {
         player = actor as PlayerActor;
       }
+
+      return actor;
     }
 
     public void Remove(Actor actor)

@@ -6,23 +6,27 @@ namespace Chroma.States
 {
   public class SandboxState : State
   {
-    SpriteDestroyerActor actor;
+    private readonly ActorManager actorManager;
+    private readonly PlayerActor player;
 
     public SandboxState(Core core) : base(core)
     {
-      actor = new SpriteDestroyerActor(core, new Vector2(50, 50), core.SpriteManager.GetSprite("druid_fall_1"));
+      actorManager = new ActorManager(core);
+
+      player = actorManager.Add(new PlayerActor(core, new Vector2(50, 50))) as PlayerActor;
+      actorManager.Add(new FlatPlatformActor(core, new Vector2(0, 100), 100500));
     }
 
     public override void Update(int ticks)
     {
-      actor.Update(ticks);
+      actorManager.Update(ticks);
 
       base.Update(ticks);
     }
 
     public override void Draw()
     {
-      actor.Draw();
+      actorManager.Draw();
 
       base.Draw();
     }

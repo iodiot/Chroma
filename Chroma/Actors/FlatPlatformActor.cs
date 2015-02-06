@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Chroma.Graphics;
 
 namespace Chroma.Actors
 {
   public class FlatPlatformActor : PlatformActor
   {
     private readonly int width;
+    private readonly Sprite floorSprite, grassSprite;
 
     public FlatPlatformActor(Core core, Vector2 position, int width) : base(core, position)
     {
@@ -16,30 +18,31 @@ namespace Chroma.Actors
 
       CanMove = false;
       CanFall = true;
+
+      floorSprite = core.SpriteManager.GetSprite("floor");
+      grassSprite = core.SpriteManager.GetSprite("floor_grass");
     }
 
     public override void Draw()
     {
       DrawEdges();
       DrawGround();
+
       base.Draw();
     }
 
     private void DrawGround()
     {
-      var floor = core.SpriteManager.GetSprite("floor");
-      var grass = core.SpriteManager.GetSprite("floor_grass");
-
-      var n = width / floor.Width;
+      var n = width / floorSprite.Width;
       for (var i = 0; i <= n; ++i)
       {
         core.Renderer.DrawSpriteW(
-          i == n ? floor.ClampWidth(width % floor.Width) : floor, 
-          new Vector2(Position.X + floor.Width * i, Position.Y - 11)
+          i == n ? floorSprite.ClampWidth(width % floorSprite.Width) : floorSprite, 
+          new Vector2(Position.X + floorSprite.Width * i, Position.Y - 11)
         );
         core.Renderer.DrawSpriteW(
-          i == n ? grass.ClampWidth(width % grass.Width) : grass, 
-          new Vector2(Position.X + grass.Width * i, Position.Y - 4)
+          i == n ? grassSprite.ClampWidth(width % grassSprite.Width) : grassSprite, 
+          new Vector2(Position.X + grassSprite.Width * i, Position.Y - 4)
         );
       }
 

@@ -11,7 +11,8 @@ namespace Chroma.Actors
     public int LeftY { get; protected set; }
     public int RightY { get; protected set; }
 
-    public PlatformActor(Core core, Vector2 position) : base(core, position) {
+    public PlatformActor(Core core, Vector2 position) : base(core, position) 
+    {
       PreviousPlatform = null;
       NextPlatform = null;
     }

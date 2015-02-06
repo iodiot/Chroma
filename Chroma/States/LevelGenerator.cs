@@ -6,7 +6,6 @@ namespace Chroma.States
 {
   public class LevelGenerator
   {
-  
     private readonly ActorManager actorManager;
     private readonly Core core;
 

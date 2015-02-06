@@ -342,6 +342,18 @@ namespace Chroma.Graphics
   
     private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, Color tint, float rotation, float scale, SpriteEffects flip)
     {
+      // drop off-screen sprites
+      if (position.X > ScreenWidth || position.Y > ScreenHeight)
+      {
+        return;
+      }
+
+      // drop off-screen sprites
+      if (position.X + sourceRect.Width < 0 || position.Y + sourceRect.Height < 0)
+      {
+        return;
+      }
+
       layers[currentLayerName].DrawsDesc.Add(new DrawDesc() {
         Texture = texture,
         Position = position,

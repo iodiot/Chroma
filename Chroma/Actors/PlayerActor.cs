@@ -122,14 +122,6 @@ namespace Chroma.Actors
       pos.Y += animation.GetCurrentFrame().LinkY - armAnimation.GetCurrentFrame().LinkY;
       core.Renderer.DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
 
-      var box = GetBoundingBoxW();
-      var point = new Vector2(box.X + box.Width, box.Y + box.Height);
-      var platform = (core.GetCurrentState() as PlayState).ActorManager.FindPlatformUnder(point);
-      if (platform != null)
-      {
-        core.Renderer.DrawTextW((platform.Y - point.Y).ToString(), Position + new Vector2(25.0f, -25.0f), Color.White);
-      }
-
       base.Draw();
     }
 
