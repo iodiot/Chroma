@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Actors;
 
 namespace Chroma.States
@@ -19,7 +20,35 @@ namespace Chroma.States
 
     public override void Update(int ticks)
     {
+      var touchState = TouchPanel.GetState();
+
+      if (touchState.Count == 1)
+      {
+        player.TryToJump();
+      }
+
+      if (ticks % 100 == 0)
+      {
+        actorManager.Add(new OneWayPlatform(
+          core, 
+          new Vector2(player.Position.X + core.GetRandom(400, 500), core.GetRandom(30, 40)), 
+          core.GetRandom(50, 100), 
+          core.GetRandom(20, 40))
+        );
+      }
+
       actorManager.Update(ticks);
+
+      #region Positioning camera
+      var targetWorldY = (core.Renderer.ScreenHeight - 120) * 0.9f - (player.platformY + player.Position.Y) / 2;
+      var currentWorldY = core.Renderer.World.Y;
+      core.Renderer.World = new Vector2(
+        25 - player.Position.X, 
+        currentWorldY + (targetWorldY - currentWorldY) * 0.05f
+      );
+      core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - player.Position.Y);
+      core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
+      #endregion
 
       base.Update(ticks);
     }

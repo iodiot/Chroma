@@ -1,4 +1,4 @@
-﻿using System;
+Яusing System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -153,7 +153,6 @@ namespace Chroma.States
       LevelGenerator.Update(levelDistance);
 
       #region Positioning camera
-      var targetWorldY = (core.Renderer.ScreenHeight - 130) * 0.9f - (player.platformY + player.Position.Y) / 2;
       var currentWorldY = core.Renderer.World.Y;
       core.Renderer.World = new Vector2(
         25 - player.Position.X, 
@@ -161,7 +160,6 @@ namespace Chroma.States
        );
       core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - player.Position.Y);
       core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
-      #endregion
 
       gameControls.Update(ticks);
 

@@ -11,6 +11,37 @@ namespace Chroma.Actors
     public Rectangle BoundingBox;
   }
 
+  public sealed class ActorFeatures
+  {
+    public enum Feature
+    {
+      CanMove,
+      CanLick,
+      CanFall,
+      OneWayObstacle
+    }
+
+    public bool IsStatic { get { return !Contains(Feature.CanMove) && !Contains(Feature.CanFall); } }
+
+    private readonly HashSet<Feature> features;
+
+    public ActorFeatures()
+    {
+      features = new HashSet<Feature>();
+    }
+
+    public ActorFeatures Add(Feature feature)
+    {
+      features.Add(feature);
+      return this;
+    }
+
+    public bool Contains(Feature feature)
+    {
+      return features.Contains(feature);
+    }
+  }
+
   public abstract class Actor : ISubscriber
   {
     #region Fields 
@@ -35,9 +66,9 @@ namespace Chroma.Actors
 
     protected Color boundingBoxColor = Color.Red;
 
-    #endregion
-
     protected readonly Core core;
+
+    #endregion
 
     public Actor(Core core, Vector2 position)
     {
@@ -90,7 +121,12 @@ namespace Chroma.Actors
     {
     }
 
-    #region Collision detection
+    #region Physics
+
+    public void SetBoundingBox(float x, float y, float width, float height)
+    {
+      boundingBox = new Rectangle((int)x, (int)y, (int)width, (int)height);
+    }
 
     public Rectangle GetBoundingBoxW()
     {

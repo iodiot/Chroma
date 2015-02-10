@@ -41,7 +41,7 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      Color color = MagicManager.MagicColors[this.color];
+      var color = MagicManager.MagicColors[this.color];
       core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, color * 0.5f);
       core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(20, 23), color * 0.4f);
       //core.Renderer["fg_add"].DrawSpriteW(animation.GetCurrentFrame(), Position, color);
@@ -81,4 +81,5 @@ namespace Chroma.Actors
     }
   }
 }
+
 

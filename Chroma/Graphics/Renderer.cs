@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Chroma.Graphics
 {
-
   public enum SpriteFlip
   {
     None =        SpriteEffects.None,
@@ -39,18 +38,45 @@ namespace Chroma.Graphics
       public float Rotation;
       public float Scale;
       public SpriteEffects Flip;
+      public int Depth;
     }
 
     #endregion
       
-    // blending
+    #region Blending
     public static readonly BlendState AlphaBlend;
     public static readonly BlendState AdditiveBlend;
 
-    public Renderer this[string key]
+    static Renderer()
+    {
+      AlphaBlend = BlendState.AlphaBlend;
+
+      AdditiveBlend = BlendState.Additive;
+      AdditiveBlend.ColorSourceBlend = Blend.One;
+    }
+    #endregion
+
+    public Renderer this[string layer, int depth]
     {
       get {
-        SetCurrentLayer(key);
+        SetCurrentLayer(layer);
+        SetCurrentDepth(depth);
+        return this;
+      }
+    }
+
+    public Renderer this[string layer]
+    {
+      get {
+        SetCurrentLayer(layer);
+        return this;
+      }
+    }
+
+    public Renderer this[int depth]
+    {
+      get {
+        SetCurrentDepth(depth);
         return this;
       }
     }
@@ -62,6 +88,8 @@ namespace Chroma.Graphics
     private string currentLayerName;
     private Dictionary<string, Layer> layers;
 
+    private int currentDepth;
+
     public readonly float ScreenWidth;
     public readonly float ScreenHeight;
 
@@ -72,14 +100,6 @@ namespace Chroma.Graphics
     private int shakeTtl;
 
     private Random random;
-
-    static Renderer()
-    {
-      AlphaBlend = BlendState.AlphaBlend;
-
-      AdditiveBlend = BlendState.Additive;
-      AdditiveBlend.ColorSourceBlend = Blend.One;
-    }
 
     public Renderer(Core core, SpriteBatch spriteBatch, float screenWidth, float screenHeight)
     {
@@ -105,10 +125,17 @@ namespace Chroma.Graphics
       AddLayer("fg", 2, Renderer.AlphaBlend);
 
       SetCurrentLayer(DefaultLayerName);
+
+      SetCurrentDepth(0);
     }
 
     public void Unload()
     {
+    }
+
+    public void SetCurrentDepth(int depth)
+    {
+      currentDepth = depth;
     }
 
     #region Layers
@@ -172,6 +199,11 @@ namespace Chroma.Graphics
         {
           continue;
         }
+
+        // sort by depth
+        layer.DrawsDesc.Sort(
+          (l, r) => l.Depth < r.Depth ? -1 : 1
+        );
 
         Begin(layer.Blend);
 
@@ -340,7 +372,8 @@ namespace Chroma.Graphics
 
     #endregion
   
-    private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, Color tint, float rotation, float scale, SpriteEffects flip)
+    private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, 
+      Color tint, float rotation, float scale, SpriteEffects flip)
     {
       // drop off-screen sprites
       if (position.X > ScreenWidth || position.Y > ScreenHeight)
@@ -361,11 +394,13 @@ namespace Chroma.Graphics
         Tint = tint,
         Rotation = rotation,
         Scale = scale,
-        Flip = flip
+        Flip = flip,
+        Depth = currentDepth
       });
 
-      // reset layer
+      // reset layer and depth
       SetCurrentLayer(DefaultLayerName);
+      SetCurrentDepth(0);
     }
   }
 }

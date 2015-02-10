@@ -5,11 +5,19 @@ namespace Chroma.Actors
 {
   public class OneWayPlatform : PlatformActor
   {
-    private readonly float width;
-
-    public OneWayPlatform(Core core, Vector2 position, float width) : base(core, position)
+    public OneWayPlatform(Core core, Vector2 position, float width, float height) : base(core, position)
     {
-      this.width = width;
+      SetBoundingBox(0, 0, width, height);
+    }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      var actorBox = actor.GetBoundingBoxW();
+      var thisBox = GetBoundingBoxW();
+
+      var f = actorBox.Y + actorBox.Height <= thisBox.Y;
+
+      return !f;
     }
   }
 }
