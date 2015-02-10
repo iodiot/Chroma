@@ -200,14 +200,9 @@ namespace Chroma.Graphics
           continue;
         }
 
-        // sort by depth
-        layer.DrawsDesc.Sort(
-          (l, r) => l.Depth < r.Depth ? -1 : 1
-        );
-
         Begin(layer.Blend);
 
-        foreach (var dd in layer.DrawsDesc)
+        foreach (var dd in layer.DrawsDesc.OrderBy(dd => dd.Depth))
         {
           spriteBatch.Draw(
             dd.Texture, 
@@ -375,8 +370,10 @@ namespace Chroma.Graphics
     private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, 
       Color tint, float rotation, float scale, SpriteEffects flip)
     {
-      // drop off-screen sprites
-      if (position.X < ScreenWidth && position.Y < ScreenHeight && position.X + sourceRect.Width >= 0.0f && position.Y + sourceRect.Height >= 0.0f)
+      const float D = 1.0f; // delta
+
+      // draw if on screen
+      if (position.X < ScreenWidth + D && position.Y < ScreenHeight + D && position.X + sourceRect.Width >= -D && position.Y + sourceRect.Height >= -D)
       {
         layers[currentLayerName].DrawsDesc.Add(new DrawDesc()
           {

@@ -122,7 +122,7 @@ namespace Chroma.Actors
 
       pos.X += animation.GetCurrentFrame().LinkX - armAnimation.GetCurrentFrame().LinkX;
       pos.Y += animation.GetCurrentFrame().LinkY - armAnimation.GetCurrentFrame().LinkY;
-      core.Renderer[11].DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
+      core.Renderer[10].DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
 
       base.Draw();
     }
