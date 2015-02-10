@@ -51,10 +51,9 @@ namespace Chroma.Actors
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-      if (!(other is ProjectileActor))
+      if (!(other is ProjectileActor || other is CoinActor))
       {
-        core.MessageManager.Send(new RemoveActorMessage(this), this);
-        core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, animation.GetCurrentFrame())), this);
+        explode();
       }
 
       base.OnColliderTrigger(other, otherCollider, thisCollider);
@@ -67,12 +66,18 @@ namespace Chroma.Actors
 
     public override void OnBoundingBoxTrigger(Actor other)
     {
-      if (other is FlatPlatformActor)
+      if (other is PlatformActor)
       {
-        core.MessageManager.Send(new RemoveActorMessage(this), this);
+        explode();
       }
 
       base.OnBoundingBoxTrigger(other);
+    }
+
+    private void explode()
+    {
+      core.MessageManager.Send(new RemoveActorMessage(this), this);
+      core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, animation.GetCurrentFrame())), this);
     }
   }
 }

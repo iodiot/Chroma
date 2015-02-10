@@ -1,0 +1,351 @@
+﻿using System;
+using Chroma.Actors;
+using Microsoft.Xna.Framework;
+using Chroma.States;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Chroma.Gameplay
+{
+  public class LevelGenerator
+  {
+  
+    private readonly ActorManager actorManager;
+    private readonly Core core;
+
+    public PlatformActor LastPlatform { get; private set; }
+    public int CurrentX { get; private set; }
+    public int CurrentY { get; private set; }
+    public float distance;
+    public int distanceMeters;
+
+    private int coinGrid = 10;
+    private List<string> coinPatterns;
+
+    enum LevelModule {
+      Flat = 0,
+
+      Raise,
+      Descent,
+
+      CliffRight,
+      CliffLeft,
+      Gap,
+
+      CoinPattern,
+      CoinGap
+    }
+
+    enum EnemyType {
+      Slime = 0,
+      SlimeRoll,
+      SlimeWalk,
+
+      Golem
+    }
+
+    private int milestone;
+    private List<KeyValuePair<LevelModule, int>> ModuleRatios;
+    private List<KeyValuePair<EnemyType, int>> EnemyRatios;
+
+    public LevelGenerator(Core core, ActorManager actorManager)
+    {
+      this.core = core;
+      this.actorManager = actorManager;
+      LastPlatform = null;
+      milestone = -1;
+
+      coinPatterns = new List<string> { "arrows", "ring", "checkers" };
+
+      ModuleRatios = new List<KeyValuePair<LevelModule, int>>();
+      EnemyRatios = new List<KeyValuePair<EnemyType, int>>();
+
+    }
+
+    private void ProgressLevel()
+    {
+      switch (milestone)
+      {
+        case 0:
+          StartLevel();
+          ResetAllRatios();
+          SetRatioOf(LevelModule.Flat, 8);
+          SetRatioOf(LevelModule.Raise, 2);
+          SetRatioOf(LevelModule.Descent, 2);
+          SetRatioOf(LevelModule.Gap, 1);
+          SetRatioOf(LevelModule.CoinGap, 1);
+
+          SetRatioOf(EnemyType.Slime, 5);
+          break;
+        case 300:
+          SetRatioOf(EnemyType.SlimeRoll, 2);
+          break;
+        case 500:
+          SetRatioOf(LevelModule.CoinPattern, 1);
+          SetRatioOf(EnemyType.SlimeRoll, 5);
+          break;
+        case 700:
+          SetRatioOf(EnemyType.SlimeRoll, 10);
+          SetRatioOf(EnemyType.SlimeWalk, 1);
+          break;
+        case 1200:
+          SetRatioOf(EnemyType.SlimeWalk, 5);
+          break;
+        case 1300:
+          SetRatioOf(EnemyType.Slime, 0);
+          SetRatioOf(EnemyType.SlimeWalk, 10);
+          break;
+      }
+    }
+
+    public void Update(float distance)
+    {
+      this.distance = distance;
+      this.distanceMeters = (int)(distance / 10);
+
+      var latestMilestone = (int)(distance / 100) * 10;
+      if (milestone < latestMilestone)
+      {
+        milestone = latestMilestone;
+        ProgressLevel();
+        SortRatios();
+      }
+
+      if (CurrentX < distance + core.Renderer.ScreenWidth + 100)
+      {
+        ExtendLevel();
+      }
+    }
+
+    public void StartLevel() 
+    {
+      CurrentX = CurrentY = 0;
+
+      SpawnFlat((int)core.Renderer.ScreenWidth + 10);
+    }
+
+    private void ResetAllRatios()
+    {
+      ResetRatios<LevelModule>(ModuleRatios);
+      ResetRatios<EnemyType>(EnemyRatios);
+    }
+
+    private void ResetRatios<T>(List<KeyValuePair<T, int>> Ratios)
+    {
+      Ratios.Clear();
+      foreach (T item in Enum.GetValues(typeof(T))) {
+        Ratios.Add(new KeyValuePair<T, int>(item, 0));
+      }
+    }
+
+    private void SortRatios() 
+    {
+      ModuleRatios.Sort((a, b) => a.Value.CompareTo(b.Value));
+      EnemyRatios.Sort((a, b) => a.Value.CompareTo(b.Value));
+    }
+
+    private void SetRatioOf(LevelModule module, int ratio)
+    {
+      var i = ModuleRatios.FindIndex(x => x.Key == module);
+      ModuleRatios.RemoveAt(i);
+      ModuleRatios.Add(new KeyValuePair<LevelModule, int>(module, ratio));
+    }
+
+    private void SetRatioOf(EnemyType enemy, int ratio)
+    {
+      var i = EnemyRatios.FindIndex(x => x.Key == enemy);
+      EnemyRatios.RemoveAt(i);
+      EnemyRatios.Add(new KeyValuePair<EnemyType, int>(enemy, ratio));
+    }
+
+    private T GetRandom<T>(List<KeyValuePair<T, int>> Ratios)
+    {
+      var total = Ratios.Sum(x => x.Value);
+      var roll = core.GetRandom(1, total);
+      var i = -1;
+      var sum = 0;
+      do
+      {
+        i++;
+        sum += Ratios[i].Value;
+      } while (sum < roll && i < Ratios.Count - 1);
+      return Ratios[i].Key;
+    }
+
+    private void ExtendLevel() 
+    {
+      SpawnModule(GetRandom<LevelModule>(ModuleRatios));
+    }
+
+    //--------------------------------------------------
+
+    #region Enemies
+    private void SpawnEnemy(EnemyType enemy)
+    {
+
+    }
+    #endregion
+
+    //--------------------------------------------------
+
+    #region Basic secions
+    private void AttachToLast(PlatformActor newPlatform)
+    {
+      if (LastPlatform != null)
+      {
+        newPlatform.PreviousPlatform = LastPlatform;
+        LastPlatform.NextPlatform = newPlatform;
+      }
+      LastPlatform = newPlatform;
+    }
+
+    private void SpawnFlat(int length = 30, int elevation = 0)
+    {
+      CurrentY += elevation;
+
+      var newPlatform = new FlatPlatformActor(core, new Vector2(CurrentX, CurrentY), length);
+      actorManager.Add(newPlatform);
+      AttachToLast(newPlatform);
+
+      CurrentX += length;
+    }
+
+    private void SpawnSlope(SlopeDirection direction, int sections = 1, int elevation = 0)
+    {
+      CurrentY += elevation;
+
+      var newSlope = new SlopedPlatformActor(core, new Vector2(CurrentX, CurrentY), direction, sections);
+      actorManager.Add(newSlope);
+      AttachToLast(newSlope);
+
+      CurrentY = (int)newSlope.RightY;
+      CurrentX += newSlope.Width;
+    }
+
+    private void SpawnGap(int length)
+    {
+      CurrentX += length;
+      LastPlatform = null;
+    }
+    #endregion
+
+    //--------------------------------------------------
+
+    #region Modules
+    private void SpawnModule(LevelModule module)
+    {
+      switch (module)
+      {
+        case LevelModule.Flat:
+          SpawnFlat(100);
+          break;
+
+        case LevelModule.Raise:
+          SpawnSlope(SlopeDirection.Up, core.GetRandom(1,2));
+          SpawnFlat(30);
+          break;
+        case LevelModule.Descent:
+          SpawnSlope(SlopeDirection.Down, core.GetRandom(1,2));
+          SpawnFlat(30);
+          break;
+
+        case LevelModule.CliffRight:
+          SpawnSlope(SlopeDirection.Up, 2);
+          SpawnFlat(200, core.GetRandom(30, 70));
+          break;
+
+        case LevelModule.CliffLeft:
+          SpawnSlope(SlopeDirection.Down, 2, -30);
+          SpawnFlat(30);
+          break;
+
+        case LevelModule.Gap:
+          SpawnGap(50);
+          break;
+
+        case LevelModule.CoinPattern:
+          var pattern = "cp_" + coinPatterns[core.GetRandom(0, coinPatterns.Count - 1)];
+          var sprite = core.SpriteManager.GetSprite(pattern);
+          SpawnCoinPattern(CurrentX, CurrentY - coinGrid, pattern);
+          SpawnFlat(sprite.Width * coinGrid);
+          break;
+
+        case LevelModule.CoinGap:
+          SpawnFlat(40);
+          SpawnCoinArc(CurrentX - 30, CurrentY - 15);
+          SpawnGap(90);
+          SpawnFlat(50);
+          break;
+      }
+    }
+    #endregion
+
+    //--------------------------------------------------
+
+    #region Coin clusters
+    private void SpawnCoin(int x, int y)
+    {
+      var newCoin = new CoinActor(core, new Vector2(x, y));
+      actorManager.Add(newCoin);
+    }
+      
+    private void SpawnCoinRect(int x, int y, int width, int height)
+    {
+      for (var i = 0; i < width / 15; i++)
+      {
+        for (var j = 0; j < height / 15; j++)
+        {
+          SpawnCoin(x + i * 15, y + j * 15);
+        }
+      }
+    }
+
+    private void SpawnCoinArc(int x, int y)
+    {
+      float cx = x;
+      float cy = y;
+      var vx = 2.2f;
+      var vy = -3.0f;
+      var coins = 0;
+
+      do
+      {
+        SpawnCoin((int)cx, (int)cy);
+        coins++;
+
+        for (var i = 0; i <= 5; i++)
+        {
+          cx += vx;
+          cy += vy;
+          vy += 0.08f;
+          vy *= 0.99f;
+        }
+          
+      } while (coins < 12);
+    }
+
+    private void SpawnCoinPattern(int x, int y, string pattern)
+    {
+      var sprite = core.SpriteManager.GetSprite(pattern);
+      var texture = core.SpriteManager.GetTexture(sprite.TextureName);
+      var textureData = core.SpriteManager.GetTextureData(sprite.TextureName);
+
+      for (var j = sprite.Y; j < sprite.Y + sprite.Height; j++)
+      {
+        for (var i = sprite.X; i < sprite.X + sprite.Width; i++)
+        {
+          var color = textureData[i + j * texture.Width];
+          if (color == Color.Black)
+          {
+            SpawnCoin(x + (i - sprite.X) * coinGrid, y - (coinGrid * sprite.Height) + (j - sprite.Y) * coinGrid);
+          }
+        }
+      }
+    }
+
+    #endregion
+
+    //--------------------------------------------------
+  }
+}
+

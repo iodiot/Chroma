@@ -173,9 +173,9 @@
     <Compile Include="Actors\SlopedPlatformActor.cs" />
     <Compile Include="Actors\InvisiblePlatformActor.cs" />
     <Compile Include="Actors\PlatformActor.cs" />
-    <Compile Include="States\LevelGenerator.cs" />
     <Compile Include="Actors\FlatPlatformActor.cs" />
     <Compile Include="Actors\OneWayPlatform.cs" />
+    <Compile Include="Gameplay\LevelGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

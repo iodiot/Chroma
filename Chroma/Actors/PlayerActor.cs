@@ -67,6 +67,8 @@ namespace Chroma.Actors
       CanLick = true;
 
       boundingBoxColor = Color.Yellow;
+
+      AddCollider(new Collider(){ Name = "body", BoundingBox = boundingBox });
     }
 
     public override void Update(int ticks)
@@ -163,7 +165,7 @@ namespace Chroma.Actors
         hurtTtl = 25;
       }
 
-      if (!other.CanMove)
+      if (other is PlatformActor)
       {
         platformY = other.GetBoundingBoxW().Top;
       }

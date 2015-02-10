@@ -9,42 +9,59 @@ using Chroma.Graphics;
 
 namespace Chroma.Actors
 {
-  public enum CoinType
-  {
-    Vertical,
-    Horizontal
-  };
 
   public class CoinActor : Actor
   {
     private readonly Animation animation;
+    private int delay;
 
-    public CoinActor(Core core, Vector2 position, CoinType type = CoinType.Vertical) : base(core, position)
+    public CoinActor(Core core, Vector2 position) : base(core, position)
     {
-      boundingBox = new Rectangle(0, 0, 5, 5);
+      boundingBox = new Rectangle(0, 0, 8, 8);
+      this.delay = (int)(position.X / 15) % 20;
 
       animation = new Animation();
-      var prefix = String.Format("coin_{0}", type == CoinType.Vertical ? "v" : "h");
-      animation.Add("live", core.SpriteManager.GetFrames(prefix, new List<int>{ 1, 2, 3 }));
+      var prefix = "coin_";
+      animation.Add("spin", core.SpriteManager.GetFrames(prefix, new List<int>{ 0, 0, 0, 0, 1, 2, 3, 4 }));
 
-      animation.Play("live");
+      animation.Play("spin");
 
       CanMove = false;
       CanFall = false;
 
-      AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
+      AddCollider(new Collider() { Name = "coin", BoundingBox = boundingBox });
     }
       
     public override void Update(int ticks)
     {
-      animation.Update(ticks);
+      if (delay > 0)
+      {
+        delay--;
+      }
+
+      if (delay == 0)
+      {
+        animation.Update(ticks);
+      }
 
       base.Update(ticks);
     }
 
     public override void Draw()
     {
+
+      core.Renderer.DrawSpriteW("glow", new Vector2(Position.X - 8, Position.Y - 8), 
+        Color.Gold * 0.25f, 0.4f);
+
       core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position);
+
+      var frame = animation.GetCurrentFrameNumber();
+      var scale = (6f / frame) * (6f / frame);
+      if (frame > 5)
+      {
+        core.Renderer["fg_add"].DrawSpriteW("glow", new Vector2(Position.X - 0.5f, Position.Y - 0.5f), 
+          Color.White * 1f * scale, 0.13f * scale);
+      }
 
       base.Draw();
     }
@@ -63,7 +80,7 @@ namespace Chroma.Actors
 
     public override bool IsPassableFor(Actor actor)
     {
-      return actor.CanMove;
+      return true;
     }
   }
 }

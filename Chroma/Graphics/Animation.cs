@@ -5,7 +5,7 @@ namespace Chroma.Graphics
 {
   public sealed class Animation
   {
-    public string CurrentPlay { get; private set; }
+    public string CurrentSequence { get; private set; }
     public float Speed { get; private set; }
 
     private readonly Dictionary<string, List<Sprite>> animations;
@@ -15,7 +15,7 @@ namespace Chroma.Graphics
     public Animation(float speed = 0.2f)
     {
       Speed = speed;
-      CurrentPlay = "";
+      CurrentSequence = "";
 
       animations = new Dictionary<string, List<Sprite>>();
 
@@ -41,19 +41,19 @@ namespace Chroma.Graphics
 
     public void Play(string name)
     {
-      Debug.Assert(animations[name] != null, String.Format("Animation.Play() : Play {0} is missing", name));
+      Debug.Assert(animations[name] != null, String.Format("Animation.Play() : Sequence {0} is missing", name));
 
-      CurrentPlay = name;
+      CurrentSequence = name;
       Reset();
     }
 
     public void Update(int ticks)
     {
-      Debug.Assert(animations[CurrentPlay] != null, "Animation.Update() : Current play is missing");
+      Debug.Assert(animations[CurrentSequence] != null, "Animation.Update() : Current sequence is missing");
 
       timeLine += Speed;
 
-      if (timeLine >= animations[CurrentPlay].Count)
+      if (timeLine >= animations[CurrentSequence].Count)
       {
         Reset();
       }
@@ -61,9 +61,14 @@ namespace Chroma.Graphics
 
     public Sprite GetCurrentFrame()
     {
-      Debug.Assert(animations[CurrentPlay] != null, "Animation.GetCurrentFrame() : Current play is missing");
+      Debug.Assert(animations[CurrentSequence] != null, "Animation.GetCurrentFrame() : Current sequence is missing");
 
-      return animations[CurrentPlay][(int)timeLine];
+      return animations[CurrentSequence][(int)timeLine];
+    }
+
+    public int GetCurrentFrameNumber()
+    {
+      return (int)timeLine;
     }
   }
 }
