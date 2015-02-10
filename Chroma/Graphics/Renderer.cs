@@ -376,27 +376,20 @@ namespace Chroma.Graphics
       Color tint, float rotation, float scale, SpriteEffects flip)
     {
       // drop off-screen sprites
-      if (position.X > ScreenWidth || position.Y > ScreenHeight)
+      if (position.X < ScreenWidth && position.Y < ScreenHeight && position.X + sourceRect.Width >= 0.0f && position.Y + sourceRect.Height >= 0.0f)
       {
-        return;
+        layers[currentLayerName].DrawsDesc.Add(new DrawDesc()
+          {
+            Texture = texture,
+            Position = position,
+            SourceRect = sourceRect,
+            Tint = tint,
+            Rotation = rotation,
+            Scale = scale,
+            Flip = flip,
+            Depth = currentDepth
+          });
       }
-
-      // drop off-screen sprites
-      if (position.X + sourceRect.Width < 0 || position.Y + sourceRect.Height < 0)
-      {
-        return;
-      }
-
-      layers[currentLayerName].DrawsDesc.Add(new DrawDesc() {
-        Texture = texture,
-        Position = position,
-        SourceRect = sourceRect,
-        Tint = tint,
-        Rotation = rotation,
-        Scale = scale,
-        Flip = flip,
-        Depth = currentDepth
-      });
 
       // reset layer and depth
       SetCurrentLayer(DefaultLayerName);
