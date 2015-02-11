@@ -153,8 +153,9 @@ namespace Chroma.States
       LevelGenerator.Update(levelDistance);
 
       #region Positioning camera
-      var currentWorldY = core.Renderer.World.Y;
       var targetWorldY = (core.Renderer.ScreenHeight - 130) * 0.9f - (player.platformY + player.Position.Y) / 2;
+      var currentWorldY = core.Renderer.World.Y;
+
       core.Renderer.World = new Vector2(
         25 - player.Position.X, 
         currentWorldY + (targetWorldY - currentWorldY) * 0.05f

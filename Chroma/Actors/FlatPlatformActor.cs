@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Chroma.Graphics;
+using Chroma.Messages;
 
 namespace Chroma.Actors
 {
@@ -21,6 +22,45 @@ namespace Chroma.Actors
 
       floorSprite = core.SpriteManager.GetSprite("floor");
       grassSprite = core.SpriteManager.GetSprite("floor_grass");
+
+      // Vines
+      if (core.ChanceRoll(0.5f))
+      {
+        var x = Position.X + core.GetRandom(4, width - 12);
+        var vine = core.GetRandom(1, 4);
+        core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
+          new Vector2(x, Position.Y),
+          "vine_" + vine.ToString(),
+          flip: core.ChanceRoll(0.5f),
+          zIndex: 10
+            )), this);
+        if (core.ChanceRoll(0.3f))
+        {
+          x += 8;
+          var vine2 = core.GetRandom(1, 4);
+          while (vine == vine2)
+          {
+            vine2 = core.GetRandom(1, 4);
+          }
+          core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
+            new Vector2(x, Position.Y),
+            "vine_" + vine2.ToString(),
+            flip: core.ChanceRoll(0.5f),
+            zIndex: 10
+          )), this);
+        }
+      }
+
+      // Boulders
+      if (core.ChanceRoll(0.8f))
+      {
+        var boulder = core.GetRandom(1, 4);
+        var x = Position.X + core.GetRandom(4, width - 4 - 15);
+        core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
+          new Vector2(x, Position.Y + core.GetRandom(15, 60)),
+          "earth_boulder_" + boulder.ToString()
+        )), this);
+      }
     }
 
     public override void Draw()
@@ -38,11 +78,11 @@ namespace Chroma.Actors
       {
         core.Renderer.DrawSpriteW(
           i == n ? floorSprite.ClampWidth(width % floorSprite.Width) : floorSprite, 
-          new Vector2(Position.X + floorSprite.Width * i, Position.Y - 11)
+          new Vector2(Position.X + floorSprite.Width * i, Position.Y - 13)
         );
-        core.Renderer.DrawSpriteW(
+        core.Renderer[50].DrawSpriteW(
           i == n ? grassSprite.ClampWidth(width % grassSprite.Width) : grassSprite, 
-          new Vector2(Position.X + grassSprite.Width * i, Position.Y - 4)
+          new Vector2(Position.X + grassSprite.Width * i, Position.Y - 6)
         );
       }
 

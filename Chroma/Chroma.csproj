@@ -176,6 +176,7 @@
     <Compile Include="Actors\FlatPlatformActor.cs" />
     <Compile Include="Actors\OneWayPlatform.cs" />
     <Compile Include="Gameplay\LevelGenerator.cs" />
+    <Compile Include="Actors\DecalActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

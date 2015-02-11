@@ -77,11 +77,11 @@ namespace Chroma.Gui
     public override void Draw()
     {
       // Jump button
-      core.Renderer.DrawSpriteS(core.SpriteManager.GetSprite("btn_jump" + (jumpTouchId == -1 ? "" : "_pressed")), 
+      core.Renderer[1000].DrawSpriteS(core.SpriteManager.GetSprite("btn_jump" + (jumpTouchId == -1 ? "" : "_pressed")), 
         new Vector2(20, core.Renderer.ScreenHeight - 100), scale: 1.5f);
 
       // Tripad
-      core.Renderer.DrawSpriteS(core.SpriteManager.GetSprite("pad_base"), 
+      core.Renderer[1000].DrawSpriteS(core.SpriteManager.GetSprite("pad_base"), 
         new Vector2(buttons[MagicColor.Red].box.Left, buttons[MagicColor.Red].box.Top) - new Vector2(7, 5), scale: 1.5f);
       if (player.charging)
         core.Renderer["fg_add"].DrawSpriteS(core.SpriteManager.GetSprite("glow"), 
@@ -95,7 +95,7 @@ namespace Chroma.Gui
         if (button.pressed)
           core.Renderer["fg_add"].DrawSpriteS(core.SpriteManager.GetSprite("glow"), new Vector2(button.box.Left, button.box.Top) - new Vector2(25, 25),
             MagicManager.MagicColors[button.color] * 0.8f, 1.5f);
-        core.Renderer.DrawSpriteS(core.SpriteManager.GetSprite(gemName), new Vector2(button.box.Left, button.box.Top), scale: 1.5f);
+        core.Renderer[1000].DrawSpriteS(core.SpriteManager.GetSprite(gemName), new Vector2(button.box.Left, button.box.Top), scale: 1.5f);
       }
 
       base.Draw();
@@ -114,6 +114,12 @@ namespace Chroma.Gui
 
       foreach (TouchLocation touch in touchState)
       {
+
+        // Debug: stop
+        if (touch.Position.Y < core.Renderer.ScreenHeight / 2 && touch.State == TouchLocationState.Moved)
+        {
+          player.Position.X -= 2.2f;
+        }
 
         // Jump
         if (touch.Id == jumpTouchId && touch.State == TouchLocationState.Released)

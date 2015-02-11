@@ -162,6 +162,11 @@ namespace Chroma.Graphics
       
     private void SetCurrentLayer(string name)
     {
+      if (name == "") 
+      {
+        name = DefaultLayerName;
+      }
+
       Debug.Assert(layers.ContainsKey(name), String.Format("Renderer.SetCurrentLayer() : Layer {0} is missing", name));
 
       currentLayerName = name;

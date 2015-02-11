@@ -81,12 +81,12 @@ namespace Chroma.Actors
 
         core.Renderer.DrawSpriteW(
           "slope",
-          new Vector2(Position.X + i * 33, Position.Y + yPos - 24),
+          new Vector2(Position.X + i * 33, Position.Y + yPos - 26),
           flip: Direction == SlopeDirection.Up ? SpriteFlip.None : SpriteFlip.Horizontal
         );
-        core.Renderer.DrawSpriteW(
+        core.Renderer[50].DrawSpriteW(
           "slope_grass",
-          new Vector2(Position.X + i * 33, Position.Y + yPos - 18),
+          new Vector2(Position.X + i * 33, Position.Y + yPos - 20),
           flip: Direction == SlopeDirection.Up ? SpriteFlip.None : SpriteFlip.Horizontal
         );
       }

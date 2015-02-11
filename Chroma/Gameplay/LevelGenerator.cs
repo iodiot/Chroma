@@ -74,10 +74,10 @@ namespace Chroma.Gameplay
           SetRatioOf(LevelModule.Descent, 2);
           SetRatioOf(LevelModule.Gap, 1);
           SetRatioOf(LevelModule.CoinGap, 1);
-
           SetRatioOf(EnemyType.Slime, 5);
           break;
         case 300:
+          SetRatioOf(LevelModule.CliffRight, 1);
           SetRatioOf(EnemyType.SlimeRoll, 2);
           break;
         case 500:
@@ -251,7 +251,7 @@ namespace Chroma.Gameplay
 
         case LevelModule.CliffRight:
           SpawnSlope(SlopeDirection.Up, 2);
-          SpawnFlat(200, core.GetRandom(30, 70));
+          SpawnFlat(200, core.GetRandom(60, 100));
           break;
 
         case LevelModule.CliffLeft:
