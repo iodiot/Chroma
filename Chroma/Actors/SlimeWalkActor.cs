@@ -16,6 +16,7 @@ namespace Chroma.Actors
     {
       Color = color;
       boundingBox = new Rectangle(0, 0, 48, 53);
+      this.Position.Y -= 53;
 
       walkAnimation = new Animation(0.15f);
       walkAnimation.AddAndPlay("live", core.SpriteManager.GetFrames("slime_walk_", new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }));
@@ -42,9 +43,9 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      core.Renderer.DrawSpriteW(walkAnimation.GetCurrentFrame(), Position, MagicManager.MagicColors[Color]);
+      core.Renderer[-1].DrawSpriteW(walkAnimation.GetCurrentFrame(), Position, MagicManager.MagicColors[Color]);
       core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(10, 15), MagicManager.MagicColors[Color] * 0.6f);
-      core.Renderer["fg"].DrawSpriteW(legAnimation.GetCurrentFrame(), Position);
+      core.Renderer[10].DrawSpriteW(legAnimation.GetCurrentFrame(), Position);
 
       base.Draw();
     }

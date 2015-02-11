@@ -17,6 +17,7 @@ namespace Chroma.Actors
     {
       this.color = color;
       boundingBox = new Rectangle(0, 0, 20, 28);
+      this.Position.Y -= 28;
 
       animation = new Animation();
       animation.AddAndPlay("live", core.SpriteManager.GetFrames("golem_", new List<int>{ 1, 2, 3, 4, 5, 6 }));

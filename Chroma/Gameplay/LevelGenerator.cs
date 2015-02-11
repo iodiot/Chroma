@@ -83,6 +83,7 @@ namespace Chroma.Gameplay
           SetRatioOf(LevelModule.CoinGap, 1);
           SetRatioOf(Encounter.None, 100);
           SetRatioOf(Encounter.Golem, 50);
+          SetRatioOf(Encounter.Boulder, 20);
           break;
         case 200:
           SetRatioOf(LevelModule.CliffRight, 1);
@@ -240,22 +241,28 @@ namespace Chroma.Gameplay
         case LevelModule.Flat:
           var width = 15;
           var encounter = GetRandom<Encounter>(EncounterRatios);
-          var position = new Vector2(CurrentX, CurrentY - 100);
+          var position = new Vector2(CurrentX, CurrentY);
           switch (encounter)
           {
             case Encounter.None:
 
               break;
 
+            case Encounter.Boulder:
+              var newBoulder = new BoulderActor(core, position);
+              width += newBoulder.GetBoundingBoxW().Width;
+              actorManager.Add(newBoulder);
+              break;
+
             case Encounter.Golem:
               var newGolem = new GolemActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
-              width = newGolem.GetBoundingBoxW().Width;
+              width += newGolem.GetBoundingBoxW().Width;
               actorManager.Add(newGolem);
               break;
 
             case Encounter.SlimeWalk:
               var newSlimeWalker = new SlimeWalkActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
-              width = newSlimeWalker.GetBoundingBoxW().Width;
+              width += newSlimeWalker.GetBoundingBoxW().Width;
               actorManager.Add(newSlimeWalker);
               break;
           }

@@ -23,6 +23,8 @@ namespace Chroma.Actors
     public override void Draw()
     {
       core.Renderer[layer, zIndex].DrawSpriteW(sprite, Position, flip: flip ? SpriteFlip.Horizontal : SpriteFlip.None);
+
+      base.Draw();
     }
 
     public override bool IsPassableFor(Actor actor)
