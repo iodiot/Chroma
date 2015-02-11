@@ -20,7 +20,7 @@ namespace Chroma.Actors
       this.Position.Y -= 28;
 
       animation = new Animation();
-      animation.AddAndPlay("live", core.SpriteManager.GetFrames("golem_", new List<int>{ 1, 2, 3, 4, 5, 6 }));
+      animation.AddAndPlay("live", core.SpriteManager.GetFrames("golem_", new List<int>{ 1, 2, 3, 4, 5, 6 }, color));
 
       CanMove = true;
       CanFall = true;
@@ -41,8 +41,8 @@ namespace Chroma.Actors
     public override void Draw()
     {
       Color color = MagicManager.MagicColors[this.color];
-      core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(20, 10), color * 0.3f);
-      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, color);
+      //core.Renderer.DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position + new Vector2(-1, -4), color, 0.35f);
+      core.Renderer[1].DrawSpriteW(animation.GetCurrentFrame(), Position);
 
       base.Draw();
     }

@@ -6,6 +6,7 @@ using System.Json;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Chroma.Gameplay;
 
 namespace Chroma.Graphics
 {
@@ -121,8 +122,13 @@ namespace Chroma.Graphics
       }
     }
 
-    public Sprite GetSprite(string name)
+    public Sprite GetSprite(string name, MagicColor? color = null)
     {
+      if (color != null)
+      {
+        name += "/" + color.ToString();
+      }
+
       Debug.Assert(sprites.ContainsKey(name), String.Format("SpriteManager.GetSprite() : Sprite {0} is missing", name));
 
       var s = sprites[name];
@@ -141,13 +147,13 @@ namespace Chroma.Graphics
       return textures[name];
     }
 
-    public List<Sprite> GetFrames(string prefix, IEnumerable<int> frames)
+    public List<Sprite> GetFrames(string prefix, IEnumerable<int> frames, MagicColor? color = null)
     {
       var result = new List<Sprite>();
 
       foreach (var frame in frames) 
       {
-        result.Add(GetSprite(String.Format("{0}{1}", prefix, frame)));
+        result.Add(GetSprite(String.Format("{0}{1}", prefix, frame), color));
       }
 
       return result;

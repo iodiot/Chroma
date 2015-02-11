@@ -181,15 +181,6 @@ namespace Chroma.Gameplay
 
     //--------------------------------------------------
 
-    #region Enemies
-    private void SpawnEnemy(Encounter enemy)
-    {
-
-    }
-    #endregion
-
-    //--------------------------------------------------
-
     #region Basic secions
     private void AttachToLast(PlatformActor newPlatform)
     {
@@ -233,40 +224,50 @@ namespace Chroma.Gameplay
 
     //--------------------------------------------------
 
+    #region Encounters
+    private int SpawnEncounter(Encounter encounter)
+    {
+      var width = 30;
+
+      var position = new Vector2(CurrentX + 15, CurrentY);
+      switch (encounter)
+      {
+        case Encounter.None:
+          break;
+
+        case Encounter.Boulder:
+          var newBoulder = new BoulderActor(core, position);
+          width += newBoulder.GetBoundingBoxW().Width;
+          actorManager.Add(newBoulder);
+          break;
+
+        case Encounter.Golem:
+          var newGolem = new GolemActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
+          width += newGolem.GetBoundingBoxW().Width;
+          actorManager.Add(newGolem);
+          break;
+
+        case Encounter.SlimeWalk:
+          var newSlimeWalker = new SlimeWalkActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
+          width += newSlimeWalker.GetBoundingBoxW().Width;
+          actorManager.Add(newSlimeWalker);
+          break;
+      }
+
+      return width;
+    }
+    #endregion
+
+    //--------------------------------------------------
+
     #region Modules
     private void SpawnModule(LevelModule module)
     {
       switch (module)
       {
         case LevelModule.Flat:
-          var width = 15;
           var encounter = GetRandom<Encounter>(EncounterRatios);
-          var position = new Vector2(CurrentX, CurrentY);
-          switch (encounter)
-          {
-            case Encounter.None:
-
-              break;
-
-            case Encounter.Boulder:
-              var newBoulder = new BoulderActor(core, position);
-              width += newBoulder.GetBoundingBoxW().Width;
-              actorManager.Add(newBoulder);
-              break;
-
-            case Encounter.Golem:
-              var newGolem = new GolemActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
-              width += newGolem.GetBoundingBoxW().Width;
-              actorManager.Add(newGolem);
-              break;
-
-            case Encounter.SlimeWalk:
-              var newSlimeWalker = new SlimeWalkActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
-              width += newSlimeWalker.GetBoundingBoxW().Width;
-              actorManager.Add(newSlimeWalker);
-              break;
-          }
-          width += 15;
+          var width = SpawnEncounter(encounter);
           SpawnFlat(width);
           break;
 

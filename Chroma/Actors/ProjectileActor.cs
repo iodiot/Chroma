@@ -10,7 +10,7 @@ namespace Chroma.Actors
   public class ProjectileActor : Actor
   {
     public readonly MagicColor color;
-    private readonly Animation animation;
+    private readonly Sprite sprite;
 
     public ProjectileActor(Core core, Vector2 position, MagicColor color) : base(core, position)
     {
@@ -18,22 +18,19 @@ namespace Chroma.Actors
 
       boundingBox = new Rectangle(0, 0, 14, 8);
 
-      animation = new Animation();
-      animation.AddAndPlay("live", core.SpriteManager.GetFrames("projectile_", new List<int>() { 1, 2, 3, 4 }));
+      sprite = core.SpriteManager.GetSprite("projectile", color);
 
       CanMove = true;
       CanFall = false;
       CanLick = false;
 
-      AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
+      AddCollider(new Collider() { Name = "projectile", BoundingBox = boundingBox });
 
       Ttl = 250;
     }
 
     public override void Update(int ticks)
     {
-      animation.Update(ticks);
-
       Velocity.X = 7.0f;
 
       base.Update(ticks);
@@ -42,9 +39,8 @@ namespace Chroma.Actors
     public override void Draw()
     {
       var color = MagicManager.MagicColors[this.color];
-      core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position, color * 0.5f);
+      core.Renderer.DrawSpriteW(sprite, Position);
       core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(20, 23), color * 0.4f);
-      //core.Renderer["fg_add"].DrawSpriteW(animation.GetCurrentFrame(), Position, color);
 
       base.Draw();
     }
@@ -66,7 +62,7 @@ namespace Chroma.Actors
 
     public override void OnBoundingBoxTrigger(Actor other)
     {
-      if (other is PlatformActor)
+      if (other is PlatformActor || other is BoulderActor) // TODO: features!
       {
         Explode();
       }
@@ -77,7 +73,7 @@ namespace Chroma.Actors
     private void Explode()
     {
       core.MessageManager.Send(new RemoveActorMessage(this), this);
-      core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, animation.GetCurrentFrame())), this);
+      core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
     }
   }
 }
