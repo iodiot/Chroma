@@ -177,6 +177,7 @@
     <Compile Include="Actors\OneWayPlatform.cs" />
     <Compile Include="Gameplay\LevelGenerator.cs" />
     <Compile Include="Actors\DecalActor.cs" />
+    <Compile Include="Helpers\SmallHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -189,6 +190,7 @@
     <Folder Include="Gui\" />
     <Folder Include="StateMachines\" />
     <Folder Include="Gameplay\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\click1.wav">

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Chroma.Helpers;
 using Chroma.Actors;
 using Chroma.Messages;
 using Chroma.States;
@@ -13,13 +14,6 @@ namespace Chroma
 {
   public sealed class Core
   {
-    // TEMP
-    // Move to Chroma.Helpers?
-    public class Pair<T1, T2>
-    {
-      public T1 A { get; set; }
-      public T2 B { get; set; }
-    }
     private readonly List<Pair<string, int>> DebugMessages;
 
     public SpriteManager SpriteManager { get; private set; }
@@ -138,7 +132,7 @@ namespace Chroma
 
     public void DebugMessage(string message)
     {
-      DebugMessages.Add(new Pair<string, int>{ A = message, B = 200 } );
+      DebugMessages.Add(new Pair<string, int>(message, 200) );
     }
 
     public void Draw(GameTime gameTime)

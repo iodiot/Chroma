@@ -1,4 +1,5 @@
 ﻿using System;
+using Chroma.Helpers;
 using Chroma.Actors;
 using Microsoft.Xna.Framework;
 using Chroma.States;
@@ -50,8 +51,8 @@ namespace Chroma.Gameplay
     }
 
     private int milestone;
-    private List<KeyValuePair<LevelModule, int>> ModuleRatios;
-    private List<KeyValuePair<Encounter, int>> EncounterRatios;
+    private List<Pair<LevelModule, int>> ModuleRatios;
+    private List<Pair<Encounter, int>> EncounterRatios;
 
     public LevelGenerator(Core core, ActorManager actorManager)
     {
@@ -62,8 +63,8 @@ namespace Chroma.Gameplay
 
       coinPatterns = new List<string> { "arrows", "ring", "checkers" };
 
-      ModuleRatios = new List<KeyValuePair<LevelModule, int>>();
-      EncounterRatios = new List<KeyValuePair<Encounter, int>>();
+      ModuleRatios = new List<Pair<LevelModule, int>>();
+      EncounterRatios = new List<Pair<Encounter, int>>();
 
     }
 
@@ -132,48 +133,44 @@ namespace Chroma.Gameplay
       ResetRatios<Encounter>(EncounterRatios);
     }
 
-    private void ResetRatios<T>(List<KeyValuePair<T, int>> Ratios)
+    private void ResetRatios<T>(List<Pair<T, int>> Ratios)
     {
       Ratios.Clear();
       foreach (T item in Enum.GetValues(typeof(T))) {
-        Ratios.Add(new KeyValuePair<T, int>(item, 0));
+        Ratios.Add(new Pair<T, int>(item, 0));
       }
     }
 
     private void SortRatios() 
     {
-      ModuleRatios.Sort((a, b) => a.Value.CompareTo(b.Value));
-      EncounterRatios.Sort((a, b) => a.Value.CompareTo(b.Value));
+      ModuleRatios.Sort((a, b) => a.B.CompareTo(b.B));
+      EncounterRatios.Sort((a, b) => a.B.CompareTo(b.B));
     }
 
     private void SetRatioOf(LevelModule module, int ratio)
     {
-      var i = ModuleRatios.FindIndex(x => x.Key == module);
-      ModuleRatios.RemoveAt(i);
-      ModuleRatios.Add(new KeyValuePair<LevelModule, int>(module, ratio));
+      ModuleRatios.Find(x => x.A == module).B = ratio;
     }
 
     private void SetRatioOf(Encounter encounter, int ratio)
     {
-      core.DebugMessage(String.Format("{0} -> {1}", encounter, ratio));
+      EncounterRatios.Find(x => x.A == encounter).B = ratio;
 
-      var i = EncounterRatios.FindIndex(x => x.Key == encounter);
-      EncounterRatios.RemoveAt(i);
-      EncounterRatios.Add(new KeyValuePair<Encounter, int>(encounter, ratio));
+      core.DebugMessage(String.Format("{0} -> {1}", encounter, ratio));
     }
 
-    private T GetRandom<T>(List<KeyValuePair<T, int>> Ratios)
+    private T GetRandom<T>(List<Pair<T, int>> Ratios)
     {
-      var total = Ratios.Sum(x => x.Value);
+      var total = Ratios.Sum(x => x.B);
       var roll = core.GetRandom(1, total);
       var i = -1;
       var sum = 0;
       do
       {
         i++;
-        sum += Ratios[i].Value;
+        sum += Ratios[i].B;
       } while (sum < roll && i < Ratios.Count - 1);
-      return Ratios[i].Key;
+      return Ratios[i].A;
     }
 
     private void ExtendLevel() 
