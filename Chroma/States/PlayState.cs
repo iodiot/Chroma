@@ -176,8 +176,8 @@ namespace Chroma.States
       gameControls.Draw();
 
       core.Renderer.DrawTextS(
-        String.Format("distance: {0} m", LevelGenerator.distanceMeters),
-        new Vector2(10, 12),
+        String.Format("{0} m", LevelGenerator.distanceMeters),
+        new Vector2(60, 5),
         Color.White * 0.25f
       );
 

@@ -123,7 +123,7 @@ namespace Chroma
       {
         core.Renderer.DrawTextS(
           String.Format("actors: {0}", actors.Count),
-          new Vector2(core.Renderer.ScreenWidth - 70, 12),
+          new Vector2(10, 15),
           Color.White * 0.25f
         );
       }

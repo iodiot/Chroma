@@ -36,8 +36,13 @@ namespace Chroma.Gameplay
       CoinGap
     }
 
-    enum EnemyType {
-      Slime = 0,
+    enum Encounter {
+      // Obstacles
+      None = 0,
+      Boulder,
+
+      // Enemies
+      Slime,
       SlimeRoll,
       SlimeWalk,
 
@@ -46,7 +51,7 @@ namespace Chroma.Gameplay
 
     private int milestone;
     private List<KeyValuePair<LevelModule, int>> ModuleRatios;
-    private List<KeyValuePair<EnemyType, int>> EnemyRatios;
+    private List<KeyValuePair<Encounter, int>> EncounterRatios;
 
     public LevelGenerator(Core core, ActorManager actorManager)
     {
@@ -58,7 +63,7 @@ namespace Chroma.Gameplay
       coinPatterns = new List<string> { "arrows", "ring", "checkers" };
 
       ModuleRatios = new List<KeyValuePair<LevelModule, int>>();
-      EnemyRatios = new List<KeyValuePair<EnemyType, int>>();
+      EncounterRatios = new List<KeyValuePair<Encounter, int>>();
 
     }
 
@@ -67,33 +72,30 @@ namespace Chroma.Gameplay
       switch (milestone)
       {
         case 0:
+          core.DebugMessage("Level started!");
           StartLevel();
           ResetAllRatios();
-          SetRatioOf(LevelModule.Flat, 8);
+          SetRatioOf(LevelModule.Flat, 200);
           SetRatioOf(LevelModule.Raise, 2);
           SetRatioOf(LevelModule.Descent, 2);
           SetRatioOf(LevelModule.Gap, 1);
           SetRatioOf(LevelModule.CoinGap, 1);
-          SetRatioOf(EnemyType.Slime, 5);
+          SetRatioOf(Encounter.None, 100);
+          SetRatioOf(Encounter.Golem, 50);
           break;
-        case 300:
+        case 200:
           SetRatioOf(LevelModule.CliffRight, 1);
-          SetRatioOf(EnemyType.SlimeRoll, 2);
+          SetRatioOf(Encounter.SlimeWalk, 10);
           break;
-        case 500:
+        case 400:
           SetRatioOf(LevelModule.CoinPattern, 1);
-          SetRatioOf(EnemyType.SlimeRoll, 5);
+          SetRatioOf(Encounter.Golem, 20);
+          SetRatioOf(Encounter.SlimeWalk, 50);
           break;
-        case 700:
-          SetRatioOf(EnemyType.SlimeRoll, 10);
-          SetRatioOf(EnemyType.SlimeWalk, 1);
-          break;
-        case 1200:
-          SetRatioOf(EnemyType.SlimeWalk, 5);
-          break;
-        case 1300:
-          SetRatioOf(EnemyType.Slime, 0);
-          SetRatioOf(EnemyType.SlimeWalk, 10);
+        case 600:
+          SetRatioOf(LevelModule.CoinPattern, 1);
+          SetRatioOf(Encounter.Golem, 0);
+          SetRatioOf(Encounter.SlimeWalk, 50);
           break;
       }
     }
@@ -127,7 +129,7 @@ namespace Chroma.Gameplay
     private void ResetAllRatios()
     {
       ResetRatios<LevelModule>(ModuleRatios);
-      ResetRatios<EnemyType>(EnemyRatios);
+      ResetRatios<Encounter>(EncounterRatios);
     }
 
     private void ResetRatios<T>(List<KeyValuePair<T, int>> Ratios)
@@ -141,7 +143,7 @@ namespace Chroma.Gameplay
     private void SortRatios() 
     {
       ModuleRatios.Sort((a, b) => a.Value.CompareTo(b.Value));
-      EnemyRatios.Sort((a, b) => a.Value.CompareTo(b.Value));
+      EncounterRatios.Sort((a, b) => a.Value.CompareTo(b.Value));
     }
 
     private void SetRatioOf(LevelModule module, int ratio)
@@ -151,11 +153,13 @@ namespace Chroma.Gameplay
       ModuleRatios.Add(new KeyValuePair<LevelModule, int>(module, ratio));
     }
 
-    private void SetRatioOf(EnemyType enemy, int ratio)
+    private void SetRatioOf(Encounter encounter, int ratio)
     {
-      var i = EnemyRatios.FindIndex(x => x.Key == enemy);
-      EnemyRatios.RemoveAt(i);
-      EnemyRatios.Add(new KeyValuePair<EnemyType, int>(enemy, ratio));
+      core.DebugMessage(String.Format("{0} -> {1}", encounter, ratio));
+
+      var i = EncounterRatios.FindIndex(x => x.Key == encounter);
+      EncounterRatios.RemoveAt(i);
+      EncounterRatios.Add(new KeyValuePair<Encounter, int>(encounter, ratio));
     }
 
     private T GetRandom<T>(List<KeyValuePair<T, int>> Ratios)
@@ -180,7 +184,7 @@ namespace Chroma.Gameplay
     //--------------------------------------------------
 
     #region Enemies
-    private void SpawnEnemy(EnemyType enemy)
+    private void SpawnEnemy(Encounter enemy)
     {
 
     }
@@ -237,7 +241,29 @@ namespace Chroma.Gameplay
       switch (module)
       {
         case LevelModule.Flat:
-          SpawnFlat(100);
+          var width = 15;
+          var encounter = GetRandom<Encounter>(EncounterRatios);
+          var position = new Vector2(CurrentX, CurrentY - 100);
+          switch (encounter)
+          {
+            case Encounter.None:
+
+              break;
+
+            case Encounter.Golem:
+              var newGolem = new GolemActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
+              width = newGolem.GetBoundingBoxW().Width;
+              actorManager.Add(newGolem);
+              break;
+
+            case Encounter.SlimeWalk:
+              var newSlimeWalker = new SlimeWalkActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
+              width = newSlimeWalker.GetBoundingBoxW().Width;
+              actorManager.Add(newSlimeWalker);
+              break;
+          }
+          width += 15;
+          SpawnFlat(width);
           break;
 
         case LevelModule.Raise:

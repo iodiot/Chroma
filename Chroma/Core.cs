@@ -13,6 +13,15 @@ namespace Chroma
 {
   public sealed class Core
   {
+    // TEMP
+    // Move to Chroma.Helpers?
+    public class Pair<T1, T2>
+    {
+      public T1 A { get; set; }
+      public T2 B { get; set; }
+    }
+    private readonly List<Pair<string, int>> DebugMessages;
+
     public SpriteManager SpriteManager { get; private set; }
     public Renderer Renderer { get; private set; }
     public ContentManager Content { get; private set; }
@@ -28,6 +37,8 @@ namespace Chroma
 
     public Core(SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
     {
+      DebugMessages = new List<Pair<string, int>>();
+
       SpriteManager = new SpriteManager(this);
       SoundManager = new SoundManager(this);
       Renderer = new Renderer(this, spriteBatch, screenWidth, screenHeight);
@@ -108,6 +119,11 @@ namespace Chroma
     {
       TimerManager.Update(ticks);
 
+      foreach (var message in DebugMessages) {
+        message.B--;
+      }
+      DebugMessages.RemoveAll(m => m.B == 0);
+
       if (GetCurrentState() != null)
       {
         GetCurrentState().Update(ticks);
@@ -118,6 +134,11 @@ namespace Chroma
       Renderer.Update(ticks);
 
       ++ticks;
+    }
+
+    public void DebugMessage(string message)
+    {
+      DebugMessages.Add(new Pair<string, int>{ A = message, B = 200 } );
     }
 
     public void Draw(GameTime gameTime)
@@ -133,10 +154,23 @@ namespace Chroma
       if (Settings.DrawFps)
       {
         Renderer.DrawTextS(
-          String.Format("fps:    {0}", Math.Round(frameCounter.AverageFramesPerSecond)), 
-          new Vector2(Renderer.ScreenWidth - 70, 3),
+          String.Format("{0} fps", Math.Round(frameCounter.AverageFramesPerSecond)),
+          new Vector2(10, 5),
           Color.White * 0.25f
         );
+      }
+
+      if (Settings.DrawDebugMessages)
+      {
+        var i = 0;
+        foreach (var message in DebugMessages) {
+          Renderer.DrawTextS(
+            message.A,
+            new Vector2(Renderer.ScreenWidth - 150, 5 + 10 * i + 10 * ((float)message.B / 200)),
+            Color.White * ((float)message.B / 400)
+          );
+          i++;
+        }
       }
 
       // final draw
