@@ -15,7 +15,7 @@ namespace Chroma.Actors
     private readonly Animation animation;
     private int delay;
 
-    public CoinActor(Core core, Vector2 position) : base(core, position)
+    public CoinActor(Core core, Vector2 position, bool canMove = false) : base(core, position)
     {
       boundingBox = new Rectangle(0, 0, 8, 8);
       this.delay = (int)(position.X / 15) % 20;
@@ -23,8 +23,8 @@ namespace Chroma.Actors
       animation = new Animation();
       animation.AddAndPlay("spin", core.SpriteManager.GetFrames("coin_", new List<int>{ 0, 0, 0, 0, 1, 2, 3, 4 }));
 
-      CanMove = false;
-      CanFall = false;
+      CanMove = canMove;
+      CanFall = canMove;
 
       AddCollider(new Collider() { Name = "coin", BoundingBox = boundingBox });
     }

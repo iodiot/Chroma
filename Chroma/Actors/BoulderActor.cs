@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Chroma.Graphics;
+using Chroma.Messages;
 
 namespace Chroma.Actors
 {
@@ -12,6 +13,7 @@ namespace Chroma.Actors
       sprite = core.SpriteManager.GetSprite("boulder_1");
       this.Position.Y -= sprite.Height - 1;
       boundingBox = new Rectangle(0, 3, sprite.Width, sprite.Height);
+      AddCollider(new Collider() { BoundingBox = boundingBox });
 
       CanMove = false;
     }
@@ -25,7 +27,23 @@ namespace Chroma.Actors
 
     public override bool IsPassableFor(Actor actor)
     {
-      return actor is SlimeWalkActor;
+      return actor is SlimeWalkActor || actor is ProjectileActor;
+    }
+
+    public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
+    {
+      if (other is ProjectileActor)
+      {
+        core.MessageManager.Send(new RemoveActorMessage(this), this);
+        core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
+
+        var newCoin = new CoinActor(core, this.Position, true);
+        newCoin.Velocity = new Vector2(core.GetRandom(1, 2), core.GetRandom(-3, -1));
+
+        core.MessageManager.Send(new AddActorMessage(newCoin), this);
+      }
+
+      base.OnColliderTrigger(other, otherCollider, thisCollider);
     }
   }
 }
