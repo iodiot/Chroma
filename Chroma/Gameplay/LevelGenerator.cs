@@ -10,7 +10,6 @@ namespace Chroma.Gameplay
 {
   public class LevelGenerator
   {
-  
     private readonly ActorManager actorManager;
     private readonly Core core;
 

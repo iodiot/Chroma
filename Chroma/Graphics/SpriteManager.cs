@@ -12,36 +12,46 @@ namespace Chroma.Graphics
 {
   public sealed class Sprite
   {
-    public string TextureName;
     public int X;
     public int Y;
     public int Width;
     public int Height;
     public int LinkX;
     public int LinkY;
-    public Vector2 AnchorPoint;
+    public string TextureName;
 
     public Sprite ClampWidth(int maxWidth)
     {
-      var result = this.MemberwiseClone() as Sprite;
+      var result = Clone();
       result.Width = Math.Min(Width, maxWidth);
       return result;
     }
 
     public Sprite Reduce(int left, int top, int right, int bottom)
     {
-      var result = this.MemberwiseClone() as Sprite;
+      var result = Clone();
       result.X += Math.Min(left, Width);
       result.Y += Math.Min(top, Height);
       result.Width = Math.Max(Width - left - right, 0);
       result.Height = Math.Max(Height - top - bottom, 0);
       return result;
     }
+
+    public Sprite Clone()
+    {
+      return this.MemberwiseClone() as Sprite;
+    }
   }
 
   public sealed class SpriteManager
   {
-    // shortcuts
+    private sealed class ColorDesc
+    {
+      public int MapIndex;
+      public int RowIndex;
+    };
+
+    // Shortcuts
     public Texture2D OnePixel { get; private set; }
     public Texture2D Font { get; private set; }
     public Sprite OnePixelSprite { get; private set; }
@@ -75,7 +85,9 @@ namespace Chroma.Graphics
 
     public void Unload()
     {
-
+      sprites.Clear();
+      textures.Clear();
+      texturesData.Clear();
     }
 
     private void AddTexture(string textureName, Texture2D texture)
@@ -131,13 +143,8 @@ namespace Chroma.Graphics
 
       Debug.Assert(sprites.ContainsKey(name), String.Format("SpriteManager.GetSprite() : Sprite {0} is missing", name));
 
-      var s = sprites[name];
-      return new Sprite() { 
-        X = s.X, Y = s.Y, 
-        Width = s.Width, Height = s.Height, 
-        TextureName = s.TextureName, 
-        LinkX = s.LinkX, LinkY = s.LinkY 
-      };
+      // TODO
+      return sprites[name].Clone();
     }
 
     public Texture2D GetTexture(string name)
@@ -166,7 +173,7 @@ namespace Chroma.Graphics
       return texturesData[name];
     }
 
-    public Sprite GetFontSprite(char ch)
+    public Sprite MakeCharSprite(char ch)
     {
       const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?\"'/\\<>()[]{}abcdefghijklmnopqrstuvwxyz_               0123456789+-=*:;                          ";
       const int CharsPerRow = 42;

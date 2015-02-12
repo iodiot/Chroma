@@ -34,7 +34,7 @@ namespace Chroma
     {
       spriteBatch = new SpriteBatch(GraphicsDevice);
 
-      core = new Core(spriteBatch, Content, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+      core = new Core(GraphicsDevice, spriteBatch, Content, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
       core.Load();
     }
 

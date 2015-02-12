@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -23,15 +23,18 @@ namespace Chroma
     public MessageManager MessageManager { get; private set; }
     public TimerManager TimerManager { get; private set; }
 
+    public GraphicsDevice GraphicsDevice;
+
     private readonly Stack<State> states;
     private readonly Random random;
 
     private FrameCounter frameCounter;
     private int ticks = 0;
 
-    public Core(SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
+    public Core(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
     {
       DebugMessages = new List<Pair<string, int>>();
+      GraphicsDevice = graphicsDevice;
 
       SpriteManager = new SpriteManager(this);
       SoundManager = new SoundManager(this);

@@ -5,7 +5,6 @@ using Chroma.Graphics;
 
 namespace Chroma.Actors
 {
-
   public enum SlopeDirection {
     Up,
     Down

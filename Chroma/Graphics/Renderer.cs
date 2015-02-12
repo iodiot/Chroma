@@ -21,7 +21,6 @@ namespace Chroma.Graphics
     private const string DefaultLayerName = "default";
 
     #region Class definitions
-
     private class Layer
     {
       public int Z;
@@ -40,7 +39,6 @@ namespace Chroma.Graphics
       public SpriteEffects Flip;
       public int Depth;
     }
-
     #endregion
       
     #region Blending
@@ -56,6 +54,7 @@ namespace Chroma.Graphics
     }
     #endregion
 
+    #region Special getters
     public Renderer this[string layer, int depth]
     {
       get {
@@ -80,15 +79,11 @@ namespace Chroma.Graphics
         return this;
       }
     }
+    #endregion
 
+    #region Fields
     public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth * 0.5f, ScreenHeight * 0.5f); } }
     public Vector2 World;
-
-    // layers
-    private string currentLayerName;
-    private Dictionary<string, Layer> layers;
-
-    private int currentDepth;
 
     public readonly float ScreenWidth;
     public readonly float ScreenHeight;
@@ -96,10 +91,15 @@ namespace Chroma.Graphics
     private readonly Core core;
     private readonly SpriteBatch spriteBatch;
 
+    private int currentDepth;
+    private string currentLayerName;
+    private Dictionary<string, Layer> layers;
+
     private float shakeAmplitude;
     private int shakeTtl;
 
     private Random random;
+    #endregion
 
     public Renderer(Core core, SpriteBatch spriteBatch, float screenWidth, float screenHeight)
     {
@@ -299,11 +299,9 @@ namespace Chroma.Graphics
       float scale = 1.0f, float rotation = 0.0f, 
       SpriteFlip flip = SpriteFlip.None)
     {
-      var d = new Vector2(sprite.AnchorPoint.X * sprite.Width, sprite.AnchorPoint.Y * sprite.Height);
-
       InternalDrawSprite(
         core.SpriteManager.GetTexture(sprite.TextureName),
-        position - d,
+        position,
         new Rectangle(sprite.X, sprite.Y, sprite.Width, sprite.Height),
         tint ?? Color.White,
         rotation,
@@ -361,7 +359,7 @@ namespace Chroma.Graphics
 
       for (var i = 0; i < text.Length; ++i)
       {
-        DrawSpriteS(core.SpriteManager.GetFontSprite(text[i]), new Vector2(position.X + i * scale * CharWidth, position.Y), tint, scale);
+        DrawSpriteS(core.SpriteManager.MakeCharSprite(text[i]), new Vector2(position.X + i * scale * CharWidth, position.Y), tint, scale);
       }
     }
 

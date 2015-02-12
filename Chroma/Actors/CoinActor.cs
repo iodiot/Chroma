@@ -21,10 +21,7 @@ namespace Chroma.Actors
       this.delay = (int)(position.X / 15) % 20;
 
       animation = new Animation();
-      var prefix = "coin_";
-      animation.Add("spin", core.SpriteManager.GetFrames(prefix, new List<int>{ 0, 0, 0, 0, 1, 2, 3, 4 }));
-
-      animation.Play("spin");
+      animation.AddAndPlay("spin", core.SpriteManager.GetFrames("coin_", new List<int>{ 0, 0, 0, 0, 1, 2, 3, 4 }));
 
       CanMove = false;
       CanFall = false;
