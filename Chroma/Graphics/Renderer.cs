@@ -121,8 +121,9 @@ namespace Chroma.Graphics
       AddLayer("bg", -2, Renderer.AlphaBlend);
       AddLayer("bg_add", -1, Renderer.AdditiveBlend);
       AddLayer(DefaultLayerName, 0, Renderer.AlphaBlend);
-      AddLayer("fg_add", 1, Renderer.AdditiveBlend);
+      AddLayer("add", 1, Renderer.AdditiveBlend);
       AddLayer("fg", 2, Renderer.AlphaBlend);
+      AddLayer("fg_add", 3, Renderer.AdditiveBlend);
 
       SetCurrentLayer(DefaultLayerName);
 
@@ -269,7 +270,7 @@ namespace Chroma.Graphics
 
     public void DrawRectangleW(Rectangle rect, Color color)
     {
-      DrawRectangleS(new Rectangle((int)(rect.X + World.X), (int)(rect.Y + World.Y), rect.Width, rect.Height), color);
+      DrawRectangleS(new Vector2(rect.X + World.X, rect.Y + World.Y), rect.Width, rect.Height, color);
     }
 
     public void DrawLineW(Vector2 from, Vector2 to, Color color)

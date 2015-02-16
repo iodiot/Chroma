@@ -74,6 +74,7 @@ namespace Chroma.Actors
     {
       core.MessageManager.Send(new RemoveActorMessage(this), this);
       core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
+      //core.MessageManager.Send(new AddActorMessage(new FlashActor(core, Position + new Vector2(sprite.Width, boundingBox.Height / 2), color)), this);
     }
   }
 }

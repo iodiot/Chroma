@@ -31,6 +31,7 @@ namespace Chroma.Gameplay
       CliffRight,
       CliffLeft,
       Gap,
+      Pond,
 
       CoinPattern,
       CoinGap
@@ -75,6 +76,7 @@ namespace Chroma.Gameplay
           StartLevel();
           ResetAllRatios();
           SetRatioOf(LevelModule.Flat, 200);
+          SetRatioOf(LevelModule.Pond, 200);
           SetRatioOf(LevelModule.Raise, 2);
           SetRatioOf(LevelModule.Descent, 2);
           SetRatioOf(LevelModule.Gap, 1);
@@ -218,12 +220,21 @@ namespace Chroma.Gameplay
       CurrentX += length;
       LastPlatform = null;
     }
+
+    private void SpawnWater(int width)
+    {
+      WaterBodyActor newWater = new WaterBodyActor(core, new Vector2(CurrentX, CurrentY + 30), width);
+      actorManager.Add(newWater);
+      LastPlatform = null;
+
+      CurrentX += width;
+    }
     #endregion
 
     //--------------------------------------------------
 
     #region Encounters
-    private int SpawnEncounter(Encounter encounter)
+    private void SpawnEncounter(Encounter encounter)
     {
       var width = 30;
 
@@ -252,7 +263,7 @@ namespace Chroma.Gameplay
           break;
       }
 
-      return width;
+      SpawnFlat(width);
     }
     #endregion
 
@@ -265,8 +276,7 @@ namespace Chroma.Gameplay
       {
         case LevelModule.Flat:
           var encounter = GetRandom<Encounter>(EncounterRatios);
-          var width = SpawnEncounter(encounter);
-          SpawnFlat(width);
+          SpawnEncounter(encounter);
           break;
 
         case LevelModule.Raise:
@@ -292,12 +302,20 @@ namespace Chroma.Gameplay
           SpawnGap(50);
           break;
 
+        case LevelModule.Pond:
+          SpawnFlat(30);
+          SpawnWater(100);
+          SpawnFlat(30);
+          break;
+
         case LevelModule.CoinPattern:
           var pattern = "cp_" + coinPatterns[core.GetRandom(0, coinPatterns.Count - 1)];
           var sprite = core.SpriteManager.GetSprite(pattern);
           SpawnCoinPattern(CurrentX, CurrentY - coinGrid, pattern);
           SpawnFlat(sprite.Width * coinGrid);
           break;
+
+
 
         case LevelModule.CoinGap:
           SpawnFlat(40);

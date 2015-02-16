@@ -180,6 +180,8 @@
     <Compile Include="Helpers\SmallHelpers.cs" />
     <Compile Include="Actors\BoulderActor.cs" />
     <Compile Include="Actors\ActorFeatures.cs" />
+    <Compile Include="Actors\FlashActor.cs" />
+    <Compile Include="Actors\WaterBodyActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

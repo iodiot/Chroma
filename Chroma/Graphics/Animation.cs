@@ -59,6 +59,26 @@ namespace Chroma.Graphics
       }
     }
 
+    public void StepBackward(int ticks = 1)
+    {
+      for (var i = 0; i < ticks; i++)
+      {
+        timeLine -= Speed;
+        if (timeLine < 0)
+        {
+          timeLine = animations[CurrentSequence].Count - 1;
+        }
+      }
+    }
+
+    public void StepForward(int ticks = 1)
+    {
+      for (var i = 0; i < ticks; i++)
+      {
+        Update(0);
+      }
+    }
+
     public Sprite GetCurrentFrame()
     {
       Debug.Assert(animations[CurrentSequence] != null, "Animation.GetCurrentFrame() : Current sequence is missing");

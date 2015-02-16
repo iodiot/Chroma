@@ -133,6 +133,11 @@ namespace Chroma
       ++ticks;
     }
 
+    public int GetTicks()
+    {
+      return ticks;
+    }
+
     public void DebugMessage(string message)
     {
       DebugMessages.Add(new Pair<string, int>(message, 200) );

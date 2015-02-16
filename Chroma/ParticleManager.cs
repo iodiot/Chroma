@@ -145,7 +145,7 @@ namespace Chroma
             p.Sprite,
             p.Position,
             p.Color,
-            p.Scale
+            p.Scale,
             p.Rotation
           );
         }

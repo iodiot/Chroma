@@ -55,7 +55,7 @@ namespace Chroma.Actors
       if (core.ChanceRoll(0.8f))
       {
         var boulder = core.GetRandom(1, 4);
-        var x = Position.X + core.GetRandom(4, width - 4 - 15);
+        var x = Position.X + core.GetRandom(4, width - 4 - 30);
         core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
           new Vector2(x, Position.Y + core.GetRandom(15, 60)),
           "earth_boulder_" + boulder.ToString()
