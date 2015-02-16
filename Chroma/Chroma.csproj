@@ -179,6 +179,7 @@
     <Compile Include="Actors\DecalActor.cs" />
     <Compile Include="Helpers\SmallHelpers.cs" />
     <Compile Include="Actors\BoulderActor.cs" />
+    <Compile Include="Actors\ActorFeatures.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

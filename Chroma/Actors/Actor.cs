@@ -10,38 +10,7 @@ namespace Chroma.Actors
     public string Name;
     public Rectangle BoundingBox;
   }
-
-  public sealed class ActorFeatures
-  {
-    public enum Feature
-    {
-      CanMove,
-      CanLick,
-      CanFall,
-      OneWayObstacle
-    }
-
-    public bool IsStatic { get { return !Contains(Feature.CanMove) && !Contains(Feature.CanFall); } }
-
-    private readonly HashSet<Feature> features;
-
-    public ActorFeatures()
-    {
-      features = new HashSet<Feature>();
-    }
-
-    public ActorFeatures Add(Feature feature)
-    {
-      features.Add(feature);
-      return this;
-    }
-
-    public bool Contains(Feature feature)
-    {
-      return features.Contains(feature);
-    }
-  }
-
+    
   public abstract class Actor : ISubscriber
   {
     #region Fields 
@@ -77,6 +46,8 @@ namespace Chroma.Actors
       Position = position;
 
       Handle = String.Empty;
+
+      boundingBox = Rectangle.Empty;
 
       colliders = new List<Collider>();
 
