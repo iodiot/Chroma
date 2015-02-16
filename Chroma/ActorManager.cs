@@ -177,7 +177,6 @@ namespace Chroma
 
     private void Step()
     {
-
       const float G = 0.08f;
       const float DragFactor = 0.99f;
 
@@ -366,7 +365,7 @@ namespace Chroma
 
       foreach (var other in actors)
       {
-        if (actor == other || other.IsPassableFor(actor))
+        if (actor == other || other.IsPassableFor(actor) && other.GetBoundingBox() != Rectangle.Empty)
         {
           continue;
         }

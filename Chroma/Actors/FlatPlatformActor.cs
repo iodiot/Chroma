@@ -32,7 +32,7 @@ namespace Chroma.Actors
           new Vector2(x, Position.Y),
           "vine_" + vine.ToString(),
           flip: core.ChanceRoll(0.5f),
-          zIndex: 10
+          depth: 10
             )), this);
         if (core.ChanceRoll(0.3f))
         {
@@ -46,7 +46,7 @@ namespace Chroma.Actors
             new Vector2(x, Position.Y),
             "vine_" + vine2.ToString(),
             flip: core.ChanceRoll(0.5f),
-            zIndex: 10
+            depth: 10
           )), this);
         }
       }

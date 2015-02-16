@@ -78,15 +78,15 @@ namespace Chroma.Gui
     {
       // Jump button
       core.Renderer[1000].DrawSpriteS(core.SpriteManager.GetSprite("btn_jump" + (jumpTouchId == -1 ? "" : "_pressed")), 
-        new Vector2(20, core.Renderer.ScreenHeight - 100), scale: 1.5f);
+        new Vector2(20, core.Renderer.ScreenHeight - 100), scale: new Vector2(1.5f, 1.5f));
 
       // Tripad
       core.Renderer[1000].DrawSpriteS(core.SpriteManager.GetSprite("pad_base"), 
-        new Vector2(buttons[MagicColor.Red].box.Left, buttons[MagicColor.Red].box.Top) - new Vector2(7, 5), scale: 1.5f);
+        new Vector2(buttons[MagicColor.Red].box.Left, buttons[MagicColor.Red].box.Top) - new Vector2(7, 5), scale: new Vector2(1.5f, 1.5f));
       if (player.charging)
         core.Renderer["fg_add"].DrawSpriteS(core.SpriteManager.GetSprite("glow"), 
           new Vector2(buttons[MagicColor.Red].box.Left, buttons[MagicColor.Red].box.Top) - new Vector2(13, 13),
-          MagicManager.MagicColors[player.chargeColor] * 0.7f, 2.0f);
+          MagicManager.MagicColors[player.chargeColor] * 0.7f, new Vector2(2.0f, 2.0f));
       foreach (KeyValuePair<MagicColor, Button> pair in buttons)
       {
         Button button = pair.Value;
@@ -94,8 +94,8 @@ namespace Chroma.Gui
         gemName = "gem_" + gemName + (button.pressed ? "_active" : "");
         if (button.pressed)
           core.Renderer["fg_add"].DrawSpriteS(core.SpriteManager.GetSprite("glow"), new Vector2(button.box.Left, button.box.Top) - new Vector2(25, 25),
-            MagicManager.MagicColors[button.color] * 0.8f, 1.5f);
-        core.Renderer[1000].DrawSpriteS(core.SpriteManager.GetSprite(gemName), new Vector2(button.box.Left, button.box.Top), scale: 1.5f);
+            MagicManager.MagicColors[button.color] * 0.8f, new Vector2(1.5f, 1.5f));
+        core.Renderer[1000].DrawSpriteS(core.SpriteManager.GetSprite(gemName), new Vector2(button.box.Left, button.box.Top), scale: new Vector2(1.5f, 1.5f));
       }
 
       base.Draw();

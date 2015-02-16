@@ -35,7 +35,7 @@ namespace Chroma.Graphics
       public Rectangle SourceRect;
       public Color Tint;
       public float Rotation;
-      public float Scale;
+      public Vector2 Scale;
       public SpriteEffects Flip;
       public int Depth;
     }
@@ -216,7 +216,7 @@ namespace Chroma.Graphics
             dd.Tint,
             dd.Rotation,
             Vector2.Zero,
-            new Vector2(dd.Scale, dd.Scale),
+            dd.Scale,
             dd.Flip,
             0
           );
@@ -256,7 +256,7 @@ namespace Chroma.Graphics
     }
 
     public void DrawSpriteW(Sprite sprite, Vector2 position, Color? tint = null, 
-      float scale = 1.0f, float rotation = 0.0f,
+      Vector2? scale = null, float rotation = 0.0f,
       SpriteFlip flip = SpriteFlip.None)
     {
       DrawSpriteS(sprite, position + World, tint, scale, rotation, flip);
@@ -278,7 +278,7 @@ namespace Chroma.Graphics
     }
 
     public void DrawSpriteW(string spriteName, Vector2 position, Color? tint = null, 
-      float scale = 1.0f, float rotation = 0.0f,
+      Vector2? scale = null, float rotation = 0.0f,
       SpriteFlip flip = SpriteFlip.None)
     {
       DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position + World, tint, scale, rotation, flip);
@@ -289,14 +289,14 @@ namespace Chroma.Graphics
     #region Screen draw
 
     public void DrawSpriteS(string spriteName, Vector2 position, Color? tint = null, 
-      float scale = 1.0f, float rotation = 0.0f, 
+      Vector2? scale = null, float rotation = 0.0f, 
       SpriteFlip flip = SpriteFlip.None)
     {
       DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position, tint ?? Color.White, scale, rotation, flip);
     }
 
     public void DrawSpriteS(Sprite sprite, Vector2 position, Color? tint = null,
-      float scale = 1.0f, float rotation = 0.0f, 
+      Vector2? scale = null, float rotation = 0.0f, 
       SpriteFlip flip = SpriteFlip.None)
     {
       InternalDrawSprite(
@@ -305,7 +305,7 @@ namespace Chroma.Graphics
         new Rectangle(sprite.X, sprite.Y, sprite.Width, sprite.Height),
         tint ?? Color.White,
         rotation,
-        scale,
+        scale ?? new Vector2(1.0f, 1.0f),
         (SpriteEffects)flip
       );
     }
@@ -322,7 +322,7 @@ namespace Chroma.Graphics
         rect,
         color,
         (float)Math.Atan(v.Y / v.X), 
-        1.0f,
+        new Vector2(1.0f, 1.0f),
         SpriteEffects.None
       );
     }
@@ -335,7 +335,7 @@ namespace Chroma.Graphics
         new Rectangle(0, 0, (int)width, (int)height), 
         color, 
         0,
-        1.0f,
+        new Vector2(1.0f, 1.0f),
         SpriteEffects.None
       );
     }
@@ -348,7 +348,7 @@ namespace Chroma.Graphics
         new Rectangle(0, 0, rect.Width, rect.Height), 
         color, 
         0,
-        1.0f,
+        new Vector2(1.0f, 1.0f),
         SpriteEffects.None
       );
     }
@@ -359,7 +359,7 @@ namespace Chroma.Graphics
 
       for (var i = 0; i < text.Length; ++i)
       {
-        DrawSpriteS(core.SpriteManager.MakeCharSprite(text[i]), new Vector2(position.X + i * scale * CharWidth, position.Y), tint, scale);
+        DrawSpriteS(core.SpriteManager.MakeCharSprite(text[i]), new Vector2(position.X + i * scale * CharWidth, position.Y), tint, new Vector2(scale, scale));
       }
     }
 
@@ -371,11 +371,11 @@ namespace Chroma.Graphics
     #endregion
   
     private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, 
-      Color tint, float rotation, float scale, SpriteEffects flip)
+      Color tint, float rotation, Vector2 scale, SpriteEffects flip)
     {
       const float D = 1.0f; // delta
 
-      // draw if on screen
+      // Draw only sprites that on screen
       if (position.X < ScreenWidth + D && position.Y < ScreenHeight + D && position.X + sourceRect.Width >= -D && position.Y + sourceRect.Height >= -D)
       {
         layers[currentLayerName].DrawsDesc.Add(new DrawDesc()
@@ -391,7 +391,7 @@ namespace Chroma.Graphics
           });
       }
 
-      // reset layer and depth
+      // Reset layer and depth
       SetCurrentLayer(DefaultLayerName);
       SetCurrentDepth(0);
     }

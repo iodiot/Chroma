@@ -45,12 +45,6 @@ namespace Chroma.Graphics
 
   public sealed class SpriteManager
   {
-    private sealed class ColorDesc
-    {
-      public int MapIndex;
-      public int RowIndex;
-    };
-
     // Shortcuts
     public Texture2D OnePixel { get; private set; }
     public Texture2D Font { get; private set; }

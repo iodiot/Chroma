@@ -9,7 +9,6 @@ using Chroma.Graphics;
 
 namespace Chroma.Actors
 {
-
   public class CoinActor : Actor
   {
     private readonly Animation animation;
@@ -48,7 +47,7 @@ namespace Chroma.Actors
     {
 
       core.Renderer.DrawSpriteW("glow", new Vector2(Position.X - 8, Position.Y - 8), 
-        Color.Gold * 0.25f, 0.4f);
+        Color.Gold * 0.25f, new Vector2(0.4f, 0.4f));
 
       core.Renderer.DrawSpriteW(animation.GetCurrentFrame(), Position);
 
@@ -57,7 +56,7 @@ namespace Chroma.Actors
       if (frame > 5)
       {
         core.Renderer["fg_add"].DrawSpriteW("glow", new Vector2(Position.X - 0.5f, Position.Y - 0.5f), 
-          Color.White * 1f * scale, 0.13f * scale);
+          Color.White * 1f * scale, new Vector2(0.13f * scale, 0.13f * scale));
       }
 
       base.Draw();

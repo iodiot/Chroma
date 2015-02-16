@@ -5,7 +5,7 @@ using Chroma.Graphics;
 
 namespace Chroma
 {
-  public class Particle
+  public sealed class Particle
   {
     public Sprite Sprite;
     public Vector2 Position;
@@ -18,7 +18,7 @@ namespace Chroma
     public byte Tag;
   }
 
-  public class ParticleManager
+  public sealed class ParticleManager
   {
     public float SpawnRate;
 
@@ -141,11 +141,11 @@ namespace Chroma
       {
         if (p.Ttl > 0)
         {
-          core.Renderer.DrawSpriteW(
+          core.Renderer[1000].DrawSpriteW(
             p.Sprite,
             p.Position,
             p.Color,
-            p.Scale.X,
+            p.Scale
             p.Rotation
           );
         }

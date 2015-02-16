@@ -2,7 +2,6 @@
 
 namespace Chroma.Helpers
 {
-
   // A simple mutable pair
   public class Pair<T1, T2>
   {
@@ -15,6 +14,5 @@ namespace Chroma.Helpers
       this.B = B;
     }
   }
-
 }
 

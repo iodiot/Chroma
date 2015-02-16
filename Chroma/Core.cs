@@ -170,7 +170,7 @@ namespace Chroma
         }
       }
 
-      // final draw
+      // Final draw
       Renderer.Draw();
     }
   }

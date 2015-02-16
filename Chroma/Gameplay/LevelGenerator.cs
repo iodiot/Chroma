@@ -64,7 +64,6 @@ namespace Chroma.Gameplay
 
       ModuleRatios = new List<Pair<LevelModule, int>>();
       EncounterRatios = new List<Pair<Encounter, int>>();
-
     }
 
     private void ProgressLevel()

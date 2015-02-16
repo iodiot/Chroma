@@ -6,23 +6,24 @@ namespace Chroma.Actors
 {
   public class DecalActor : Actor
   {
-    private Sprite sprite;
-    private string layer;
-    private int zIndex;
-    private bool flip;
+    private readonly string spriteName;
+    private readonly string layer;
+    private readonly int depth;
+    private readonly SpriteFlip spriteFlip;
 
-    public DecalActor(Core core, Vector2 position, string spriteName, string layer = "", int zIndex = 0, bool flip = false) : base(core, position)
+    public DecalActor(Core core, Vector2 position, string spriteName, string layer = "", int depth = 0, bool flip = false) : base(core, position)
     {
-      sprite = core.SpriteManager.GetSprite(spriteName);
+      this.spriteName = spriteName;
       this.layer = layer;
-      this.zIndex = zIndex;
-      this.flip = flip;
+      this.depth = depth;
+      this.spriteFlip = flip ? SpriteFlip.Horizontal : SpriteFlip.None;
+
       CanMove = false;
     }
 
     public override void Draw()
     {
-      core.Renderer[layer, zIndex].DrawSpriteW(sprite, Position, flip: flip ? SpriteFlip.Horizontal : SpriteFlip.None);
+      core.Renderer[layer, depth].DrawSpriteW(spriteName, Position, flip: spriteFlip);
 
       base.Draw();
     }
