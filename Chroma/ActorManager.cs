@@ -332,6 +332,10 @@ namespace Chroma
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep).Count == 0)
           {
             actor.Position += new Vector2(v.X, -LickStep);
+            if (actor is PlayerActor)
+            {
+              core.DebugMessage("lick");
+            }
           //  actor.Velocity = Vector2.Zero;
             return;
           }

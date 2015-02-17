@@ -38,9 +38,14 @@ namespace Chroma.Gameplay
     }
 
     enum Encounter {
-      // Obstacles
+
       None = 0,
+
+      // Obstacles
       Boulder,
+
+      //Structures
+      Bridge,
 
       // Enemies
       Slime,
@@ -76,7 +81,9 @@ namespace Chroma.Gameplay
           StartLevel();
           ResetAllRatios();
           SetRatioOf(LevelModule.Flat, 200);
-          SetRatioOf(LevelModule.Pond, 200);
+          SetRatioOf(LevelModule.Pond, 20);
+          //SpawnBridge();
+          SetRatioOf(Encounter.Bridge, 20);
           SetRatioOf(LevelModule.Raise, 2);
           SetRatioOf(LevelModule.Descent, 2);
           SetRatioOf(LevelModule.Gap, 1);
@@ -234,6 +241,25 @@ namespace Chroma.Gameplay
     //--------------------------------------------------
 
     #region Encounters
+    private void SpawnBridge()
+    {
+      var n = core.GetRandom(10, 30);
+      var x = CurrentX;
+      var y = CurrentY - core.GetRandom(30, 50);
+
+      for (var i = 1; i <= n; i++)
+      {
+        PlankActor newPlank = new PlankActor(core, new Vector2(x, y), 
+          (i == 1) ? PlankActor.PlankOrigin.Left :
+          (i == n) ? PlankActor.PlankOrigin.Right:
+          PlankActor.PlankOrigin.Middle
+        );
+        actorManager.Add(newPlank);
+        x += newPlank.Width;
+        //y += core.GetRandom(-2, 2);
+      }
+    }
+
     private void SpawnEncounter(Encounter encounter)
     {
       var width = 30;
@@ -248,6 +274,10 @@ namespace Chroma.Gameplay
           var newBoulder = new BoulderActor(core, position);
           width += newBoulder.GetBoundingBoxW().Width;
           actorManager.Add(newBoulder);
+          break;
+
+        case Encounter.Bridge:
+          SpawnBridge();
           break;
 
         case Encounter.Golem:

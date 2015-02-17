@@ -25,6 +25,7 @@ namespace Chroma
     {
       graphics.PreferredBackBufferWidth = (int)(graphics.PreferredBackBufferWidth / Settings.ScreenScale);
       graphics.PreferredBackBufferHeight = (int)(graphics.PreferredBackBufferHeight / Settings.ScreenScale);
+      graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
       graphics.ApplyChanges();
 
       base.Initialize();

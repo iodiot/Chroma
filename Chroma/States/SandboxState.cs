@@ -27,16 +27,6 @@ namespace Chroma.States
         player.TryToJump();
       }
 
-      if (ticks % 100 == 0)
-      {
-        actorManager.Add(new OneWayPlatform(
-          core, 
-          new Vector2(player.Position.X + core.GetRandom(400, 500), core.GetRandom(30, 40)), 
-          core.GetRandom(50, 100), 
-          core.GetRandom(20, 40))
-        );
-      }
-
       actorManager.Update(ticks);
 
       #region Positioning camera

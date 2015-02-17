@@ -3,11 +3,11 @@ using Microsoft.Xna.Framework;
 
 namespace Chroma.Actors
 {
-  public class OneWayPlatform : PlatformActor
+  public abstract class OneWayPlatform : PlatformActor
   {
-    public OneWayPlatform(Core core, Vector2 position, float width, float height) : base(core, position)
+    public OneWayPlatform(Core core, Vector2 position) : base(core, position)
     {
-      SetBoundingBox(0, 0, width, height);
+
     }
 
     public override bool IsPassableFor(Actor actor)
@@ -15,7 +15,7 @@ namespace Chroma.Actors
       var actorBox = actor.GetBoundingBoxW();
       var thisBox = GetBoundingBoxW();
 
-      var f = actorBox.Y + actorBox.Height <= thisBox.Y;
+      var f = actorBox.Bottom <= thisBox.Top + 2.0f; // Lick step = 2.0 
 
       return !f;
     }

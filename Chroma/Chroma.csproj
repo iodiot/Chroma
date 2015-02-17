@@ -182,6 +182,7 @@
     <Compile Include="Actors\ActorFeatures.cs" />
     <Compile Include="Actors\FlashActor.cs" />
     <Compile Include="Actors\WaterBodyActor.cs" />
+    <Compile Include="Actors\PlankActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
