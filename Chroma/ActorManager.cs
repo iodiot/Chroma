@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
 using Chroma.Actors;
+using Chroma.Graphics;
+using Chroma.Helpers;
 
 namespace Chroma
 {
@@ -72,31 +74,33 @@ namespace Chroma
 
     public void Draw()
     {
-      var earth = core.SpriteManager.GetSprite("earth");
+      var tile = core.SpriteManager.GetSprite("earth");
+      var tileWidth = tile.Width;
+      var tileHeight = tile.Height;
       foreach (var actor in actors)
       {
         if (actor is PlatformActor)
         {
           var box = actor.GetBoundingBoxW();
 
-          var offx = Math.Abs(box.Left) % earth.Width;
+          var offx = Math.Abs(box.Left) % tileWidth;
           if (box.Left < 0)
-            offx = earth.Width - offx;
+            offx = tileWidth - offx;
 
-          var offy = Math.Abs(box.Top) % earth.Height;
+          var offy = Math.Abs(box.Top) % tileHeight;
           if (box.Top < 0)
-            offy = earth.Height - offy;
+            offy = tileHeight - offy;
             
           var x = box.Left - offx;
           do
           {
             var y = box.Top - offy;
             do {
-              var reducedEarth = earth.Reduce(
+              var reducedTile = tile.Reduce(
                 Math.Max(box.Left - x, 0),
                 Math.Max(box.Top - y, 0),
-                Math.Max(x + earth.Width - box.Right, 0),
-                Math.Max(y + earth.Height - box.Bottom, 0)
+                Math.Max(x + tileWidth - box.Right, 0),
+                Math.Max(y + tileHeight - box.Bottom, 0)
               );
 
               var pos = new Vector2(
@@ -104,12 +108,12 @@ namespace Chroma
                 Math.Max(y, box.Top)
               );
 
-              core.Renderer.DrawSpriteW(reducedEarth, pos);
+              core.Renderer.DrawSpriteW(reducedTile, pos);
 
-              y += earth.Height;
+              y += tileHeight;
             } while (y < box.Bottom);
 
-            x += earth.Width;
+            x += tileWidth;
           } while (x < box.Right);
         }
       }

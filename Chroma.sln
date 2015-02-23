@@ -26,7 +26,4 @@ Global
 		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{E4F404A2-12DF-4057-8FC1-AAE6AB283ECC}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Chroma\Chroma.csproj
-	EndGlobalSection
 EndGlobal

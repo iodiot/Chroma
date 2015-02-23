@@ -25,7 +25,6 @@ namespace Chroma
     {
       graphics.PreferredBackBufferWidth = (int)(graphics.PreferredBackBufferWidth / Settings.ScreenScale);
       graphics.PreferredBackBufferHeight = (int)(graphics.PreferredBackBufferHeight / Settings.ScreenScale);
-      graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
       graphics.ApplyChanges();
 
       base.Initialize();
@@ -33,9 +32,9 @@ namespace Chroma
 
     protected override void LoadContent()
     {
-      spriteBatch = new SpriteBatch(GraphicsDevice);
+      spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
 
-      core = new Core(GraphicsDevice, spriteBatch, Content, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+      core = new Core(graphics.GraphicsDevice, spriteBatch, Content, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
       core.Load();
     }
 

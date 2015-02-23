@@ -23,6 +23,12 @@ namespace Chroma.Actors
       CanMove = canMove;
       CanFall = canMove;
 
+      // Flying out
+      if (CanMove) {
+        Velocity.X = core.GetRandom(1, 2);
+        Velocity.Y = core.GetRandom(-3, -1);
+      }
+
       AddCollider(new Collider() { Name = "coin", BoundingBox = boundingBox });
     }
       

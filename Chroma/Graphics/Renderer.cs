@@ -231,17 +231,28 @@ namespace Chroma.Graphics
 
         layer.DrawsDesc.Clear();
       }
-
-      //Debug.Print(drawCallsCounter.ToString());
     }
 
     public void Begin(BlendState blendState)
     {
-      var shake = shakeTtl > 0 ? 
-        Matrix.CreateTranslation((float)random.NextDouble() * shakeAmplitude - shakeAmplitude * 0.5f, (float)random.NextDouble() * shakeAmplitude - shakeAmplitude * 0.5f, 0) : Matrix.Identity;
-
+      var shake = 
+        shakeTtl > 0 
+          ? Matrix.CreateTranslation(
+              (float)random.NextDouble() * shakeAmplitude - shakeAmplitude * 0.5f, 
+              (float)random.NextDouble() * shakeAmplitude - shakeAmplitude * 0.5f, 
+              0) 
+          : Matrix.Identity;
       var scale = Matrix.CreateScale(new Vector3(Settings.ScreenScale, Settings.ScreenScale, 1));
-      spriteBatch.Begin(SpriteSortMode.Deferred, blendState, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, null, scale * shake);
+
+      spriteBatch.Begin(
+        SpriteSortMode.Immediate, 
+        blendState, 
+        SamplerState.PointClamp, 
+        DepthStencilState.Default, 
+        RasterizerState.CullCounterClockwise, 
+        null, 
+        scale * shake
+      );
     }
 
     public void End()
@@ -376,9 +387,12 @@ namespace Chroma.Graphics
     {
       const float D = 1.0f; // delta
 
-      // Draw only sprites that on screen
-      if (position.X < ScreenWidth + D && position.Y < ScreenHeight + D && position.X + sourceRect.Width >= -D && position.Y + sourceRect.Height >= -D)
-      {
+      // Draw only sprites that are on screen
+      if (position.X < ScreenWidth + D && 
+          position.Y < ScreenHeight + D && 
+          position.X + sourceRect.Width * scale.X >= -D && 
+          position.Y + sourceRect.Height * scale.Y >= -D)
+      {    
         layers[currentLayerName].DrawsDesc.Add(new DrawDesc()
           {
             Texture = texture,

@@ -1,3 +1,17 @@
 *.userprefs
 Chroma/bin
 Chroma/obj
+
+*.wflow
+
+*.plist
+
+Art/_make.app/Contents/MacOS/Application Stub
+
+*.nib
+
+*.icns
+
+Art/atlas.png
+
+Art/atlas.json

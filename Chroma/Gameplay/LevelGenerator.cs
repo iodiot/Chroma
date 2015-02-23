@@ -80,16 +80,16 @@ namespace Chroma.Gameplay
           core.DebugMessage("Level started!");
           StartLevel();
           ResetAllRatios();
-          SetRatioOf(LevelModule.Flat, 200);
-          SetRatioOf(LevelModule.Pond, 20);
+          SetRatioOf(LevelModule.Flat, 80);
+          SetRatioOf(LevelModule.Pond, 200);
           //SpawnBridge();
-          SetRatioOf(Encounter.Bridge, 20);
+          SetRatioOf(Encounter.Bridge, 2);
           SetRatioOf(LevelModule.Raise, 2);
           SetRatioOf(LevelModule.Descent, 2);
           SetRatioOf(LevelModule.Gap, 1);
           SetRatioOf(LevelModule.CoinGap, 1);
           SetRatioOf(Encounter.None, 100);
-          SetRatioOf(Encounter.Golem, 50);
+          SetRatioOf(Encounter.Golem, 60);
           SetRatioOf(Encounter.Boulder, 20);
           break;
         case 200:
@@ -103,7 +103,6 @@ namespace Chroma.Gameplay
           break;
         case 600:
           SetRatioOf(LevelModule.CoinPattern, 1);
-          SetRatioOf(Encounter.Golem, 0);
           SetRatioOf(Encounter.SlimeWalk, 50);
           break;
       }

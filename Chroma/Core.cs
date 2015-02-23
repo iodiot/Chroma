@@ -140,7 +140,7 @@ namespace Chroma
 
     public void DebugMessage(string message)
     {
-      DebugMessages.Add(new Pair<string, int>(message, 200) );
+      DebugMessages.Insert(0, new Pair<string, int>(message, 200) );
     }
 
     public void Draw(GameTime gameTime)
@@ -164,14 +164,14 @@ namespace Chroma
 
       if (Settings.DrawDebugMessages)
       {
-        var i = 0;
+        float i = -5;
         foreach (var message in DebugMessages) {
+          i += 10;
           Renderer.DrawTextS(
             message.A,
-            new Vector2(Renderer.ScreenWidth - 150, 5 + 10 * i + 10 * ((float)message.B / 200)),
-            Color.White * ((float)message.B / 400)
+            new Vector2(Renderer.ScreenWidth - 150, i),
+            Color.White * 0.5f * ((float)message.B / 200)
           );
-          i++;
         }
       }
 
