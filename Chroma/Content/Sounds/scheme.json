@@ -1,8 +1,12 @@
 {
 	"sounds": [
 		{
-			"name": "click",
-			"fileName": "click1.wav"
+			"name": "coin",
+			"fileName": "coin.wav"
+		},
+		{
+			"name": "bubble_pop",
+			"fileName": "bubble_pop.wav"
 		}
 	]
 }

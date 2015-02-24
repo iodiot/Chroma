@@ -30,7 +30,7 @@ namespace Chroma.States
       actorManager.Update(ticks);
 
       #region Positioning camera
-      var targetWorldY = (core.Renderer.ScreenHeight - 120) * 0.9f - (player.platformY + player.Position.Y) / 2;
+      var targetWorldY = (core.Renderer.ScreenHeight - 120) * 0.9f - (player.PlatformY + player.Position.Y) / 2;
       var currentWorldY = core.Renderer.World.Y;
       core.Renderer.World = new Vector2(
         25 - player.Position.X, 

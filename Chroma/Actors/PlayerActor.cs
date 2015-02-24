@@ -17,8 +17,16 @@ namespace Chroma.Actors
     public MagicColor chargeColor;
     public bool charging = false;
 
-    private int hurtTtl;
-    public float platformY { get; private set; }
+    public float PlatformY { get; private set; }
+
+    #region Player stats
+    public int MaxHearts { get; private set; }
+    public int Hearts { get; private set; }
+    #endregion
+
+    #region Effects
+    private int hurtTimeout;
+    #endregion
 
     enum DruidState {
       Running,
@@ -69,6 +77,11 @@ namespace Chroma.Actors
       boundingBoxColor = Color.Yellow;
 
       AddCollider(new Collider(){ Name = "body", BoundingBox = boundingBox });
+
+      MaxHearts = 5;
+      Hearts = 5;
+
+      hurtTimeout = 0;
     }
 
     public override void Update(int ticks)
@@ -91,22 +104,22 @@ namespace Chroma.Actors
 //        sm.Trigger(DruidEvent.Land);
 //      }
 
-      if (hurtTtl > 0)
+      if (hurtTimeout > 0)
       {
-        --hurtTtl;
+        --hurtTimeout;
       }
 
       animation.Update(ticks);
       armAnimation.Update(ticks);
 
-      Velocity.X = 2.2f;
+      Velocity.X = 2.0f;
 
       base.Update(ticks);
     }
 
     public override void Draw()
     {
-      var tint = (hurtTtl / 5) % 2 == 0 ? Color.White : Color.Red;
+      var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.GetTicks() / 3));
 
       var pos = new Vector2(Position.X, Position.Y);
       if (sm.currentState == DruidState.Landing)
@@ -160,14 +173,14 @@ namespace Chroma.Actors
 
     public override void OnBoundingBoxTrigger(Actor other)
     {
-      if (other.CanMove && (hurtTtl == 0))
+      if (other.CanMove && (hurtTimeout == 0))
       {
-        hurtTtl = 25;
+        hurtTimeout = 25;
       }
 
       if (other is PlatformActor)
       {
-        platformY = other.GetBoundingBoxW().Top;
+        PlatformY = other.GetBoundingBoxW().Top;
       }
 
       base.OnBoundingBoxTrigger(other);
@@ -176,6 +189,35 @@ namespace Chroma.Actors
     public override bool IsPassableFor(Actor actor)
     {
       return actor.CanMove;
+    }
+
+    public void PickItem()
+    {
+      if (Hearts < MaxHearts)
+      {
+        Hearts++;
+      }
+    }
+
+    public void Hurt(int strength = 1) 
+    {
+      // After-shock invincibility
+      if (hurtTimeout > 0)
+        return;
+
+      hurtTimeout = 100;
+
+      Hearts--;
+
+      if (Hearts == 0)
+      {
+        Die();
+      }
+    }
+
+    private void Die() {
+      // DEBUG GOD MODE
+      Hearts = MaxHearts;
     }
   }
 }

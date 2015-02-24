@@ -6,7 +6,7 @@ namespace Chroma.Graphics
   public sealed class Animation
   {
     public string CurrentSequence { get; private set; }
-    public float Speed { get; private set; }
+    public float Speed { get; set; }
 
     private readonly Dictionary<string, List<Sprite>> animations;
 

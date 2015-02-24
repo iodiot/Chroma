@@ -51,6 +51,16 @@ namespace Chroma.Actors
 
     }
 
+    public override bool IsPassableFor(Actor actor)
+    {
+      return true;
+    }
+
+    public override void OnBoundingBoxTrigger(Actor other)
+    {
+
+      base.OnBoundingBoxTrigger(other);
+    }
   }
 }
 

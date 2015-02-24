@@ -144,6 +144,10 @@ namespace Chroma.Actors
 
     public virtual void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
+      if (other is PlayerActor && (this is GolemActor || this is SlimeWalkActor))
+      {
+        (other as PlayerActor).Hurt();
+      }
     }
 
     public virtual void OnBoundingBoxTrigger(Actor other)
@@ -156,6 +160,13 @@ namespace Chroma.Actors
     }
 
     #endregion
+
+    protected void DropCoin() {
+      if (core.ChanceRoll(1f))
+      {
+        core.MessageManager.Send(new AddActorMessage(new CoinActor(core, this.Position, true)), this);
+      }
+    }
   }
 }
 

@@ -183,6 +183,7 @@
     <Compile Include="Actors\FlashActor.cs" />
     <Compile Include="Actors\WaterBodyActor.cs" />
     <Compile Include="Actors\PlankActor.cs" />
+    <Compile Include="Actors\ItemActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -198,14 +199,13 @@
     <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Sounds\click1.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\Sounds\scheme.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Images\font.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Sounds\coin.wav" />
+    <Content Include="Content\Sounds\bubble_pop.wav" />
   </ItemGroup>
 </Project>

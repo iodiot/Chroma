@@ -263,7 +263,7 @@ namespace Chroma
           {
             var otherCollider = other.GetColliderW(j);
 
-            if (collider.BoundingBox.Intersects(otherCollider.BoundingBox))
+            if ( collider.BoundingBox.Intersects(otherCollider.BoundingBox))
             {
               actor.OnColliderTrigger(other, j, i);
               other.OnColliderTrigger(actor, i, j);

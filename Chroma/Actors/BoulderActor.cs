@@ -37,7 +37,7 @@ namespace Chroma.Actors
         core.MessageManager.Send(new RemoveActorMessage(this), this);
         core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
 
-        core.MessageManager.Send(new AddActorMessage(new CoinActor(core, this.Position, true)), this);
+        DropCoin();
       }
 
       base.OnColliderTrigger(other, otherCollider, thisCollider);

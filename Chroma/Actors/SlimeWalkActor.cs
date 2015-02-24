@@ -55,6 +55,8 @@ namespace Chroma.Actors
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
         core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, walkAnimation.GetCurrentFrame())), this);
+
+        DropCoin();
       }
 
       base.OnColliderTrigger(other, otherCollider, thisCollider);

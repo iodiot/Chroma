@@ -44,6 +44,9 @@ namespace Chroma.Gameplay
       // Obstacles
       Boulder,
 
+      // Items
+      HealthItem,
+
       //Structures
       Bridge,
 
@@ -80,30 +83,31 @@ namespace Chroma.Gameplay
           core.DebugMessage("Level started!");
           StartLevel();
           ResetAllRatios();
-          SetRatioOf(LevelModule.Flat, 80);
-          SetRatioOf(LevelModule.Pond, 200);
-          //SpawnBridge();
+
+          //Testing out
+          SetRatioOf(Encounter.HealthItem, 3);
+
+          SetRatioOf(LevelModule.Flat, 200);
+          SetRatioOf(LevelModule.Pond, 2);
           SetRatioOf(Encounter.Bridge, 2);
-          SetRatioOf(LevelModule.Raise, 2);
-          SetRatioOf(LevelModule.Descent, 2);
+          SetRatioOf(LevelModule.Raise, 1);
+          SetRatioOf(LevelModule.Descent, 1);
           SetRatioOf(LevelModule.Gap, 1);
           SetRatioOf(LevelModule.CoinGap, 1);
+          SetRatioOf(LevelModule.CoinPattern, 3);
           SetRatioOf(Encounter.None, 100);
-          SetRatioOf(Encounter.Golem, 60);
-          SetRatioOf(Encounter.Boulder, 20);
+          SetRatioOf(Encounter.Golem, 10);
+          SetRatioOf(Encounter.Boulder, 2);
           break;
         case 200:
-          SetRatioOf(LevelModule.CliffRight, 1);
-          SetRatioOf(Encounter.SlimeWalk, 10);
+          SetRatioOf(Encounter.SlimeWalk, 2);
           break;
         case 400:
-          SetRatioOf(LevelModule.CoinPattern, 1);
           SetRatioOf(Encounter.Golem, 20);
-          SetRatioOf(Encounter.SlimeWalk, 50);
+          SetRatioOf(Encounter.SlimeWalk, 5);
           break;
         case 600:
-          SetRatioOf(LevelModule.CoinPattern, 1);
-          SetRatioOf(Encounter.SlimeWalk, 50);
+          SetRatioOf(Encounter.SlimeWalk, 10);
           break;
       }
     }
@@ -269,16 +273,29 @@ namespace Chroma.Gameplay
         case Encounter.None:
           break;
 
+        #region Items
+        case Encounter.HealthItem:
+          position.Y -= 50;
+          var newItem = new ItemActor(core, position);
+          actorManager.Add(newItem);
+          break;
+        #endregion
+
+        #region Objects
         case Encounter.Boulder:
           var newBoulder = new BoulderActor(core, position);
           width += newBoulder.GetBoundingBoxW().Width;
           actorManager.Add(newBoulder);
           break;
-
+        #endregion
+        
+        #region Structures
         case Encounter.Bridge:
           SpawnBridge();
           break;
+        #endregion
 
+        #region Enemies
         case Encounter.Golem:
           var newGolem = new GolemActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
           width += newGolem.GetBoundingBoxW().Width;
@@ -290,6 +307,7 @@ namespace Chroma.Gameplay
           width += newSlimeWalker.GetBoundingBoxW().Width;
           actorManager.Add(newSlimeWalker);
           break;
+        #endregion
       }
 
       SpawnFlat(width);

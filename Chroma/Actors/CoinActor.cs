@@ -54,7 +54,7 @@ namespace Chroma.Actors
     {
       if (other is PlayerActor)
       {
-        core.SoundManager.Play("click");
+        core.SoundManager.Play("coin");
 
         core.MessageManager.Send(new RemoveActorMessage(this), this);
       }

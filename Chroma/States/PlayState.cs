@@ -15,7 +15,8 @@ namespace Chroma.States
   {
     public ActorManager ActorManager { get; private set; }
 
-    public GameHudGui gameControls { get; private set; }
+    public GameHudGui GameControls { get; private set; }
+    public HealthGui HealthGui { get; set; }
 
     private LevelGenerator LevelGenerator;
     private PlayerActor player;
@@ -32,7 +33,8 @@ namespace Chroma.States
       player = new PlayerActor(core, new Vector2(25, -50));
       ActorManager.Add(player);
 
-      gameControls = new GameHudGui(core, this, player);
+      GameControls = new GameHudGui(core, this, player);
+      HealthGui = new HealthGui(core, player);
     }
 
     public override void Load()
@@ -47,10 +49,13 @@ namespace Chroma.States
 
     private void DrawBackground()
     {
+
       core.Renderer["bg"].DrawRectangleS(
         new Rectangle(0, 0, (int)core.Renderer.ScreenWidth + 1, (int)core.Renderer.ScreenHeight + 1),
         new Color(17, 22, 42)
       );
+
+      //return;
 
       #region Trees, temporary
       var trees = core.SpriteManager.GetSprite("trees_l1");
@@ -153,7 +158,7 @@ namespace Chroma.States
       LevelGenerator.Update(levelDistance);
 
       #region Positioning camera
-      var targetWorldY = (core.Renderer.ScreenHeight - 130) * 0.9f - (player.platformY + player.Position.Y) / 2;
+      var targetWorldY = (core.Renderer.ScreenHeight - 130) * 0.9f - (player.PlatformY + player.Position.Y) / 2;
       var currentWorldY = core.Renderer.World.Y;
 
       core.Renderer.World = new Vector2(
@@ -164,7 +169,8 @@ namespace Chroma.States
       core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
       #endregion
 
-      gameControls.Update(ticks);
+      GameControls.Update(ticks);
+      HealthGui.Update(ticks);
 
       base.Update(ticks);
     }
@@ -173,7 +179,8 @@ namespace Chroma.States
     {
       DrawBackground();
       ActorManager.Draw();
-      gameControls.Draw();
+      GameControls.Draw();
+      HealthGui.Draw();
 
       core.Renderer.DrawTextS(
         String.Format("{0} m", LevelGenerator.distanceMeters),
