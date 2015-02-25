@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Chroma.Messages;
+using Chroma.Helpers;
 
 namespace Chroma.Actors
 {
@@ -159,11 +160,12 @@ namespace Chroma.Actors
 
     #endregion
 
-    protected void DropCoin() {
-      if (core.ChanceRoll(1f))
+    protected void DropCoin() 
+    {
+      if (ScienceHelper.ChanceRoll(1f))
       {
         core.MessageManager.Send(new AddActorMessage(new CoinActor(core, this.Position, true)), this);
-      }
+      } 
     }
   }
 }

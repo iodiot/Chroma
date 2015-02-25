@@ -26,7 +26,6 @@ namespace Chroma
     public GraphicsDevice GraphicsDevice;
 
     private readonly Stack<State> states;
-    private readonly Random random;
 
     private FrameCounter frameCounter;
     private int ticks = 0;
@@ -43,23 +42,12 @@ namespace Chroma
       TimerManager = new TimerManager(this);
 
       Content = content;
-      random = new Random();
 
       states = new Stack<State>();
 
       frameCounter = new FrameCounter();
 
       Debug.Print(String.Format("screen size: {0}x{1}", screenWidth, screenHeight));
-    }
-
-    public int GetRandom(int from, int to)
-    {
-      return (random.Next() % (to - from + 1)) + from;
-    }
-
-    public bool ChanceRoll(float chance = 0.5f)
-    {
-      return GetRandom(1, 100) <= chance * 100;
     }
 
     #region States

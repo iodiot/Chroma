@@ -184,6 +184,7 @@
     <Compile Include="Actors\WaterBodyActor.cs" />
     <Compile Include="Actors\PlankActor.cs" />
     <Compile Include="Actors\ItemActor.cs" />
+    <Compile Include="Helpers\ScienceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

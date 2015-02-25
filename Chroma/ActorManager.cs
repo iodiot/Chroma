@@ -47,7 +47,7 @@ namespace Chroma
         RemoveDeadActors();
       }
 
-      // remove actors
+      // Remove actors
       foreach (var actor in actorsToRemove)
       {
         actor.Unload();
@@ -55,7 +55,7 @@ namespace Chroma
       }
       actorsToRemove.Clear();
 
-      // add actors
+      // Add actors
       foreach (var actor in actorsToAdd)
       {
         actor.Load();
@@ -63,7 +63,7 @@ namespace Chroma
       }
       actorsToAdd.Clear();
 
-      // update actors
+      // Update actors
       foreach (var actor in actors)
       {
         actor.Update(ticks);
@@ -217,7 +217,7 @@ namespace Chroma
         }
       }
 
-      // drag velocity
+      // Drag velocity
       foreach (var a in actors)
       {
         if (a.CanMove)
@@ -331,15 +331,10 @@ namespace Chroma
             }
           }
                         
-          // try to lick
+          // Try to lick
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep).Count == 0)
           {
             actor.Position += new Vector2(v.X, -LickStep);
-            if (actor is PlayerActor)
-            {
-              core.DebugMessage("lick");
-            }
-          //  actor.Velocity = Vector2.Zero;
             return;
           }
 
@@ -347,7 +342,7 @@ namespace Chroma
         }
       }
 
-      // final check
+      // Final check
       if (v.Length() > Settings.Eps && GetObstacles(actor, v.X, v.Y).Count > 0)
       {
         actor.Velocity = v * 0.75f;

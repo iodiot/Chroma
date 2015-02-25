@@ -48,6 +48,11 @@ namespace Chroma.Actors
 
       base.Draw();
     }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      return true;
+    }
   }
 }
 

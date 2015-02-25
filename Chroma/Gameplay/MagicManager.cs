@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Chroma.Helpers;
 
 namespace Chroma.Gameplay
 {
@@ -29,7 +30,7 @@ namespace Chroma.Gameplay
 
     public static MagicColor GetRandomColor(Core core, float chanceOfComplexColor = 0.5f)
     {
-      return (MagicColor)(core.GetRandom(1, 3) + (core.ChanceRoll(chanceOfComplexColor) ? 3 : 0));
+      return (MagicColor)(ScienceHelper.GetRandom(1, 3) + (ScienceHelper.ChanceRoll(chanceOfComplexColor) ? 3 : 0));
     }
 
     public static MagicColor Mix(MagicColor first, MagicColor second) 

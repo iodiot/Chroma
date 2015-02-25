@@ -6,6 +6,7 @@ using Chroma.Actors;
 using Chroma.States;
 using Chroma.Messages;
 using Chroma.Graphics;
+using Chroma.Helpers;
 
 namespace Chroma.Actors
 {
@@ -25,8 +26,8 @@ namespace Chroma.Actors
 
       // Flying out
       if (CanMove) {
-        Velocity.X = core.GetRandom(1, 2);
-        Velocity.Y = core.GetRandom(-3, -1);
+        Velocity.X = ScienceHelper.GetRandom(1, 2);
+        Velocity.Y = ScienceHelper.GetRandom(-3, -1);
       }
 
       AddCollider(new Collider() { Name = "coin", BoundingBox = boundingBox });

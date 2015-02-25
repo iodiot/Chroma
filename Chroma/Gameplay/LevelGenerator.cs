@@ -173,7 +173,7 @@ namespace Chroma.Gameplay
     private T GetRandom<T>(List<Pair<T, int>> Ratios)
     {
       var total = Ratios.Sum(x => x.B);
-      var roll = core.GetRandom(1, total);
+      var roll = ScienceHelper.GetRandom(1, total);
       var i = -1;
       var sum = 0;
       do
@@ -246,9 +246,9 @@ namespace Chroma.Gameplay
     #region Encounters
     private void SpawnBridge()
     {
-      var n = core.GetRandom(10, 30);
+      var n = ScienceHelper.GetRandom(10, 30);
       var x = CurrentX;
-      var y = CurrentY - core.GetRandom(30, 50);
+      var y = CurrentY - ScienceHelper.GetRandom(30, 50);
 
       for (var i = 1; i <= n; i++)
       {
@@ -327,17 +327,17 @@ namespace Chroma.Gameplay
           break;
 
         case LevelModule.Raise:
-          SpawnSlope(SlopeDirection.Up, core.GetRandom(1,2));
+          SpawnSlope(SlopeDirection.Up, ScienceHelper.GetRandom(1,2));
           SpawnFlat(30);
           break;
         case LevelModule.Descent:
-          SpawnSlope(SlopeDirection.Down, core.GetRandom(1,2));
+          SpawnSlope(SlopeDirection.Down, ScienceHelper.GetRandom(1,2));
           SpawnFlat(30);
           break;
 
         case LevelModule.CliffRight:
           SpawnSlope(SlopeDirection.Up, 2);
-          SpawnFlat(200, core.GetRandom(60, 100));
+          SpawnFlat(200, ScienceHelper.GetRandom(60, 100));
           break;
 
         case LevelModule.CliffLeft:
@@ -356,7 +356,7 @@ namespace Chroma.Gameplay
           break;
 
         case LevelModule.CoinPattern:
-          var pattern = "cp_" + coinPatterns[core.GetRandom(0, coinPatterns.Count - 1)];
+          var pattern = "cp_" + coinPatterns[ScienceHelper.GetRandom(0, coinPatterns.Count - 1)];
           var sprite = core.SpriteManager.GetSprite(pattern);
           SpawnCoinPattern(CurrentX, CurrentY - coinGrid, pattern);
           SpawnFlat(sprite.Width * coinGrid);

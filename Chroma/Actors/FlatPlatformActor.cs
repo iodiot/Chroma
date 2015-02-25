@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Chroma.Graphics;
 using Chroma.Messages;
+using Chroma.Helpers;
 
 namespace Chroma.Actors
 {
@@ -24,40 +25,40 @@ namespace Chroma.Actors
       grassSprite = core.SpriteManager.GetSprite("floor_grass");
 
       // Vines
-      if (core.ChanceRoll(0.5f))
+      if (ScienceHelper.ChanceRoll(0.5f))
       {
-        var x = Position.X + core.GetRandom(4, width - 12);
-        var vine = core.GetRandom(1, 4);
+        var x = Position.X + ScienceHelper.GetRandom(4, width - 12);
+        var vine = ScienceHelper.GetRandom(1, 4);
         core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
           new Vector2(x, Position.Y),
           "vine_" + vine.ToString(),
-          flip: core.ChanceRoll(0.5f),
+          flip: ScienceHelper.ChanceRoll(0.5f),
           depth: 10
             )), this);
-        if (core.ChanceRoll(0.3f))
+        if (ScienceHelper.ChanceRoll(0.3f))
         {
           x += 8;
-          var vine2 = core.GetRandom(1, 4);
+          var vine2 = ScienceHelper.GetRandom(1, 4);
           while (vine == vine2)
           {
-            vine2 = core.GetRandom(1, 4);
+            vine2 = ScienceHelper.GetRandom(1, 4);
           }
           core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
             new Vector2(x, Position.Y),
             "vine_" + vine2.ToString(),
-            flip: core.ChanceRoll(0.5f),
+            flip: ScienceHelper.ChanceRoll(0.5f),
             depth: 10
           )), this);
         }
       }
 
       // Boulders
-      if (core.ChanceRoll(0.8f))
+      if (ScienceHelper.ChanceRoll(0.8f))
       {
-        var boulder = core.GetRandom(1, 4);
-        var x = Position.X + core.GetRandom(4, width - 4 - 30);
+        var boulder = ScienceHelper.GetRandom(1, 4);
+        var x = Position.X + ScienceHelper.GetRandom(4, width - 4 - 30);
         core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
-          new Vector2(x, Position.Y + core.GetRandom(15, 60)),
+          new Vector2(x, Position.Y + ScienceHelper.GetRandom(15, 60)),
           "earth_boulder_" + boulder.ToString()
         )), this);
       }
