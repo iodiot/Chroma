@@ -33,16 +33,17 @@ namespace Chroma.Actors
       LeftY = (int)position.Y;
       RightY = (int)position.Y + dir * 16 * sections;
 
-      int steps = 8;
-      int stepHeight = 16 / steps;
-      int stepWidth = 33 / steps;
+      var steps = 8;
+      var stepHeight = 16 / steps;
+      var stepWidth = 33 / steps;
 
-      for (int i = 1; i < steps * sections; i++)
+      for (var i = 1; i < steps * sections; i++)
       {
-        int thisStepStart = 0;
-        int thisStepWidth = 0;
+        var thisStepStart = 0;
+        var thisStepWidth = 0;
 
-        switch (direction) {
+        switch (direction) 
+        {
           case SlopeDirection.Up:
             thisStepStart = i * stepWidth;
             thisStepWidth = 33 * sections - stepWidth * i;
@@ -71,9 +72,10 @@ namespace Chroma.Actors
       base.Draw();
     }
 
-    private void DrawGround() {
-      for (int i = 0; i < Sections; i++) {
-
+    private void DrawGround() 
+    {
+      for (int i = 0; i < Sections; i++) 
+      {
         var yPos = dir * i * 16;
         if (Direction == SlopeDirection.Down)
           yPos += 16;

@@ -31,7 +31,7 @@ namespace Chroma.Actors
     protected Rectangle boundingBox;
 
     public int Ttl { get; protected set; }
-    public bool IsDead { get { return Ttl == 0; } }
+    public bool IsZombie;
 
     protected Color boundingBoxColor = Color.Red;
 
@@ -51,6 +51,8 @@ namespace Chroma.Actors
       colliders = new List<Collider>();
 
       Ttl = -1;
+
+      IsZombie = false;
     }
       
     public virtual void Load()

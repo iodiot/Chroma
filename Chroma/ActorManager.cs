@@ -11,7 +11,7 @@ namespace Chroma
   public sealed class ActorManager
   {
     private readonly Core core;
-    private readonly List<Actor> actors, actorsToAdd, actorsToRemove;
+    private readonly List<Actor> actors, actorsToAdd;
 
     private PlayerActor player;
 
@@ -21,7 +21,6 @@ namespace Chroma
 
       actors = new List<Actor>();
       actorsToAdd = new List<Actor>();
-      actorsToRemove = new List<Actor>();
     }
 
     public void Load()
@@ -43,17 +42,8 @@ namespace Chroma
     {
       if (ticks % 100 == 0)
       {
-        RemoveOffScreenActors();
-        RemoveDeadActors();
+        RemoveActors();
       }
-
-      // Remove actors
-      foreach (var actor in actorsToRemove)
-      {
-        actor.Unload();
-        actors.Remove(actor);
-      }
-      actorsToRemove.Clear();
 
       // Add actors
       foreach (var actor in actorsToAdd)
@@ -66,7 +56,10 @@ namespace Chroma
       // Update actors
       foreach (var actor in actors)
       {
-        actor.Update(ticks);
+        if (!actor.IsZombie)
+        {
+          actor.Update(ticks);
+        }
       }
 
       Step();
@@ -120,7 +113,10 @@ namespace Chroma
 
       foreach (var actor in actors)
       {
-        actor.Draw();
+        if (!actor.IsZombie)
+        {
+          actor.Draw();
+        }
       }
 
       if (Settings.DrawActorsCount)
@@ -133,6 +129,7 @@ namespace Chroma
       }
     }
 
+    #region Actor operations
     public Actor Add(Actor actor)
     {
       actorsToAdd.Add(actor);
@@ -147,35 +144,35 @@ namespace Chroma
 
     public void Remove(Actor actor)
     {
-      actorsToRemove.Add(actor);
+      actor.IsZombie = true;
     }
 
-    public void RemoveOffScreenActors()
+    private void RemoveActors()
     {
-      const float criticalDistance = 30.0f;
+      var aliveActors = new List<Actor>();
+
+      foreach (var actor in actors)
+      {
+        if (!CanRemoveActor(actor))
+        {
+          aliveActors.Add(actor);
+        }
+      }
+
+      actors.Clear();
+      actors.AddRange(aliveActors);
+    }
+
+    private bool CanRemoveActor(Actor actor)
+    {
+      const float CriticalDistance = 30.0f;
 
       var x = player.Position.X;
+      var otherX = actor.GetBoundingBoxW().X + actor.GetBoundingBoxW().Width;
 
-      foreach (var actor in actors)
-      {
-        var otherX = actor.GetBoundingBoxW().X + actor.GetBoundingBoxW().Width;
-        if (x - otherX > criticalDistance)
-        {
-          Remove(actor);
-        }
-      }
+      return (x - otherX > CriticalDistance) || (actor.Ttl == 0) || actor.IsZombie;
     }
-
-    public void RemoveDeadActors()
-    {
-      foreach (var actor in actors)
-      {
-        if (actor.IsDead)
-        {
-          Remove(actor);
-        }
-      }
-    }
+    #endregion
 
     #region Physics
 
@@ -184,10 +181,10 @@ namespace Chroma
       const float G = 0.08f;
       const float DragFactor = 0.99f;
 
-      // apply gravity
+      // Apply gravity
       foreach (var a in actors)
       {
-        if (a.CanMove && a.CanFall)
+        if (!a.IsZombie && a.CanMove && a.CanFall)
         {
           a.Velocity.Y += G;
         }
@@ -195,7 +192,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (a.CanMove)
+        if (!a.IsZombie && a.CanMove)
         {
           ResolveBoundingBoxes(a);
         }
@@ -203,7 +200,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (a.CanMove)
+        if (!a.IsZombie && a.CanMove)
         {
           MoveActor(a);
         }
@@ -211,7 +208,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (a.GetCollidersCount() > 0)
+        if (!a.IsZombie)
         {
           ResolveColliders(a);
         }
@@ -220,7 +217,7 @@ namespace Chroma
       // Drag velocity
       foreach (var a in actors)
       {
-        if (a.CanMove)
+        if (!a.IsZombie && a.CanMove)
         {
           a.Velocity *= DragFactor;
 

@@ -7,11 +7,12 @@ namespace Chroma.Actors
 {
   public class BoulderActor : Actor
   {
-    private Sprite sprite;
+    private readonly Sprite sprite;
+
     public BoulderActor(Core core, Vector2 position) : base (core, position)
     {
       sprite = core.SpriteManager.GetSprite("boulder_1");
-      this.Position.Y -= sprite.Height - 1;
+      Y -= sprite.Height - 1;
       boundingBox = new Rectangle(0, 3, sprite.Width, sprite.Height);
       AddCollider(new Collider() { BoundingBox = boundingBox });
 

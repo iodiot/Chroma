@@ -40,7 +40,7 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      Color color = MagicManager.MagicColors[this.color];
+      var color = MagicManager.MagicColors[this.color];
       //core.Renderer.DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position + new Vector2(-1, -4), color, 0.35f);
       core.Renderer[1].DrawSpriteW(animation.GetCurrentFrame(), Position);
 
