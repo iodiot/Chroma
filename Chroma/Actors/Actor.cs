@@ -14,7 +14,6 @@ namespace Chroma.Actors
   public abstract class Actor : ISubscriber
   {
     #region Fields 
-
     public Vector2 Position;
     public float X { get { return Position.X; } set { Position = new Vector2(value, Position.Y); } }
     public float Y { get { return Position.Y; } set { Position = new Vector2(Position.X, value); } }
@@ -36,7 +35,6 @@ namespace Chroma.Actors
     protected Color boundingBoxColor = Color.Red;
 
     protected readonly Core core;
-
     #endregion
 
     public Actor(Core core, Vector2 position)

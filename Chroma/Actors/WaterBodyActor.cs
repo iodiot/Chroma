@@ -46,20 +46,7 @@ namespace Chroma.Actors
       core.Renderer["add"].DrawSpriteW(edge, 
         new Vector2(box.Right, box.Top), scale: new Vector2(1f, box.Height), flip: SpriteFlip.Horizontal);
 
-
       base.Draw();
-
-    }
-
-    public override bool IsPassableFor(Actor actor)
-    {
-      return true;
-    }
-
-    public override void OnBoundingBoxTrigger(Actor other)
-    {
-
-      base.OnBoundingBoxTrigger(other);
     }
   }
 }

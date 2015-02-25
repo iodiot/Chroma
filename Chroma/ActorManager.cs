@@ -211,7 +211,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (a.CanMove)
+        if (a.GetCollidersCount() > 0)
         {
           ResolveColliders(a);
         }
@@ -263,10 +263,9 @@ namespace Chroma
           {
             var otherCollider = other.GetColliderW(j);
 
-            if ( collider.BoundingBox.Intersects(otherCollider.BoundingBox))
+            if (collider.BoundingBox.Intersects(otherCollider.BoundingBox))
             {
               actor.OnColliderTrigger(other, j, i);
-              other.OnColliderTrigger(actor, i, j);
             }
           }
         }

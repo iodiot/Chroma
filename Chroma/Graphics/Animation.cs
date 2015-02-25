@@ -47,35 +47,48 @@ namespace Chroma.Graphics
       Reset();
     }
 
-    public void Update(int ticks)
+    private void InternalUpdate(bool forward = true)
     {
-      Debug.Assert(animations[CurrentSequence] != null, "Animation.Update() : Current sequence is missing");
+      Debug.Assert(animations[CurrentSequence] != null, "Animation.InternalUpdate() : Current sequence is missing");
 
-      timeLine += Speed;
-
-      if (timeLine >= animations[CurrentSequence].Count)
+      if (forward)
       {
-        Reset();
-      }
-    }
+        timeLine += Speed;
 
-    public void StepBackward(int ticks = 1)
-    {
-      for (var i = 0; i < ticks; i++)
+        if (timeLine >= animations[CurrentSequence].Count)
+        {
+          Reset();
+        }
+      }
+      else
       {
         timeLine -= Speed;
-        if (timeLine < 0)
+
+        if (timeLine < 0f)
         {
           timeLine = animations[CurrentSequence].Count - 1;
         }
       }
     }
 
-    public void StepForward(int ticks = 1)
+    public void Update(int ticks)
     {
-      for (var i = 0; i < ticks; i++)
+      InternalUpdate();
+    }
+
+    public void StepBackward(int steps = 1)
+    {
+      for (var i = 0; i < steps; i++)
       {
-        Update(0);
+        InternalUpdate(false);
+      }
+    }
+
+    public void StepForward(int steps = 1)
+    {
+      for (var i = 0; i < steps; i++)
+      {
+        InternalUpdate();
       }
     }
 
