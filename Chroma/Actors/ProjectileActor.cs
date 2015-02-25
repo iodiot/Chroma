@@ -47,7 +47,7 @@ namespace Chroma.Actors
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-      if (!(other is ProjectileActor || other is CoinActor || other is PlayerActor))
+      if (!(other is ProjectileActor || other is CoinActor || other is PlayerActor || other is ItemActor))
       {
         Explode();
       }
@@ -70,11 +70,10 @@ namespace Chroma.Actors
       base.OnBoundingBoxTrigger(other);
     }
 
-    private void Explode()
+    public void Explode()
     {
       core.MessageManager.Send(new RemoveActorMessage(this), this);
       core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
-      //core.MessageManager.Send(new AddActorMessage(new FlashActor(core, Position + new Vector2(sprite.Width, boundingBox.Height / 2), color)), this);
     }
   }
 }
