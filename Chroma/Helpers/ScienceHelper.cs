@@ -1,9 +1,13 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace Chroma.Helpers
 {
   public class ScienceHelper
   {
+    public static float Eps = 0.001f;
+    public static float BigFloat = 100500.0f;
+
     private static Random random;
 
     static ScienceHelper()
@@ -19,6 +23,11 @@ namespace Chroma.Helpers
     public static bool ChanceRoll(float chance = 0.5f)
     {
       return GetRandom(1, 100) <= chance * 100;
+    }
+
+    public static bool IsZero(Vector2 v)
+    {
+      return v.Length() < Eps;
     }
   }
 }

@@ -5,13 +5,14 @@ using System.Linq;
 using Chroma.Actors;
 using Chroma.Graphics;
 using Chroma.Helpers;
+using System.Diagnostics;
 
 namespace Chroma
 {
   public sealed class ActorManager
   {
     private readonly Core core;
-    private readonly List<Actor> actors, actorsToAdd;
+    private List<Actor> actors, actorsToAdd, actorsToRemove;
 
     private PlayerActor player;
 
@@ -21,6 +22,7 @@ namespace Chroma
 
       actors = new List<Actor>();
       actorsToAdd = new List<Actor>();
+      actorsToRemove = new List<Actor>();
     }
 
     public void Load()
@@ -40,10 +42,7 @@ namespace Chroma
 
     public void Update(int ticks)
     {
-      if (ticks % 100 == 0)
-      {
-        RemoveActors();
-      }
+      RemoveActors();
 
       // Add actors
       foreach (var actor in actorsToAdd)
@@ -56,10 +55,7 @@ namespace Chroma
       // Update actors
       foreach (var actor in actors)
       {
-        if (!actor.IsZombie)
-        {
-          actor.Update(ticks);
-        }
+        actor.Update(ticks);
       }
 
       Step();
@@ -113,10 +109,7 @@ namespace Chroma
 
       foreach (var actor in actors)
       {
-        if (!actor.IsZombie)
-        {
-          actor.Draw();
-        }
+        actor.Draw();
       }
 
       if (Settings.DrawActorsCount)
@@ -129,7 +122,6 @@ namespace Chroma
       }
     }
 
-    #region Actor operations
     public Actor Add(Actor actor)
     {
       actorsToAdd.Add(actor);
@@ -144,38 +136,31 @@ namespace Chroma
 
     public void Remove(Actor actor)
     {
-      actor.IsZombie = true;
+      actorsToRemove.Add(actor);
     }
 
     private void RemoveActors()
     {
-      var aliveActors = new List<Actor>();
-
-      foreach (var actor in actors)
-      {
-        if (!CanRemoveActor(actor))
-        {
-          aliveActors.Add(actor);
-        }
-      }
-
-      actors.Clear();
-      actors.AddRange(aliveActors);
+      actors = actors.FindAll(actor => !CanRemoveActor(actor) && !actorsToRemove.Contains(actor));
+      actorsToRemove.Clear();
     }
 
     private bool CanRemoveActor(Actor actor)
     {
+      if (actor.IsDead)
+      {
+        return true;
+      }
+
       const float CriticalDistance = 30.0f;
 
       var x = player.Position.X;
       var otherX = actor.GetBoundingBoxW().X + actor.GetBoundingBoxW().Width;
 
-      return (x - otherX > CriticalDistance) || (actor.Ttl == 0) || actor.IsZombie;
+      return (x - otherX > CriticalDistance);
     }
-    #endregion
 
     #region Physics
-
     private void Step()
     {
       const float G = 0.08f;
@@ -184,7 +169,7 @@ namespace Chroma
       // Apply gravity
       foreach (var a in actors)
       {
-        if (!a.IsZombie && a.CanMove && a.CanFall)
+        if (a.CanMove && a.CanFall)
         {
           a.Velocity.Y += G;
         }
@@ -192,7 +177,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (!a.IsZombie && a.CanMove)
+        if (a.CanMove)
         {
           ResolveBoundingBoxes(a);
         }
@@ -200,7 +185,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (!a.IsZombie && a.CanMove)
+        if (a.CanMove)
         {
           MoveActor(a);
         }
@@ -208,20 +193,17 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (!a.IsZombie)
-        {
-          ResolveColliders(a);
-        }
+        ResolveColliders(a);
       }
 
       // Drag velocity
       foreach (var a in actors)
       {
-        if (!a.IsZombie && a.CanMove)
+        if (a.CanMove)
         {
           a.Velocity *= DragFactor;
 
-          if (a.Velocity.Length() < Settings.Eps)
+          if (ScienceHelper.IsZero(a.Velocity))
           {
             a.Velocity = Vector2.Zero;
             continue;
@@ -271,7 +253,7 @@ namespace Chroma
 
     private void MoveActor(Actor actor)
     {
-      if (actor.Velocity.Length() < Settings.Eps)
+      if (ScienceHelper.IsZero(actor.Velocity))
       {
         return;
       }
@@ -281,7 +263,7 @@ namespace Chroma
       var v = actor.Velocity;
 
       // y-axis
-      if (Math.Abs(v.Y) > Settings.Eps)
+      if (Math.Abs(v.Y) > ScienceHelper.Eps)
       {
         var obstaclesY = GetObstacles(actor, 0, v.Y);
         if (obstaclesY.Count > 0)
@@ -307,7 +289,7 @@ namespace Chroma
       }
 
       // x-axis
-      if (Math.Abs(v.X) > Settings.Eps)
+      if (Math.Abs(v.X) > ScienceHelper.Eps)
       {
         var obstaclesX = GetObstacles(actor, v.X, 0);
         if (obstaclesX.Count > 0)
@@ -340,7 +322,7 @@ namespace Chroma
       }
 
       // Final check
-      if (v.Length() > Settings.Eps && GetObstacles(actor, v.X, v.Y).Count > 0)
+      if (!ScienceHelper.IsZero(v) && GetObstacles(actor, v.X, v.Y).Count > 0)
       {
         actor.Velocity = v * 0.75f;
         MoveActor(actor);
@@ -381,7 +363,7 @@ namespace Chroma
     public Actor FindPlatformUnder(Vector2 position)
     {
       Actor closestActor = null;
-      var minY = 100500.0f;
+      var minY = ScienceHelper.BigFloat;
 
       foreach (var a in actors)
       {
@@ -406,7 +388,6 @@ namespace Chroma
 
       return closestActor;
     }
-
     #endregion
   }
 }
