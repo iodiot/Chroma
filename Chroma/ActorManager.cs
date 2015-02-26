@@ -42,7 +42,19 @@ namespace Chroma
 
     public void Update(int ticks)
     {
-      RemoveActors();
+      // Remove actors
+      if (ticks % 100 == 0)
+      {
+        actorsToRemove.AddRange(actors.FindAll(actor => CanRemoveActor(actor)));
+      }
+
+      foreach (var actor in actorsToRemove)
+      {
+        actor.Unload();
+        actors.Remove(actor);
+      }
+      actorsToRemove.Clear();
+
 
       // Add actors
       foreach (var actor in actorsToAdd)
@@ -137,12 +149,6 @@ namespace Chroma
     public void Remove(Actor actor)
     {
       actorsToRemove.Add(actor);
-    }
-
-    private void RemoveActors()
-    {
-      actors = actors.FindAll(actor => !CanRemoveActor(actor) && !actorsToRemove.Contains(actor));
-      actorsToRemove.Clear();
     }
 
     private bool CanRemoveActor(Actor actor)

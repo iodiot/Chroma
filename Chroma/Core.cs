@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -14,7 +15,7 @@ namespace Chroma
 {
   public sealed class Core
   {
-    private readonly List<Pair<string, int>> DebugMessages;
+    private readonly List<Pair<string, int>> debugMessages;
 
     public SpriteManager SpriteManager { get; private set; }
     public Renderer Renderer { get; private set; }
@@ -30,9 +31,11 @@ namespace Chroma
     private FrameCounter frameCounter;
     private int ticks = 0;
 
+    private readonly Stopwatch stopwatch;
+
     public Core(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
     {
-      DebugMessages = new List<Pair<string, int>>();
+      debugMessages = new List<Pair<string, int>>();
       GraphicsDevice = graphicsDevice;
 
       SpriteManager = new SpriteManager(this);
@@ -46,6 +49,8 @@ namespace Chroma
       states = new Stack<State>();
 
       frameCounter = new FrameCounter();
+
+      stopwatch = new Stopwatch();
 
       Debug.Print(String.Format("screen size: {0}x{1}", screenWidth, screenHeight));
     }
@@ -104,10 +109,11 @@ namespace Chroma
     {
       TimerManager.Update(ticks);
 
-      foreach (var message in DebugMessages) {
+      foreach (var message in debugMessages) 
+      {
         message.B--;
       }
-      DebugMessages.RemoveAll(m => m.B == 0);
+      debugMessages.RemoveAll(m => m.B == 0);
 
       if (GetCurrentState() != null)
       {
@@ -128,7 +134,7 @@ namespace Chroma
 
     public void DebugMessage(string message)
     {
-      DebugMessages.Insert(0, new Pair<string, int>(message, 200) );
+      debugMessages.Insert(0, new Pair<string, int>(message, 200) );
     }
 
     public void Draw(GameTime gameTime)
@@ -153,7 +159,7 @@ namespace Chroma
       if (Settings.DrawDebugMessages)
       {
         float i = -5;
-        foreach (var message in DebugMessages) {
+        foreach (var message in debugMessages) {
           i += 10;
           Renderer.DrawTextS(
             message.A,
@@ -165,6 +171,22 @@ namespace Chroma
 
       // Final draw
       Renderer.Draw();
+    }
+
+    public void StartBenchmark()
+    {
+      stopwatch.Reset();
+      stopwatch.Start();
+    }
+
+    public void StopBenchmark(bool printOnlyPositiveMs = false)
+    {
+      stopwatch.Stop();
+
+      if (debugMessages.Count < 10 && (!printOnlyPositiveMs || (printOnlyPositiveMs && stopwatch.ElapsedMilliseconds > 0)))
+      {
+        DebugMessage(String.Format("Elapsed {0} ms, {1} ts", stopwatch.ElapsedMilliseconds, stopwatch.ElapsedTicks));
+      }
     }
   }
 }

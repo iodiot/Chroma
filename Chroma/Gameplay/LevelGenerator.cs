@@ -191,7 +191,7 @@ namespace Chroma.Gameplay
 
     //--------------------------------------------------
 
-    #region Basic secions
+    #region Basic sections
     private void AttachToLast(PlatformActor newPlatform)
     {
       if (LastPlatform != null)

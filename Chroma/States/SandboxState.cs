@@ -15,7 +15,7 @@ namespace Chroma.States
       actorManager = new ActorManager(core);
 
       player = actorManager.Add(new PlayerActor(core, new Vector2(50, 50))) as PlayerActor;
-      actorManager.Add(new FlatPlatformActor(core, new Vector2(0, 100), 100500));
+      actorManager.Add(new FlatPlatformActor(core, new Vector2(0, 100), 1000));
     }
 
     public override void Update(int ticks)
