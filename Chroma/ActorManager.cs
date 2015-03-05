@@ -154,7 +154,7 @@ namespace Chroma
       const float CriticalDistance = 30.0f;
 
       var otherX = actor.GetBoundingBoxW().X + actor.GetBoundingBoxW().Width;
-      return (core.Renderer.World.X - otherX > CriticalDistance);
+      return ((-core.Renderer.World.X) - otherX > CriticalDistance);
     }
 
     #region Physics
