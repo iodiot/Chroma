@@ -43,6 +43,9 @@ namespace Chroma.Graphics
     {
       Debug.Assert(animations[name] != null, String.Format("Animation.Play() : Sequence {0} is missing", name));
 
+      if (CurrentSequence == name)
+        return;
+
       CurrentSequence = name;
       Reset();
     }

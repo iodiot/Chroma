@@ -84,6 +84,7 @@ namespace Chroma.Graphics
     #region Fields
     public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth * 0.5f, ScreenHeight * 0.5f); } }
     public Vector2 World;
+    public float WorldYOffset;
 
     public readonly float ScreenWidth;
     public readonly float ScreenHeight;
@@ -368,9 +369,13 @@ namespace Chroma.Graphics
     public void DrawTextS(string text, Vector2 position, Color tint, float scale = 1.0f)
     {
       const int CharWidth = 6;
+      var layer = currentLayerName;
+      var depth = currentDepth;
 
       for (var i = 0; i < text.Length; ++i)
       {
+        SetCurrentLayer(layer);
+        SetCurrentDepth(depth);
         DrawSpriteS(core.SpriteManager.MakeCharSprite(text[i]), new Vector2(position.X + i * scale * CharWidth, position.Y), tint, new Vector2(scale, scale));
       }
     }

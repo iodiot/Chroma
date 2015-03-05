@@ -22,6 +22,7 @@ namespace Chroma.Actors
     #region Player stats
     public int MaxHearts { get; private set; }
     public int Hearts { get; private set; }
+    public bool HasLost { get; private set; }
     #endregion
 
     #region Effects
@@ -78,8 +79,8 @@ namespace Chroma.Actors
 
       AddCollider(new Collider(){ Name = "body", BoundingBox = boundingBox });
 
-      MaxHearts = 5;
-      Hearts = 5;
+      MaxHearts = 3;
+      Hearts = 3;
 
       hurtTimeout = 0;
     }
@@ -216,8 +217,9 @@ namespace Chroma.Actors
     }
 
     private void Die() {
-      // DEBUG GOD MODE
-      Hearts = MaxHearts;
+      HasLost = true;
+      core.MessageManager.Send(new RemoveActorMessage(this), this);
+      core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, animation.GetCurrentFrame())), this);
     }
   }
 }

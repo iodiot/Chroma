@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Graphics;
+using Chroma.Messages;
 
 namespace Chroma.States
 {
@@ -20,10 +21,9 @@ namespace Chroma.States
 
     public override void Update(int ticks)
     {
-      HandleInput();
-
       if (wasTouched)
       {
+        core.MessageManager.Send(new CoreEventMessage(CoreEvent.StartGame), this);
       }
 
       base.Update(ticks);
@@ -31,26 +31,23 @@ namespace Chroma.States
 
     public override void Draw()
     {
-      core.Renderer.FillScreen(Color.Black);
+      core.Renderer[1000].FillScreen(Color.Black * 0.1f);
 
-      if (wasTouched)
-      {
-      }
-      else
-      {
-        core.Renderer.DrawTextS(Title, new Vector2(45, 45), Color.White, 4);
-      }
+      core.Renderer[1000].DrawTextS(Title, new Vector2(45, 45), Color.White, 4);
 
       base.Draw();
     }
 
-    private void HandleInput()
+    public override void HandleInput()
     {
       var touchState = TouchPanel.GetState();
 
-      if (touchState.Count == 1 && !wasTouched)
+      foreach (var touch in touchState)
       {
-        wasTouched = true;
+        if (touch.State == TouchLocationState.Released)
+        {
+          wasTouched = true;
+        }
       }
     }
   }

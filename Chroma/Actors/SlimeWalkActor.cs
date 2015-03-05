@@ -59,6 +59,11 @@ namespace Chroma.Actors
         DropCoin();
       }
 
+      if (other is PlayerActor)
+      {
+        (other as PlayerActor).Hurt();
+      }
+
       base.OnColliderTrigger(other, otherCollider, thisCollider);
     }
 

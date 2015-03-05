@@ -67,6 +67,8 @@ namespace Chroma.Actors
     {
       if (bubble && other is ProjectileActor && ((ProjectileActor)other).color == this.color)
       {
+        (other as ProjectileActor).Explode();
+
         bubble = false;
         CanFall = true;
         Velocity.X += 0.5f * ScienceHelper.GetRandom(3, 5);

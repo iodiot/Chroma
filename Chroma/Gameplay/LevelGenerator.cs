@@ -3,24 +3,36 @@ using Chroma.Helpers;
 using Chroma.Actors;
 using Microsoft.Xna.Framework;
 using Chroma.States;
+using Chroma.Graphics;
 using System.Collections.Generic;
 using System.Linq;
+using Chroma.Messages;
 
 namespace Chroma.Gameplay
 {
-  public class LevelGenerator
+  public enum Area {
+    Jungle,
+    Ruins
+  }
+
+  public partial class LevelGenerator
   {
     private readonly ActorManager actorManager;
     private readonly Core core;
 
+    private Area area;
+
+    // Background
+    private List<ParallaxLayer> BG;
+
+    // Platforms
     public PlatformActor LastPlatform { get; private set; }
     public int CurrentX { get; private set; }
     public int CurrentY { get; private set; }
     public float distance;
     public int distanceMeters;
 
-    private int coinGrid = 10;
-    private List<string> coinPatterns;
+    private bool started = false;
 
     enum LevelModule {
       Flat = 0,
@@ -33,87 +45,74 @@ namespace Chroma.Gameplay
       Gap,
       Pond,
 
-      CoinPattern,
       CoinGap
-    }
-
-    enum Encounter {
-
-      None = 0,
-
-      // Obstacles
-      Boulder,
-
-      // Items
-      HealthItem,
-
-      //Structures
-      Bridge,
-
-      // Enemies
-      Slime,
-      SlimeRoll,
-      SlimeWalk,
-
-      Golem
     }
 
     private int milestone;
     private List<Pair<LevelModule, int>> ModuleRatios;
     private List<Pair<Encounter, int>> EncounterRatios;
 
-    public LevelGenerator(Core core, ActorManager actorManager)
+    public LevelGenerator(Core core, ActorManager actorManager, Area area)
     {
       this.core = core;
       this.actorManager = actorManager;
+      this.area = area;
       LastPlatform = null;
       milestone = -1;
 
-      coinPatterns = new List<string> { "arrows", "ring", "checkers" };
-
       ModuleRatios = new List<Pair<LevelModule, int>>();
       EncounterRatios = new List<Pair<Encounter, int>>();
+
+      // Background
+      BG = new List<ParallaxLayer>();
+      BG.Add(new ParallaxLayer(core, 31, 0.1f));
+      BG.Add(new ParallaxLayer(core, 31, 0.2f));
+      BG.Add(new ParallaxLayer(core, 17, 0.5f));
+      BG.Add(new ParallaxLayer(core, 0, 0.7f));
+
+      LoadBGTape(1, new string[] { "trees_l1" });
+      LoadBGTape(2, new string[] { "trees_l2" });
+      LoadBGTape(3, new string[] { "trees_l3_1", "trees_l3_2", "trees_l3_3" });
+      LoadBGTape(4, new string[] { "trees_l4" });
     }
 
-    private void ProgressLevel()
+    //--------------------------------------------------
+    #region Backgrounds
+
+    private void SpawnParallaxDecal()
     {
-      switch (milestone)
+      var lvl = ScienceHelper.GetRandom(7, 9);
+      var newDecal = new ParallaxDecalActor(core, new Vector2(CurrentX, CurrentY - 90), new Vector2(lvl * 0.1f, 1), 
+        "trees_l5_" + ScienceHelper.GetRandom(1, 4).ToString(), "bg", lvl, scale: 1.0f);
+      core.MessageManager.Send(new AddActorMessage(newDecal), this);
+    }
+
+    private void LoadBGTape(int layerId, string[] tape) 
+    {
+      var layer = BG[layerId - 1];
+      layer.LoadTape(tape);
+    }
+
+    public void DrawBackground()
+    {
+      foreach (var layer in BG)
       {
-        case 0:
-          core.DebugMessage("Level started!");
-          StartLevel();
-          ResetAllRatios();
-
-          //Testing out
-          SetRatioOf(Encounter.HealthItem, 3);
-
-          SetRatioOf(LevelModule.Flat, 200);
-          SetRatioOf(LevelModule.Pond, 2);
-          SetRatioOf(Encounter.Bridge, 2);
-          SetRatioOf(LevelModule.Raise, 1);
-          SetRatioOf(LevelModule.Descent, 1);
-          SetRatioOf(LevelModule.Gap, 1);
-          SetRatioOf(LevelModule.CoinGap, 1);
-          SetRatioOf(LevelModule.CoinPattern, 3);
-          SetRatioOf(Encounter.None, 100);
-          SetRatioOf(Encounter.Golem, 10);
-          SetRatioOf(Encounter.Boulder, 2);
-          break;
-        case 200:
-          SetRatioOf(Encounter.SlimeWalk, 2);
-          break;
-        case 400:
-          SetRatioOf(Encounter.Golem, 20);
-          SetRatioOf(Encounter.SlimeWalk, 5);
-          break;
-        case 600:
-          SetRatioOf(Encounter.SlimeWalk, 10);
-          break;
+        layer.Draw();
       }
     }
 
+    #endregion
+    //--------------------------------------------------
+
+
     public void Update(float distance)
     {
+      if (!started)
+      {
+        StartLevel();
+        started = true;
+      }
+
       this.distance = distance;
       this.distanceMeters = (int)(distance / 10);
 
@@ -129,12 +128,18 @@ namespace Chroma.Gameplay
       {
         ExtendLevel();
       }
+
+      foreach (var layer in BG)
+      {
+        layer.Update();
+      }
     }
 
     public void StartLevel() 
     {
       CurrentX = CurrentY = 0;
 
+      // TODO: Spawn start scene
       SpawnFlat((int)core.Renderer.ScreenWidth + 10);
     }
 
@@ -210,6 +215,9 @@ namespace Chroma.Gameplay
       actorManager.Add(newPlatform);
       AttachToLast(newPlatform);
 
+      if (ScienceHelper.ChanceRoll(0.2f))
+        SpawnParallaxDecal();
+
       CurrentX += length;
     }
 
@@ -238,79 +246,6 @@ namespace Chroma.Gameplay
       LastPlatform = null;
 
       CurrentX += width;
-    }
-    #endregion
-
-    //--------------------------------------------------
-
-    #region Encounters
-    private void SpawnBridge()
-    {
-      var n = ScienceHelper.GetRandom(10, 30);
-      var x = CurrentX;
-      var y = CurrentY - ScienceHelper.GetRandom(30, 50);
-
-      for (var i = 1; i <= n; i++)
-      {
-        PlankActor newPlank = new PlankActor(core, new Vector2(x, y), 
-          (i == 1) ? PlankActor.PlankOrigin.Left :
-          (i == n) ? PlankActor.PlankOrigin.Right:
-          PlankActor.PlankOrigin.Middle
-        );
-        actorManager.Add(newPlank);
-        x += newPlank.Width;
-        //y += core.GetRandom(-2, 2);
-      }
-    }
-
-    private void SpawnEncounter(Encounter encounter)
-    {
-      var width = 30;
-
-      var position = new Vector2(CurrentX + 15, CurrentY);
-      switch (encounter)
-      {
-        case Encounter.None:
-          break;
-
-        #region Items
-        case Encounter.HealthItem:
-          position.Y -= 50;
-          var newItem = new ItemActor(core, position);
-          actorManager.Add(newItem);
-          break;
-        #endregion
-
-        #region Objects
-        case Encounter.Boulder:
-          var newBoulder = new BoulderActor(core, position);
-          width += newBoulder.GetBoundingBoxW().Width;
-          actorManager.Add(newBoulder);
-          break;
-        #endregion
-        
-        #region Structures
-        case Encounter.Bridge:
-          SpawnBridge();
-          break;
-        #endregion
-
-        #region Enemies
-        case Encounter.Golem:
-          var newGolem = new GolemActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
-          width += newGolem.GetBoundingBoxW().Width;
-          actorManager.Add(newGolem);
-          break;
-
-        case Encounter.SlimeWalk:
-          var newSlimeWalker = new SlimeWalkActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
-          width += newSlimeWalker.GetBoundingBoxW().Width;
-          actorManager.Add(newSlimeWalker);
-          break;
-        #endregion
-      }
-
-      SpawnFlat(width);
     }
     #endregion
 
@@ -355,15 +290,6 @@ namespace Chroma.Gameplay
           SpawnFlat(30);
           break;
 
-        case LevelModule.CoinPattern:
-          var pattern = "cp_" + coinPatterns[ScienceHelper.GetRandom(0, coinPatterns.Count - 1)];
-          var sprite = core.SpriteManager.GetSprite(pattern);
-          SpawnCoinPattern(CurrentX, CurrentY - coinGrid, pattern);
-          SpawnFlat(sprite.Width * coinGrid);
-          break;
-
-
-
         case LevelModule.CoinGap:
           SpawnFlat(40);
           SpawnCoinArc(CurrentX - 30, CurrentY - 15);
@@ -381,17 +307,6 @@ namespace Chroma.Gameplay
     {
       var newCoin = new CoinActor(core, new Vector2(x, y));
       actorManager.Add(newCoin);
-    }
-      
-    private void SpawnCoinRect(int x, int y, int width, int height)
-    {
-      for (var i = 0; i < width / 15; i++)
-      {
-        for (var j = 0; j < height / 15; j++)
-        {
-          SpawnCoin(x + i * 15, y + j * 15);
-        }
-      }
     }
 
     private void SpawnCoinArc(int x, int y)
@@ -416,25 +331,6 @@ namespace Chroma.Gameplay
         }
           
       } while (coins < 12);
-    }
-
-    private void SpawnCoinPattern(int x, int y, string pattern)
-    {
-      var sprite = core.SpriteManager.GetSprite(pattern);
-      var texture = core.SpriteManager.GetTexture(sprite.TextureName);
-      var textureData = core.SpriteManager.GetTextureData(sprite.TextureName);
-
-      for (var j = sprite.Y; j < sprite.Y + sprite.Height; j++)
-      {
-        for (var i = sprite.X; i < sprite.X + sprite.Width; i++)
-        {
-          var color = textureData[i + j * texture.Width];
-          if (color == Color.Black)
-          {
-            SpawnCoin(x + (i - sprite.X) * coinGrid, y - (coinGrid * sprite.Height) + (j - sprite.Y) * coinGrid);
-          }
-        }
-      }
     }
 
     #endregion

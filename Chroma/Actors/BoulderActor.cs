@@ -28,7 +28,7 @@ namespace Chroma.Actors
 
     public override bool IsPassableFor(Actor actor)
     {
-      return actor is SlimeWalkActor || actor is ProjectileActor;
+      return true;
     }
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
@@ -39,6 +39,11 @@ namespace Chroma.Actors
         core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
 
         DropCoin();
+      }
+
+      if (other is PlayerActor)
+      {
+        (other as PlayerActor).Hurt();
       }
 
       base.OnColliderTrigger(other, otherCollider, thisCollider);

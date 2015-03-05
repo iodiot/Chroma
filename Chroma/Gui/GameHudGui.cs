@@ -70,7 +70,6 @@ namespace Chroma.Gui
 
     public override void Update(int ticks)
     {
-      HandleInput();
       base.Update(ticks);
     }
 
@@ -119,7 +118,7 @@ namespace Chroma.Gui
         // Debug: stop
         if (touch.Position.Y < core.Renderer.ScreenHeight / 2 && touch.State == TouchLocationState.Moved)
         {
-          player.Position.X -= 2.2f;
+          player.Position.X -= 1.9f;
         }
 
         // Jump
@@ -178,7 +177,7 @@ namespace Chroma.Gui
           }
         }
 
-        // Rleased over nothing
+        // Released over nothing
         if (!overButton && touch.State == TouchLocationState.Released)
         {
           ButtonSwipe swipe;

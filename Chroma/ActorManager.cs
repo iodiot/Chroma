@@ -14,8 +14,6 @@ namespace Chroma
     private readonly Core core;
     private List<Actor> actors, actorsToAdd, actorsToRemove;
 
-    private PlayerActor player;
-
     public ActorManager(Core core)
     {
       this.core = core;
@@ -138,11 +136,6 @@ namespace Chroma
     {
       actorsToAdd.Add(actor);
 
-      if (actor is PlayerActor)
-      {
-        player = actor as PlayerActor;
-      }
-
       return actor;
     }
 
@@ -160,10 +153,8 @@ namespace Chroma
 
       const float CriticalDistance = 30.0f;
 
-      var x = player.Position.X;
       var otherX = actor.GetBoundingBoxW().X + actor.GetBoundingBoxW().Width;
-
-      return (x - otherX > CriticalDistance);
+      return (core.Renderer.World.X - otherX > CriticalDistance);
     }
 
     #region Physics

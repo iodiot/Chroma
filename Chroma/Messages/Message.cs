@@ -7,6 +7,7 @@ namespace Chroma.Messages
   {
     AddActor,
     RemoveActor,
+    CoreEvent,
     Text
   };
 

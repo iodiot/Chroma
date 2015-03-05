@@ -31,6 +31,10 @@ namespace Chroma.States
     {
     }
 
+    public virtual void HandleInput()
+    {
+    }
+
     public virtual void Draw()
     {
     }

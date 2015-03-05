@@ -143,10 +143,6 @@ namespace Chroma.Actors
 
     public virtual void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-      if (other is PlayerActor && (this is GolemActor || this is SlimeWalkActor))
-      {
-        (other as PlayerActor).Hurt();
-      }
     }
 
     public virtual void OnBoundingBoxTrigger(Actor other)

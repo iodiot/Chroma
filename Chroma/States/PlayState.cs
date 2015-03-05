@@ -11,9 +11,29 @@ using Chroma.Gameplay;
 
 namespace Chroma.States
 {
+
+  public class GameStats
+  {
+    public readonly int distance;
+
+    public GameStats(int distance) {
+      this.distance = distance;
+    }
+  }
+
   public class PlayState : State
   {
+
+    private enum SubState
+    {
+      Beginning,
+      Playing,
+      GameOver
+    }
+    private SubState substate;
+
     public ActorManager ActorManager { get; private set; }
+    private Area area;
 
     public GameHudGui GameControls { get; private set; }
     public HealthGui HealthGui { get; set; }
@@ -22,24 +42,22 @@ namespace Chroma.States
     private PlayerActor player;
     private float levelDistance = 0;
 
-    public PlayState(Core core) : base(core)
+    public PlayState(Core core, Area area) : base(core)
     {
+      this.area = area;
+
       core.MessageManager.Subscribe(MessageType.AddActor, this);
       core.MessageManager.Subscribe(MessageType.RemoveActor, this);
 
       ActorManager = new ActorManager(core);
-      LevelGenerator = new LevelGenerator(core, ActorManager);
-
-      player = new PlayerActor(core, new Vector2(25, -50));
-      ActorManager.Add(player);
-
-      GameControls = new GameHudGui(core, this, player);
-      HealthGui = new HealthGui(core, player);
+      LevelGenerator = new LevelGenerator(core, ActorManager, this.area);
     }
 
     public override void Load()
     {
+      substate = SubState.Beginning;
       ActorManager.Load();
+      core.Renderer.World = new Vector2(0, (core.Renderer.ScreenHeight - 130));
     }
 
     public override void Unload()
@@ -47,146 +65,65 @@ namespace Chroma.States
       ActorManager.Unload();
     }
 
-    private void DrawBackground()
-    {
-
-      core.Renderer["bg"].DrawRectangleS(
-        new Rectangle(0, 0, (int)core.Renderer.ScreenWidth + 1, (int)core.Renderer.ScreenHeight + 1),
-        new Color(17, 22, 42)
-      );
-
-      //return;
-
-      #region Trees, temporary
-      var trees = core.SpriteManager.GetSprite("trees_l1");
-      for (var i = 0; i <= 2; i++)
-      {
-        core.Renderer["bg"].DrawSpriteS(trees, new Vector2(trees.Width * i - (levelDistance * 0.1f) % trees.Width, 31), Color.White);   
-      }
-      trees = core.SpriteManager.GetSprite("trees_l2");
-      for (var i = 0; i <= 2; i++)
-      {
-        core.Renderer["bg"].DrawSpriteS(trees, new Vector2(trees.Width * i - (levelDistance * 0.2f) % trees.Width, 31), Color.White);   
-      }
-      trees = core.SpriteManager.GetSprite("trees_l3");
-      for (var i = 0; i <= 2; i++)
-      {
-        core.Renderer["bg"].DrawSpriteS(trees, new Vector2(trees.Width * i - (levelDistance * 0.5f) % trees.Width, 17), Color.White);   
-      }
-      trees = core.SpriteManager.GetSprite("trees_l4");
-      for (var i = 0; i <= 2; i++)
-      {
-        core.Renderer["bg"].DrawSpriteS(trees, new Vector2(trees.Width * i - (levelDistance * 0.7f) % trees.Width, 0), Color.White);   
-      }
-
-     
-//      var offset = 60f; 
-//      trees = core.SpriteManager.GetSprite("sun_ray_3");
-//      for (var i = 0; i <= 3; i++)
-//      {
-//        core.Renderer["bg_add"].DrawSpriteS(trees, new Vector2(
-//          (offset + trees.Width) * i - (levelDistance * 0.80f) % (offset + trees.Width), 0), Color.White); 
-//      }
-//      offset = 90; 
-//      trees = core.SpriteManager.GetSprite("sun_ray_2");
-//      for (var i = 0; i <= 3; i++)
-//      {
-//        core.Renderer["bg_add"].DrawSpriteS(trees, new Vector2(
-//          (offset + trees.Width) * i - (levelDistance * 0.70f) % (offset + trees.Width), 0), Color.White); 
-//      }
-//      offset = 75; 
-//      trees = core.SpriteManager.GetSprite("sun_ray_1");
-//      for (var i = 0; i <= 3; i++)
-//      {
-//        core.Renderer["bg_add"].DrawSpriteS(trees, new Vector2(
-//          (offset + trees.Width) * i - (levelDistance * 0.90f) % (offset + trees.Width), 0), Color.White); 
-//      }
-//
-//
-//      offset = 120; 
-//      trees = core.SpriteManager.GetSprite("trees_l5_1");
-//      for (var i = 0; i <= 3; i++)
-//      {
-//        core.Renderer.DrawSpriteS(trees, new Vector2(
-//          (offset + trees.Width) * i - (levelDistance * 0.85f) % (offset + trees.Width), 0), Color.White); 
-//      }
-//
-//      offset = 130f; 
-//      trees = core.SpriteManager.GetSprite("trees_l5_1");
-//      for (var i = 0; i <= 3; i++)
-//      {
-//        core.Renderer.DrawSpriteS(trees, new Vector2(
-//          (offset + trees.Width) * i - (levelDistance * 0.9f) % (offset + trees.Width), 0), Color.White); 
-//      }
-//
-//      offset = 90;
-//      trees = core.SpriteManager.GetSprite("trees_l6");
-//      for (var i = 0; i <= 5; i++)
-//      {
-//        core.Renderer.DrawSpriteS(trees, new Vector2((trees.Width + offset) * i - (levelDistance * .925f) % (trees.Width + offset), -5), Color.White); 
-//      }
-//
-//      offset = 140; 
-//      trees = core.SpriteManager.GetSprite("trees_l5_3");
-//      for (var i = 0; i <= 3; i++)
-//      {
-//        core.Renderer.DrawSpriteS(trees, new Vector2(
-//          (offset + trees.Width) * i - (levelDistance * 0.95f) % (offset + trees.Width), 0), Color.White); 
-//      }
-//
-//      offset = 160; 
-//      trees = core.SpriteManager.GetSprite("trees_l5_4");
-//      for (var i = 0; i <= 3; i++)
-//      {
-//        core.Renderer.DrawSpriteS(trees, new Vector2(
-//          (offset + trees.Width) * i - (levelDistance * 1.0f) % (offset + trees.Width), 0), Color.White); 
-//      } 
-//
-//      offset = 90;
-//      trees = core.SpriteManager.GetSprite("trees_l6");
-//      for (var i = 0; i <= 5; i++)
-//      {
-//        core.Renderer.DrawSpriteS(trees, new Vector2((trees.Width + offset) * i - (levelDistance * 1.1f) % (trees.Width + offset), 0), Color.White); 
-//      }
-      #endregion
-    }
-
     public override void Update(int ticks)
     {
       ActorManager.Update(ticks);
-      levelDistance = player.Position.X;
       LevelGenerator.Update(levelDistance);
 
-      #region Positioning camera
-      var targetWorldY = (core.Renderer.ScreenHeight - 130) * 0.9f - (player.PlatformY + player.Position.Y) / 2;
-      var currentWorldY = core.Renderer.World.Y;
+      if (substate == SubState.Playing)
+      {
+        levelDistance = player.Position.X;
 
-      core.Renderer.World = new Vector2(
-        25 - player.Position.X, 
-        currentWorldY + (targetWorldY - currentWorldY) * 0.05f
-       );
-      core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - player.Position.Y);
-      core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
-      #endregion
+        #region Positioning camera
+        core.Renderer.WorldYOffset = (player.PlatformY + player.Position.Y) / 2;
+        var targetWorldY = (core.Renderer.ScreenHeight - 130) * 0.9f - core.Renderer.WorldYOffset;
+        var currentWorldY = core.Renderer.World.Y;
 
-      GameControls.Update(ticks);
-      HealthGui.Update(ticks);
+        core.Renderer.World = new Vector2(
+          25 - player.Position.X, 
+          currentWorldY + (targetWorldY - currentWorldY) * 0.05f
+        );
+        core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - player.Position.Y);
+        core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
+        #endregion
 
+        GameControls.Update(ticks);
+        HealthGui.Update(ticks);
+
+        if (player.HasLost)
+          GameOver();
+      }
+        
       base.Update(ticks);
+    }
+
+    public override void HandleInput()
+    {
+      GameControls.HandleInput();
+      base.HandleInput();
     }
 
     public override void Draw()
     {
-      DrawBackground();
-      ActorManager.Draw();
-      GameControls.Draw();
-      HealthGui.Draw();
+      core.GraphicsDevice.Clear(new Color(17, 22, 42));
 
-      core.Renderer.DrawTextS(
-        String.Format("{0} m", LevelGenerator.distanceMeters),
-        new Vector2(60, 5),
-        Color.White * 0.25f
-      );
+      LevelGenerator.DrawBackground();
+      ActorManager.Draw();
+
+      if (substate == SubState.Playing)
+      {
+        GameControls.Draw();
+        HealthGui.Draw();
+      }
+
+      if (Settings.DrawDebugMessages)
+      {
+        core.Renderer.DrawTextS(
+          String.Format("{0} m", LevelGenerator.distanceMeters),
+          new Vector2(60, 5),
+          Color.White * 0.25f
+        );
+      }
 
       base.Draw();
     }
@@ -204,6 +141,26 @@ namespace Chroma.States
       }
 
       base.OnMessage(message, sender);
+    }
+
+    // ---------------------------------------
+
+    public void Start()
+    {
+      substate = SubState.Playing;
+
+      player = new PlayerActor(core, new Vector2(25, -50));
+      ActorManager.Add(player);
+
+      GameControls = new GameHudGui(core, this, player);
+      HealthGui = new HealthGui(core, player);
+    }
+
+    public void GameOver()
+    {
+      substate = SubState.GameOver;
+      core.gameResult = new GameStats(LevelGenerator.distanceMeters); 
+      core.MessageManager.Send(new CoreEventMessage(CoreEvent.GameOver), this);
     }
   }
 }
