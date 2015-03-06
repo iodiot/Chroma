@@ -34,7 +34,7 @@ namespace Chroma.Gameplay
           SetRatioOf(Encounter.None, 100);
           SetRatioOf(Encounter.Slime, 20);
           SetRatioOf(Encounter.Golem, 0);
-          SetRatioOf(Encounter.Boulder, 2);
+          SetRatioOf(Encounter.Boulder, 20);
           break;
         case 200:
           SetRatioOf(Encounter.SlimeWalk, 2);

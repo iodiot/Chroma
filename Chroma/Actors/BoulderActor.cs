@@ -21,7 +21,7 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      core.Renderer[10].DrawSpriteW(sprite, Position);
+      core.Renderer[5].DrawSpriteW(sprite, Position);
 
       base.Draw();
     }
@@ -33,17 +33,21 @@ namespace Chroma.Actors
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-      if (other is ProjectileActor)
+      var destroyed = false;
+
+      if (other is PlayerActor)
+      {
+        var player = (other as PlayerActor);
+        player.Hurt();
+        destroyed = !player.HasLost;
+      }
+        
+      if (other is ProjectileActor || destroyed)
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
         core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
 
         DropCoin();
-      }
-
-      if (other is PlayerActor)
-      {
-        (other as PlayerActor).Hurt();
       }
 
       base.OnColliderTrigger(other, otherCollider, thisCollider);

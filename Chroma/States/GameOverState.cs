@@ -14,6 +14,8 @@ namespace Chroma.States
   public class GameOverState : State
   {
     private bool wasTouched = false;
+    private int timeout = 50;
+    private int ticks;
 
     public GameOverState(Core core) : base(core)
     {
@@ -21,6 +23,11 @@ namespace Chroma.States
 
     public override void Update(int ticks)
     {
+      this.ticks = ticks;
+
+      if (timeout > 0)
+        timeout--;
+
       if (wasTouched)
       {
         core.MessageManager.Send(new CoreEventMessage(CoreEvent.ResetGame), this);
@@ -33,13 +40,19 @@ namespace Chroma.States
     {
       core.Renderer.FillScreen(Color.Black * 0.5f);
 
-      core.Renderer.DrawTextS("Distance: " + core.gameResult.distance.ToString(), new Vector2(45, 45), Color.White, 4);
+      core.Renderer.DrawTextS("Distance: " + core.gameResult.distance.ToString() + " m", new Vector2(45, 60), Color.White, 3);
+
+      if (timeout == 0)
+        core.Renderer["fg"].DrawTextS("Tap to retry", new Vector2(45, 100), Color.White * (float)Math.Abs(Math.Sin((float)ticks / 10)), 2);
 
       base.Draw();
     }
 
     public override void HandleInput()
     {
+      if (timeout > 0)
+        return;
+
       var touchState = TouchPanel.GetState();
 
       foreach (var touch in touchState)

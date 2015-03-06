@@ -27,7 +27,7 @@ namespace Chroma.Actors
       var newWorld = core.Renderer.World;
       var dWorld = newWorld - oldWorld;
 
-      Position.X = oldPosition.X - dWorld.X + parallax.X * dWorld.X;
+      Position.X = oldPosition.X - dWorld.X + parallax.X * dWorld.X - (core.deviceTilt + 1.5f) * 20 * parallax.X;
       Position.Y = oldPosition.Y - dWorld.Y + parallax.Y * dWorld.Y;
 
       base.Update(ticks);

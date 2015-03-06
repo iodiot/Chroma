@@ -32,7 +32,8 @@ namespace Chroma.Gameplay
     public float distance;
     public int distanceMeters;
 
-    private bool started = false;
+    private bool builtStartingScene = false;
+    private bool startedLevel = false;
 
     enum LevelModule {
       Flat = 0,
@@ -104,14 +105,26 @@ namespace Chroma.Gameplay
     #endregion
     //--------------------------------------------------
 
+    public void Go()
+    {
+      startedLevel = true;
+    }
 
     public void Update(float distance)
     {
-      if (!started)
+      if (!builtStartingScene)
       {
         StartLevel();
-        started = true;
+        builtStartingScene = true;
       }
+        
+      foreach (var layer in BG)
+      {
+        layer.Update();
+      }
+
+      if (!startedLevel)
+        return;
 
       this.distance = distance;
       this.distanceMeters = (int)(distance / 10);
@@ -128,19 +141,15 @@ namespace Chroma.Gameplay
       {
         ExtendLevel();
       }
-
-      foreach (var layer in BG)
-      {
-        layer.Update();
-      }
     }
 
     public void StartLevel() 
     {
-      CurrentX = CurrentY = 0;
+      CurrentX = -10;
+      CurrentY = 0;
 
       // TODO: Spawn start scene
-      SpawnFlat((int)core.Renderer.ScreenWidth + 10);
+      SpawnFlat((int)core.Renderer.ScreenWidth + 20);
     }
 
     private void ResetAllRatios()

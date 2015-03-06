@@ -57,7 +57,7 @@ namespace Chroma.States
     {
       substate = SubState.Beginning;
       ActorManager.Load();
-      core.Renderer.World = new Vector2(0, (core.Renderer.ScreenHeight - 130));
+      core.Renderer.World = new Vector2(0, (core.Renderer.ScreenHeight - 130) * 0.9f + 50/2);
     }
 
     public override void Unload()
@@ -148,8 +148,9 @@ namespace Chroma.States
     public void Start()
     {
       substate = SubState.Playing;
+      LevelGenerator.Go();
 
-      player = new PlayerActor(core, new Vector2(25, -50));
+      player = new PlayerActor(core, new Vector2(25, -27));
       ActorManager.Add(player);
 
       GameControls = new GameHudGui(core, this, player);

@@ -120,7 +120,7 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.GetTicks() / 3));
+      var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.GetTicks() / 2));
 
       var pos = new Vector2(Position.X, Position.Y);
       if (sm.currentState == DruidState.Landing)
@@ -206,7 +206,7 @@ namespace Chroma.Actors
       if (hurtTimeout > 0)
         return;
 
-      hurtTimeout = 100;
+      hurtTimeout = 30;
 
       Hearts--;
 

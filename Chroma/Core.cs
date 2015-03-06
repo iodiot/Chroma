@@ -11,6 +11,8 @@ using Chroma.Messages;
 using Chroma.States;
 using Chroma.Graphics;
 using Chroma.Gameplay;
+using CoreMotion;
+using Foundation;
 
 namespace Chroma
 {
@@ -24,6 +26,9 @@ namespace Chroma
     public SoundManager SoundManager { get; private set; }
     public MessageManager MessageManager { get; private set; }
     public TimerManager TimerManager { get; private set; }
+
+    private CMMotionManager MotionManager;
+    public float deviceTilt { get; private set; }
 
     public GraphicsDevice GraphicsDevice;
 
@@ -45,6 +50,9 @@ namespace Chroma
       SoundManager = new SoundManager(this);
       Renderer = new Renderer(this, spriteBatch, screenWidth, screenHeight);
       TimerManager = new TimerManager(this);
+
+      MotionManager = new CMMotionManager();
+      MotionManager.DeviceMotionUpdateInterval = 0.05;
 
       MessageManager = new MessageManager(this);
       MessageManager.Subscribe(MessageType.CoreEvent, this);
@@ -120,6 +128,7 @@ namespace Chroma
 
     public void Update(GameTime gameTime)
     {
+
       TimerManager.Update(ticks);
 
       foreach (var message in debugMessages) 
@@ -209,11 +218,36 @@ namespace Chroma
 
     // -------------------------------------------------
 
+    private void TrackTilt(bool track)
+    {
+      if (track)
+      {
+        MotionManager.StartDeviceMotionUpdates(NSOperationQueue.CurrentQueue, (data, error) =>
+          {
+            // Math from 
+            // http://www.dulaccc.me/2013/03/computing-the-ios-device-tilt.html
+            // http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Conversion
+
+            CMQuaternion q = data.Attitude.Quaternion;
+            this.deviceTilt = (float)Math.Atan(2 * (q.x * q.w + q.y * q.z)/(1 - 2 * (q.z * q.z + q.w * q.w)));
+          }
+        );
+      }
+      else
+      {
+        MotionManager.StopDeviceMotionUpdates();
+        deviceTilt = 0f;
+      }
+    }
+
+    // -------------------------------------------------
+
     private void Reset() 
     {
       ClearStates();
       PushState(new PlayState(this, Area.Jungle));
       PushState(new MenuState(this));
+      TrackTilt(true);
     }
 
     private void StartGame()
@@ -227,11 +261,14 @@ namespace Chroma
       {
         playState.Start();
       }
+
+      TrackTilt(false);
     }
 
     private void GameOver()
     {
       states.Push(new GameOverState(this));
+      TrackTilt(true);
     }
 
     public void OnMessage(Message message, object sender)

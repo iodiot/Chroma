@@ -61,7 +61,7 @@ namespace Chroma.Graphics
 
     public void Draw()
     {
-      var x = screenPos.X;
+      var x = screenPos.X - (core.deviceTilt + 1.5f) * 20 * parallax;
       foreach (var s in onScreen)
       {
         core.Renderer["bg"].DrawSpriteS(s, new Vector2(x, y));

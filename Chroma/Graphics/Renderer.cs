@@ -382,7 +382,7 @@ namespace Chroma.Graphics
 
     public void FillScreen(Color color)
     {
-      core.Renderer.DrawRectangleS(Vector2.Zero, ScreenWidth, ScreenHeight, color);
+      core.Renderer.DrawRectangleS(new Vector2(-1), ScreenWidth + 1, ScreenHeight + 1, color);
     }
 
     #endregion
