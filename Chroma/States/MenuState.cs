@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Graphics;
 using Chroma.Messages;
+using Chroma.Gameplay;
 
 namespace Chroma.States
 {
@@ -14,6 +15,7 @@ namespace Chroma.States
     private static readonly string Title = "CHROMA";
 
     private bool wasTouched = false;
+    private bool leftSideTouched = false;
 
     public MenuState(Core core) : base(core)
     {
@@ -23,7 +25,17 @@ namespace Chroma.States
     {
       if (wasTouched)
       {
-        core.MessageManager.Send(new CoreEventMessage(CoreEvent.StartGame), this);
+        if (leftSideTouched)
+        {
+          // Next area
+          int a = (int)(core.profileData.CurrentArea) + 1;
+          core.profileData.CurrentArea = (Enum.IsDefined(typeof(Area), a)) ? (Area)a : (Area)0;
+          core.MessageManager.Send(new CoreEventMessage(CoreEvent.ResetGame), this);
+        }
+        else
+        {
+          core.MessageManager.Send(new CoreEventMessage(CoreEvent.StartGame), this);
+        }
       }
 
       base.Update(ticks);
@@ -47,6 +59,7 @@ namespace Chroma.States
         if (touch.State == TouchLocationState.Released)
         {
           wasTouched = true;
+          leftSideTouched = touch.Position.X < core.Renderer.ScreenWidth / 2;
         }
       }
     }

@@ -1,27 +1,54 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Chroma.Graphics;
+using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
   public abstract class PlatformActor : Actor
   {
+    protected Area area;
+
     public PlatformActor PreviousPlatform { get; set; }
     public PlatformActor NextPlatform { get; set; }
     public int LeftY { get; protected set; }
     public int RightY { get; protected set; }
 
-    public PlatformActor(Core core, Vector2 position) : base(core, position) 
+    public PlatformActor(Core core, Vector2 position, Area area) : base(core, position) 
     {
+      this.area = area;
       PreviousPlatform = null;
       NextPlatform = null;
     }
-
+      
     protected void DrawEdges()
     {
-      var grass = core.SpriteManager.GetSprite("edge_grass");
-      var earth = core.SpriteManager.GetSprite("edge_earth");
-      var earthBottom = core.SpriteManager.GetSprite("edge_earth_bottom");
+      Sprite top;
+      Sprite middle;
+      Sprite bottomEdge;
+      int edx, edy, tdx, tdy;
+
+      switch (area) {
+        default:
+        case Area.Jungle:
+          top = core.SpriteManager.GetSprite("edge_grass");
+          middle = core.SpriteManager.GetSprite("edge_earth");
+          bottomEdge = core.SpriteManager.GetSprite("edge_earth_bottom");
+          edx = 12;
+          edy = 0;
+          tdx = 1;
+          tdy = 9;
+          break;
+        case Area.Ruins:
+          top = core.SpriteManager.GetSprite("stone_edge");
+          middle = core.SpriteManager.GetSprite("bricks_edge");
+          bottomEdge = core.SpriteManager.GetSprite("edge_earth_bottom");
+          edx = 5;
+          edy = 6;
+          tdx = 0;
+          tdy = 6;
+          break;
+      }
 
       // Right edge
       if (NextPlatform == null || NextPlatform.LeftY > RightY)
@@ -32,18 +59,22 @@ namespace Chroma.Actors
         else
           bottom = GetBoundingBoxW().Bottom;
 
-        var i = bottom + 20;
-        var edge = earthBottom;
-        do
-        {
-          i -= edge.Height;
-          core.Renderer.DrawSpriteW(edge, 
-            new Vector2(GetBoundingBoxW().Right - 12, i));
-          edge = earth;
-        } while (i - edge.Height > RightY);
+        // Side
+        var i = RightY;
+        do {
+          core.Renderer.DrawSpriteW(middle, 
+            new Vector2(GetBoundingBoxW().Right - edx, i));
+          i += middle.Height - edy;
+        } while (i < bottom);
 
-        core.Renderer.DrawSpriteW(grass, 
-          new Vector2(GetBoundingBoxW().Right - 1, RightY - 9));
+        // Bottom
+        i = bottom - bottomEdge.Height + 20;
+        core.Renderer.DrawSpriteW(bottomEdge, 
+          new Vector2(GetBoundingBoxW().Right - edx, i));
+
+        // Top
+        core.Renderer.DrawSpriteW(top, 
+          new Vector2(GetBoundingBoxW().Right - tdx, RightY - tdy));
       }
 
       // Left edge
@@ -55,20 +86,26 @@ namespace Chroma.Actors
         else
           bottom = GetBoundingBoxW().Bottom;
 
-        var i = bottom + 20;
-        var edge = earthBottom;
-        do
-        {
-          i -= edge.Height;
-          core.Renderer.DrawSpriteW(edge, 
-            new Vector2(GetBoundingBoxW().Left - edge.Width + 12, i),
+        // Side
+        var i = LeftY;
+        do {
+          core.Renderer.DrawSpriteW(middle, 
+            new Vector2(GetBoundingBoxW().Left - middle.Width + edx, i),
             flip: SpriteFlip.Horizontal);
-          edge = earth;
-        } while (i - edge.Height > LeftY);
+          i += middle.Height - edy;
+        } while (i < bottom);
 
-        core.Renderer.DrawSpriteW(grass, 
-          new Vector2(GetBoundingBoxW().Left - grass.Width + 1, Y - 9), 
+        // Bottom
+        i = bottom - bottomEdge.Height + 20;
+        core.Renderer.DrawSpriteW(bottomEdge, 
+          new Vector2(GetBoundingBoxW().Left - bottomEdge.Width + edx, i),
           flip: SpriteFlip.Horizontal);
+
+        // Top
+        core.Renderer.DrawSpriteW(top, 
+          new Vector2(GetBoundingBoxW().Left - top.Width + tdx, LeftY - tdy),
+          flip: SpriteFlip.Horizontal);
+
       }
     }
   }

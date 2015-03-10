@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Chroma.Messages;
 using Chroma.Graphics;
+using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
@@ -10,15 +11,16 @@ namespace Chroma.Actors
     Down
   }
 
-  public class SlopedPlatformActor: PlatformActor
+  public abstract class SlopedPlatformActor: PlatformActor
   {
     public readonly int Sections;
     public readonly int Width;
     public readonly SlopeDirection Direction;
 
-    private readonly int dir;
+    protected readonly int dir;
 
-    public SlopedPlatformActor(Core core, Vector2 position, SlopeDirection direction, int sections = 1) : base(core, position)
+    public SlopedPlatformActor(Core core, Vector2 position, SlopeDirection direction, Area area, int sections = 1) : 
+    base(core, position, area)
     {
       Sections = sections;
       Width = sections * 33;
@@ -59,8 +61,19 @@ namespace Chroma.Actors
             Position.X + thisStepStart, 
             Position.Y + dir * i * stepHeight), 
           thisStepWidth, 
-          stepHeight
+          stepHeight,
+          area
         )), this);
+      }
+    }
+
+    public static SlopedPlatformActor Create(Core core, Vector2 position, SlopeDirection direction, Area area, int sections = 1)
+    {
+      switch (area)
+      {
+        default:
+        case Area.Jungle:
+          return new JungleSlopedPlatformActor(core, position, direction, area, sections);
       }
     }
       
@@ -71,27 +84,8 @@ namespace Chroma.Actors
 
       base.Draw();
     }
-
-    private void DrawGround() 
-    {
-      for (int i = 0; i < Sections; i++) 
-      {
-        var yPos = dir * i * 16;
-        if (Direction == SlopeDirection.Down)
-          yPos += 16;
-
-        core.Renderer.DrawSpriteW(
-          "slope",
-          new Vector2(Position.X + i * 33, Position.Y + yPos - 26),
-          flip: Direction == SlopeDirection.Up ? SpriteFlip.None : SpriteFlip.Horizontal
-        );
-        core.Renderer[50].DrawSpriteW(
-          "slope_grass",
-          new Vector2(Position.X + i * 33, Position.Y + yPos - 20),
-          flip: Direction == SlopeDirection.Up ? SpriteFlip.None : SpriteFlip.Horizontal
-        );
-      }
-    }
+      
+    protected abstract void DrawGround();
   }
 }
 

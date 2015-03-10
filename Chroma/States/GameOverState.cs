@@ -43,7 +43,7 @@ namespace Chroma.States
       core.Renderer.DrawTextS("Distance: " + core.gameResult.distance.ToString() + " m", new Vector2(45, 60), Color.White, 3);
 
       if (timeout == 0)
-        core.Renderer["fg"].DrawTextS("Tap to retry", new Vector2(45, 100), Color.White * (float)Math.Abs(Math.Sin((float)ticks / 10)), 2);
+        core.Renderer["fg"].DrawTextS("Tap to retry", new Vector2(45, 100), Color.White * ((1 + (float)Math.Sin((float)ticks / 10)) / 2f), 2);
 
       base.Draw();
     }

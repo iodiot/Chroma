@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Chroma.Graphics;
 using Chroma.States;
 using Chroma.Helpers;
+using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
@@ -20,7 +21,8 @@ namespace Chroma.Actors
       Right
     }
 
-    public PlankActor(Core core, Vector2 position, PlankOrigin origin = PlankOrigin.Middle) : base(core, position)
+    public PlankActor(Core core, Vector2 position, Area area, PlankOrigin origin = PlankOrigin.Middle) : 
+    base(core, position, area)
     {
       sprite = core.SpriteManager.GetSprite(
         (origin == PlankOrigin.Left) ? "plank_left" :

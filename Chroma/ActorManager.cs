@@ -6,17 +6,20 @@ using Chroma.Actors;
 using Chroma.Graphics;
 using Chroma.Helpers;
 using System.Diagnostics;
+using Chroma.States;
 
 namespace Chroma
 {
   public sealed class ActorManager
   {
     private readonly Core core;
+    private readonly PlayState playState;
     private List<Actor> actors, actorsToAdd, actorsToRemove;
 
-    public ActorManager(Core core)
+    public ActorManager(Core core, PlayState playState)
     {
       this.core = core;
+      this.playState = playState;
 
       actors = new List<Actor>();
       actorsToAdd = new List<Actor>();
@@ -73,7 +76,7 @@ namespace Chroma
 
     public void Draw()
     {
-      var tile = core.SpriteManager.GetSprite("earth");
+      var tile = playState.LevelGenerator.GetGroundSprite();
       var tileWidth = tile.Width;
       var tileHeight = tile.Height;
       foreach (var actor in actors)

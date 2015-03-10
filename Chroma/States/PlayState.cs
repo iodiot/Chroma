@@ -12,11 +12,11 @@ using Chroma.Gameplay;
 namespace Chroma.States
 {
 
-  public class GameStats
+  public class GameResult
   {
     public readonly int distance;
 
-    public GameStats(int distance) {
+    public GameResult(int distance) {
       this.distance = distance;
     }
   }
@@ -38,7 +38,7 @@ namespace Chroma.States
     public GameHudGui GameControls { get; private set; }
     public HealthGui HealthGui { get; set; }
 
-    private LevelGenerator LevelGenerator;
+    public LevelGenerator LevelGenerator;
     private PlayerActor player;
     private float levelDistance = 0;
 
@@ -49,8 +49,8 @@ namespace Chroma.States
       core.MessageManager.Subscribe(MessageType.AddActor, this);
       core.MessageManager.Subscribe(MessageType.RemoveActor, this);
 
-      ActorManager = new ActorManager(core);
-      LevelGenerator = new LevelGenerator(core, ActorManager, this.area);
+      ActorManager = new ActorManager(core, this);
+      LevelGenerator = LevelGenerator.Create(core, ActorManager, this.area);
     }
 
     public override void Load()
@@ -105,8 +105,6 @@ namespace Chroma.States
 
     public override void Draw()
     {
-      core.GraphicsDevice.Clear(new Color(17, 22, 42));
-
       LevelGenerator.DrawBackground();
       ActorManager.Draw();
 
@@ -160,7 +158,7 @@ namespace Chroma.States
     public void GameOver()
     {
       substate = SubState.GameOver;
-      core.gameResult = new GameStats(LevelGenerator.distanceMeters); 
+      core.gameResult = new GameResult(LevelGenerator.distanceMeters); 
       core.MessageManager.Send(new CoreEventMessage(CoreEvent.GameOver), this);
     }
   }

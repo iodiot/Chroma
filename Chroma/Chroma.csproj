@@ -188,13 +188,19 @@
     <Compile Include="Actors\PlankActor.cs" />
     <Compile Include="Actors\ItemActor.cs" />
     <Compile Include="Helpers\ScienceHelper.cs" />
-    <Compile Include="Gameplay\LevelGeneratorRatios.cs" />
-    <Compile Include="Gameplay\LevelGeneratorEncounters.cs" />
     <Compile Include="Graphics\ParallaxLayer.cs" />
     <Compile Include="Actors\ParallaxDecalActor.cs" />
     <Compile Include="Actors\SlimeActor.cs" />
     <Compile Include="States\GameOverState.cs" />
     <Compile Include="Messages\CoreEventMessage.cs" />
+    <Compile Include="Gameplay\JungleLevelGenerator.cs" />
+    <Compile Include="Gameplay\RuinsLevelGenerator.cs" />
+    <Compile Include="States\ProfileData.cs" />
+    <Compile Include="Actors\JungleFlatPlatformActor.cs" />
+    <Compile Include="Actors\JungleSlopedPlatformActor.cs" />
+    <Compile Include="Actors\RuinsFlatPlatformActor.cs" />
+    <Compile Include="Actors\ZapperActor.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

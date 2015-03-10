@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Chroma.Gameplay;
 
 namespace Chroma.Actors
 {
   public abstract class OneWayPlatform : PlatformActor
   {
-    public OneWayPlatform(Core core, Vector2 position) : base(core, position)
+    public OneWayPlatform(Core core, Vector2 position, Area area) : 
+    base(core, position, area)
     {
 
     }

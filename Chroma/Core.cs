@@ -39,7 +39,8 @@ namespace Chroma
 
     private readonly Stopwatch stopwatch;
 
-    public GameStats gameResult { get; set; }
+    public ProfileData profileData;
+    public GameResult gameResult;
 
     public Core(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
     {
@@ -62,8 +63,9 @@ namespace Chroma
       states = new Stack<State>();
 
       frameCounter = new FrameCounter();
-
       stopwatch = new Stopwatch();
+
+      profileData = new ProfileData();
 
       Debug.Print(String.Format("screen size: {0}x{1}", screenWidth, screenHeight));
     }
@@ -245,7 +247,7 @@ namespace Chroma
     private void Reset() 
     {
       ClearStates();
-      PushState(new PlayState(this, Area.Jungle));
+      PushState(new PlayState(this, profileData.CurrentArea));
       PushState(new MenuState(this));
       TrackTilt(true);
     }

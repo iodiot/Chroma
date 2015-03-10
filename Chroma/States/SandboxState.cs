@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using Chroma.Actors;
+using Chroma.Gameplay;
 
 namespace Chroma.States
 {
@@ -12,10 +13,10 @@ namespace Chroma.States
 
     public SandboxState(Core core) : base(core)
     {
-      actorManager = new ActorManager(core);
+      actorManager = new ActorManager(core, null);
 
       player = actorManager.Add(new PlayerActor(core, new Vector2(50, 50))) as PlayerActor;
-      actorManager.Add(new FlatPlatformActor(core, new Vector2(0, 100), 1000));
+      actorManager.Add(FlatPlatformActor.Create(core, new Vector2(0, 100), 1000, Area.Jungle));
     }
 
     public override void Update(int ticks)
