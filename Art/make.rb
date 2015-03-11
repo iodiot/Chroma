@@ -250,7 +250,7 @@ File.open("atlas.json", "w") do |map|
          enum.puts(enumLine + enumComment)
       end
 
-      imgs.sort! {|a, b| b.a <=> a.a}
+      imgs.sort! {|a, b| b.h <=> a.h}
 
       node = Node.new(0, 0, 1024, 2048)
       imgs.each do |b|
