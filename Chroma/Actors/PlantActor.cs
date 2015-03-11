@@ -6,6 +6,7 @@ using Chroma.Graphics;
 using Chroma.Messages;
 using Chroma.Gameplay;
 using Chroma.Helpers;
+using Chroma.StateMachines;
 
 namespace Chroma.Actors
 {
@@ -17,11 +18,20 @@ namespace Chroma.Actors
 
     private Sprite bush, leaf;
     private Animation stem, colar, head;
-    private int nextMoveIn = 0;
     private bool noHead = false;
     private bool movedCollider = false;
 
     private int animOffset;
+
+    enum PlantState {
+      Idle,
+      Aiming,
+      Shooting,
+      Dying
+    }
+    enum PlantEvent {
+    }
+    private StateMachine<PlantState, PlantEvent> sm;
 
     public PlantActor(Core core, Vector2 position, bool isSecondHead = false) : base(core, position)
     {
@@ -36,26 +46,41 @@ namespace Chroma.Actors
 
       bush = core.SpriteManager.GetSprite(SpriteName.plant_base);
       leaf = core.SpriteManager.GetSprite(SpriteName.plant_front_leaf);
+      stemPos = Vector2.Zero;
 
       stem = new Animation(loop: false);
 
       if (isSecondHead || ScienceHelper.ChanceRoll())
       {
-        stem.Add("live", new List<Sprite>
+        stem.Add("idle", new List<Sprite>
           {
-            core.SpriteManager.GetSprite(SpriteName.plant_stem1_1),
+            core.SpriteManager.GetSprite(SpriteName.plant_stem1_2)
+          });
+        stem.Add("aim", new List<Sprite>
+          {
+            core.SpriteManager.GetSprite(SpriteName.plant_stem1_3)
+          });
+        stem.Add("shoot", new List<Sprite>
+          {
             core.SpriteManager.GetSprite(SpriteName.plant_stem1_2),
-            core.SpriteManager.GetSprite(SpriteName.plant_stem1_3),
+            core.SpriteManager.GetSprite(SpriteName.plant_stem1_1)
           });
         headOffset = new Vector2(-16, -15);
       }
       else
       {
-        stem.Add("live", new List<Sprite>
+        stem.Add("idle", new List<Sprite>
           {
-            core.SpriteManager.GetSprite(SpriteName.plant_stem_1),
+            core.SpriteManager.GetSprite(SpriteName.plant_stem_2)
+          });
+        stem.Add("aim", new List<Sprite>
+          {
+            core.SpriteManager.GetSprite(SpriteName.plant_stem_3)
+          });
+        stem.Add("shoot", new List<Sprite>
+          {
             core.SpriteManager.GetSprite(SpriteName.plant_stem_2),
-            core.SpriteManager.GetSprite(SpriteName.plant_stem_3),
+            core.SpriteManager.GetSprite(SpriteName.plant_stem_1)
           });
         headOffset = new Vector2(-11, -11);
 
@@ -71,54 +96,83 @@ namespace Chroma.Actors
         }
       }
 
-      stem.Pong = true;
-      stem.Play("live");
-
-      stemPos = Position + new Vector2(18, -stem.GetCurrentFrame().Height);
 
       colar = new Animation(0.1f);
-      colar.Add("live", new List<Sprite> {
+      colar.Add("idle", new List<Sprite> {
         core.SpriteManager.GetSprite(SpriteName.plant_colar_1),
         core.SpriteManager.GetSprite(SpriteName.plant_colar_2),
         core.SpriteManager.GetSprite(SpriteName.plant_colar_3),
       });
-      colar.Play("live");
+      colar.Play("idle");
 
       head = new Animation(loop: false);
-      head.Add("shoot", new List<Sprite> {
-        core.SpriteManager.GetSprite(SpriteName.plant_head_1, color),
-        core.SpriteManager.GetSprite(SpriteName.plant_head_2, color),
-        core.SpriteManager.GetSprite(SpriteName.plant_head_3, color),
+      head.Add("aim", new List<Sprite> {
+        core.SpriteManager.GetSprite(SpriteName.plant_head_1, color)
       });
-      head.Add("live", new List<Sprite> {
+      head.Add("shoot", new List<Sprite> {
+        core.SpriteManager.GetSprite(SpriteName.plant_head_2, color),
+        core.SpriteManager.GetSprite(SpriteName.plant_head_3, color)
+      });
+      head.Add("idle", new List<Sprite> {
         core.SpriteManager.GetSprite(SpriteName.plant_head_2, color)
       });
-      head.Play("live");
+
+      sm = new StateMachine<PlantState, PlantEvent>();
+      sm.State(PlantState.Idle).IsInitial()
+        .AutoTransitionTo(PlantState.Aiming).After(ScienceHelper.GetRandom(60, 100));
+      sm.State(PlantState.Aiming).AutoTransitionTo(PlantState.Shooting).After(50);
+      sm.State(PlantState.Shooting).AutoTransitionTo(PlantState.Idle).After(25);
+      sm.State(PlantState.Dying); // Forced
+      sm.Start();
 
     }
 
     public override void Update(int ticks)
     {
 
+      //==================================
+
+      sm.Update(ticks);
+
+      if (sm.justEnteredState) {
+        switch (sm.currentState)
+        {
+          case PlantState.Idle:
+            core.DebugMessage("Plant: IDLE");
+            head.Play("idle");
+            stem.Play("idle");
+            break;
+          case PlantState.Aiming:
+            head.Play("aim");
+            stem.Play("aim");
+            break;
+          case PlantState.Shooting:
+            head.Play("shoot");
+            stem.Play("shoot");
+
+            // Only one shot per plant
+            sm.State(PlantState.Idle).autoTransition = false;
+            break;
+          case PlantState.Dying:
+            // TODO
+            break;
+        }
+      }
+
+      //==================================
+
       stem.Update(ticks);
       colar.Update(ticks);
       head.Update(ticks);
 
-      if (stem.Paused)
-      {
-        if (stem.JustStopped)
-          nextMoveIn = 50;
-        else
-        {
-          nextMoveIn--;
-          if (nextMoveIn == 0)
-            stem.Paused = false;
-        }
-      }
+      //==================================
 
+      if (stemPos == Vector2.Zero)
+        stemPos = Position + new Vector2(18, -stem.GetCurrentFrame().Height);
       var animTicks = ticks + animOffset;
       var wave = new Vector2((float)(Math.Sin(animTicks / 20) * 2), (float)(Math.Cos(animTicks / 17) * 2));
-      headPos = stemPos + stem.GetCurrentFrame().GetLink() + headOffset + wave;
+      headPos = stemPos + stem.GetCurrentFrame().GetLink() + headOffset + wave 
+        + new Vector2(sm.currentState == PlantState.Shooting ? -7 : 0, 0);
 
       if (!noHead)
       {
@@ -155,11 +209,15 @@ namespace Chroma.Actors
       {
         core.Renderer[4].DrawSpriteW(
           head.GetCurrentFrame(), 
-          headPos + new Vector2(-6, 2)
+          headPos + new Vector2(-6, 2) + new Vector2(sm.currentState == PlantState.Shooting ? -3 : 0, 0)
         );
       }
 
       base.Draw();
+    }
+
+    private void Shoot() 
+    {
     }
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)

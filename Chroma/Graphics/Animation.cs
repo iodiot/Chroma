@@ -85,16 +85,14 @@ namespace Chroma.Graphics
             Reverse = !Reverse;
             timeLine -= Speed * 2;
           }
-          else
-          { 
-            Reset();
-          }
-          if (!Loop) 
+          else if (!Loop) 
           {
             timeLine -= Speed;
             Paused = true;
             JustStopped = true;
           }
+          else
+            Reset();
         }
       }
       else
@@ -108,16 +106,15 @@ namespace Chroma.Graphics
             Reverse = !Reverse;
             timeLine += 2 * Speed;
           }
-          else
-          {
-            Reset();
-          }
-          if (!Loop) 
+          else if (!Loop) 
           {
             timeLine += Speed;
             Paused = true;
             JustStopped = true;
           }
+          else
+            Reset();
+
         }
       }
     }
