@@ -16,6 +16,8 @@ namespace Chroma.Graphics
     public int Y;
     public int Width;
     public int Height;
+    public int OffX;
+    public int OffY;
     public int LinkX;
     public int LinkY;
     public string TextureName;
@@ -45,6 +47,11 @@ namespace Chroma.Graphics
     public Vector2 GetLink()
     {
       return new Vector2(LinkX, LinkY);
+    }
+
+    public Vector2 GetOffset()
+    {
+      return new Vector2(OffX, OffY);
     }
   }
 
@@ -118,6 +125,13 @@ namespace Chroma.Graphics
         var y = sprite["y"];
         var width = sprite["width"];
         var height = sprite["height"];
+        var offX = 0;
+        var offY = 0;
+        if (sprite.ContainsKey("off-x"))
+        {
+          offX = sprite["off-x"];
+          offY = sprite["off-y"];
+        }
         var linkX = 0;
         var linkY = 0;
         if (sprite["link"] == "true")
@@ -128,7 +142,13 @@ namespace Chroma.Graphics
 
         sprites.Add(
           name,
-          new Sprite() { X = x, Y = y, Width = width, Height = height, TextureName = textureName, LinkX = linkX, LinkY = linkY }
+          new Sprite() {  
+            TextureName = textureName, 
+            X = x, Y = y, 
+            Width = width, Height = height,
+            OffX = offX, OffY = offY,
+            LinkX = linkX, LinkY = linkY 
+          }
         );
       }
     }

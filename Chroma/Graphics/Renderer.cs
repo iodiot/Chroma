@@ -314,7 +314,7 @@ namespace Chroma.Graphics
     {
       InternalDrawSprite(
         core.SpriteManager.GetTexture(sprite.TextureName),
-        position,
+        position + sprite.GetOffset(),
         new Rectangle(sprite.X, sprite.Y, sprite.Width, sprite.Height),
         tint ?? Color.White,
         rotation,
