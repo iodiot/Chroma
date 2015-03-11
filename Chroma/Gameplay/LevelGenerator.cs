@@ -161,7 +161,7 @@ namespace Chroma.Gameplay
 
         case Encounter.Plant:
           var newPlant = new PlantActor(core, position);
-          width += 36;
+          width += 70;
           actorManager.Add(newPlant);
           break;
 

@@ -28,13 +28,19 @@ namespace Chroma.Graphics
     plant_stem1_1,                     // has link |
     plant_stem1_2,                     // has link |
     plant_stem1_3,                     // has link |
+    plant_stem1_die,                   // has link |
     plant_stem_1,                      // has link |
     plant_stem_2,                      // has link |
     plant_stem_3,                      // has link |
+    plant_stem_die_1,                  // has link |
+    plant_stem_die_2,                  // has link |
+    plant_stem_die_3,                  // has link |
     plant_base,                                 // |
     plant_colar_1,                              // |
     plant_colar_2,                              // |
     plant_colar_3,                              // |
+    plant_colar_die_1,                          // |
+    plant_colar_die_2,                          // |
     plant_front_leaf,                           // |
     plant_head_1,                       // colored |
     plant_head_2,                       // colored |

@@ -47,6 +47,10 @@ namespace Chroma.StateMachines
         return this;
       }
 
+      public StateConfig ForcedOn(TEvent eventType) {
+        owner.forcedTransitions.Add(eventType, state);
+        return this;
+      }
     }
 
     //=================================================================
@@ -58,6 +62,8 @@ namespace Chroma.StateMachines
     public TState currentState { get; private set; }
     private StateConfig currentStateConfig = null;
 
+    protected readonly Dictionary<TEvent, TState> forcedTransitions;
+
     // Whether the current state was entered during this tick
     public bool justEnteredState {
       get { 
@@ -68,6 +74,7 @@ namespace Chroma.StateMachines
     public StateMachine()
     {
       states = new Dictionary<TState, StateConfig>();
+      forcedTransitions = new Dictionary<TEvent, TState>();
 
     }
 
@@ -119,15 +126,29 @@ namespace Chroma.StateMachines
       return true;
     }
 
+    public bool IsIn(TState state)
+    {
+      return EqualityComparer<TState>.Default.Equals(state, currentState);
+    }
+
     public bool Trigger(TEvent eventType)
     {
       if (currentStateConfig == null)
         return false;
-      if (!currentStateConfig.transitions.ContainsKey(eventType))
-        return false;
 
-      EnterState(currentStateConfig.transitions[eventType]);
-      return true;
+      if (currentStateConfig.transitions.ContainsKey(eventType))
+      {
+        EnterState(currentStateConfig.transitions[eventType]);
+        return true;
+      }
+
+      if (forcedTransitions.ContainsKey(eventType))
+      {
+        EnterState(forcedTransitions[eventType]);
+        return true;
+      }
+
+      return false;
     }
 
     public void Update(int ticks) {
@@ -143,7 +164,6 @@ namespace Chroma.StateMachines
         EnterState(currentStateConfig.autoTransitionTarget);
       }
 
-      // Handle animations
     }
 
   }
