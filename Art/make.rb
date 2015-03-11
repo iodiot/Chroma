@@ -1,5 +1,6 @@
 require "rubygems"
 require "rmagick"
+require "pathname"
 include Magick
 
 $maxx = 0
@@ -92,123 +93,182 @@ end
 imgs = Array.new
 
 File.open("atlas.json", "w") do |map|
-   files = Dir["_sprites/**/*.png"] 
-   files.each do |file|
-      name = File.basename(file, '.png').downcase
-      img = Image.read(file)[0]
-      imgn = nil
-      linkX = -1
-      linkY = -1
-      tileAid = false
+   File.open("SpriteNames.cs", "w") do |enum|
+      enum.puts("using System;")
+      enum.puts("")
+      enum.puts("    //-------------------------------\\\\")
+      enum.puts("    //    Generated automatically    \\\\")
+      enum.puts("    //         Do not modify         \\\\")
+      enum.puts("    //-------------------------------\\\\")
+      enum.puts("")
+      enum.puts("namespace Chroma.Graphics")
+      enum.puts("{")
+      enum.puts("  public enum SpriteName {")
+      enum.puts("")
 
-      npath = File.path(file).split('/').drop(1).unshift('_normals').join('/')
-      if File.exist?(npath)
-         imgn = Image.read(File.open(npath, 'r'))[0]
-      end
+      lastFilePath = nil
+      filesRoot = "_sprites"
 
-      # Link point
-      if name[0] == "@"
-         name[0] = ''
+      files = Dir["_sprites/**/*.png"] 
+      files.each_with_index do |file, fi|
 
-         linkColor = img.pixel_color(0, 0)
-         healColor = img.pixel_color(1, 0)
-         img.crop!(0, 1, img.columns, img.rows - 1);
-         (0..img.columns).each do |x|
-            (0..img.rows).each do |y|
-               pixel = img.pixel_color(x, y)
-               if pixel == linkColor
-                  img.pixel_color(x, y, healColor)
-                  linkX = x
-                  linkY = y
+         # Structural comments for enum
+         thisFilePath = File.dirname(file).split('/').drop(1)
+         if lastFilePath != thisFilePath
+            if thisFilePath == []
+               enum.puts("")
+               enum.puts("    // " + "=" * 45)
+            else
+               thisFilePath.each_with_index do |dirName, di|
+                  if lastFilePath == nil || lastFilePath[di] != dirName
+                     case di
+                        when 0
+                           enum.puts(" " * 48 + "// |") if fi > 0
+                           enum.puts("    // #{dirName.upcase} " + "=" * (44 - dirName.length))
+                        when 1
+                           enum.puts(" " * 48 + "// |")
+                           enum.puts("    // #{dirName} " + "-" * (44 - dirName.length))
+                        else
+                           comment = "    // " + '-' * (di - 2) + dirName
+                           comment += " " * (48 - comment.length) + "// |"
+                           enum.puts(comment)
+                     end
+                  end
                end
             end
-            break if linkX != -1
+            lastFilePath = thisFilePath
          end
-      end
 
-      # Tiled border aid
-      if name[0] == "#"
-         name[0] = ''
-         tileAid = true        
-      end
+         name = File.basename(file, '.png').downcase
+         img = Image.read(file)[0]
+         imgn = nil
+         linkX = -1
+         linkY = -1
+         tileAid = false
 
-      # Palette id
-      space = name.index(" ")
-      if space
-         colormap = name[space + 1..-1]
-         name = name[0, space]
+         npath = File.path(file).split('/').drop(1).unshift('_normals').join('/')
+         if File.exist?(npath)
+            imgn = Image.read(File.open(npath, 'r'))[0]
+         end
 
-         divider = colormap.index("|")
-         colornum = (colormap[divider + 1..-1]).to_i - 1
-         colormap = colormap[0, divider]
+         # Link point
+         if name[0] == "@"
+            name[0] = ''
 
-         cmap = Image.read(File.open("_sprites/color_map_" + colormap + ".png", 'r'))[0]
-
-         for i in 0..5
-            cname = name + "/" + $colors[i]
-            colored = img.clone
-            if i != colornum
-
-               (0..cmap.columns).each do |x|
-                  colored = colored.opaque_channel(cmap.pixel_color(x, colornum), cmap.pixel_color(x, i))
+            linkColor = img.pixel_color(0, 0)
+            healColor = img.pixel_color(1, 0)
+            img.crop!(0, 1, img.columns, img.rows - 1);
+            (0..img.columns).each do |x|
+               (0..img.rows).each do |y|
+                  pixel = img.pixel_color(x, y)
+                  if pixel == linkColor
+                     img.pixel_color(x, y, healColor)
+                     linkX = x
+                     linkY = y
+                  end
                end
-
+               break if linkX != -1
             end
-            b = Box.new(cname, colored, imgn, linkX, linkY, tileAid)
+         end
+
+         # Tiled border aid
+         if name[0] == "#"
+            name[0] = ''
+            tileAid = true        
+         end
+
+         # Palette id
+         space = name.index(" ")
+         if space
+            colormap = name[space + 1..-1]
+            name = name[0, space]
+
+            divider = colormap.index("|")
+            colornum = (colormap[divider + 1..-1]).to_i - 1
+            colormap = colormap[0, divider]
+
+            cmap = Image.read(File.open("_sprites/_AUX/color_map_" + colormap + ".png", 'r'))[0]
+
+            for i in 0..5
+               cname = name + "/" + $colors[i]
+               colored = img.clone
+               if i != colornum
+
+                  (0..cmap.columns).each do |x|
+                     colored = colored.opaque_channel(cmap.pixel_color(x, colornum), cmap.pixel_color(x, i))
+                  end
+
+               end
+               b = Box.new(cname, colored, imgn, linkX, linkY, tileAid)
+               imgs << b
+            end
+
+         else
+            b = Box.new(name, img, imgn, linkX, linkY, tileAid)
             imgs << b
          end
-
-      else
-         b = Box.new(name, img, imgn, linkX, linkY, tileAid)
-         imgs << b
+         
+         # Enum value
+         enumLine = "    #{name}" + ((fi == files.size - 1) ? "" : ",")
+         enumComment = ""
+         enumComment += " has link |" if linkX != -1
+         enumComment += " tiled |" if tileAid
+         enumComment += " colored |" if space
+         enumComment += " |" if enumComment == ""
+         enumComment = " " * (50 - enumLine.length - enumComment.length) + "//" + enumComment
+         enum.puts(enumLine + enumComment)
       end
-   end
 
-   imgs.sort! {|a, b| b.a <=> a.a}
-   
+      imgs.sort! {|a, b| b.a <=> a.a}
 
-   node = Node.new(0, 0, 512, 4096)
-   imgs.each do |b|
-      node.insert(b)
-   end
+      node = Node.new(0, 0, 512, 4096)
+      imgs.each do |b|
+         node.insert(b)
+      end
 
-   imgs.sort! {|a, b| a.name <=> b.name}
-   atlas = Image.new($maxx, $maxy) { self.background_color = "transparent" }
-   natlas = Image.new($maxx, $maxy) { self.background_color = "\#800080" }
-   
-   map.puts(
-"{
-\t\"image-path\": \"atlas.png\",
-\t\"width\": \"#{$maxx}\",
-\t\"height\": \"#{$maxy}\",
-\t\"sprites\": [")
-
-   imgs.each_with_index do |box, i| 
-      drawSprite(box, atlas, natlas)
-      map.puts("\t\t{")
-      map.puts("\t\t\t\"name\": \"#{box.name}\",")
-      map.puts("\t\t\t\"x\": \"#{box.x + $padding + (box.tileAid ? 1 : 0)}\",")
-      map.puts("\t\t\t\"y\": \"#{box.y + $padding + (box.tileAid ? 1 : 0)}\",")
-      map.puts("\t\t\t\"width\": \"#{box.w - 2 * $padding - (box.tileAid ? 2 : 0)}\",")
-      map.puts("\t\t\t\"height\": \"#{box.h - 2 * $padding - (box.tileAid ? 2 : 0)}\",")
+      imgs.sort! {|a, b| a.name <=> b.name}
+      atlas = Image.new($maxx, $maxy) { self.background_color = "transparent" }
+      natlas = Image.new($maxx, $maxy) { self.background_color = "\#800080" }
       
-      if box.linkX != -1 
-         map.puts("\t\t\t\"link\": \"true\",")
-         map.puts("\t\t\t\"link-x\": \"#{box.linkX}\",")
-         map.puts("\t\t\t\"link-y\": \"#{box.linkY}\",")
-      else
-         map.puts("\t\t\t\"link\": \"false\",")
+      map.puts(
+   "{
+   \t\"image-path\": \"atlas.png\",
+   \t\"width\": \"#{$maxx}\",
+   \t\"height\": \"#{$maxy}\",
+   \t\"sprites\": [")
+
+      imgs.each_with_index do |box, i| 
+         drawSprite(box, atlas, natlas)
+         map.puts("\t\t{")
+         map.puts("\t\t\t\"name\": \"#{box.name}\",")
+         map.puts("\t\t\t\"x\": \"#{box.x + $padding + (box.tileAid ? 1 : 0)}\",")
+         map.puts("\t\t\t\"y\": \"#{box.y + $padding + (box.tileAid ? 1 : 0)}\",")
+         map.puts("\t\t\t\"width\": \"#{box.w - 2 * $padding - (box.tileAid ? 2 : 0)}\",")
+         map.puts("\t\t\t\"height\": \"#{box.h - 2 * $padding - (box.tileAid ? 2 : 0)}\",")
+         
+         if box.linkX != -1 
+            map.puts("\t\t\t\"link\": \"true\",")
+            map.puts("\t\t\t\"link-x\": \"#{box.linkX}\",")
+            map.puts("\t\t\t\"link-y\": \"#{box.linkY}\",")
+         else
+            map.puts("\t\t\t\"link\": \"false\",")
+         end
+         #map.puts("\t\t\t\"normal-map\": \"#{box.hasNormals}\"")
+         if i == imgs.size - 1
+            map.puts("\t\t}")
+         else
+            map.puts("\t\t},")
+         end
       end
-      #map.puts("\t\t\t\"normal-map\": \"#{box.hasNormals}\"")
-      if i == imgs.size - 1
-         map.puts("\t\t}")
-      else
-         map.puts("\t\t},")
-      end
+
+      map.puts("\t]\n}")
+
+      atlas.write('atlas.png')
+      #natlas.write('atlas-normals.png')
+
+      enum.puts("    // ---------------------------------------------")
+      enum.puts("")
+      enum.puts("  }")
+      enum.puts("}")
    end
-
-   map.puts("\t]\n}")
-
-   atlas.write('atlas.png')
-   #natlas.write('atlas-normals.png')
 end;

@@ -141,6 +141,11 @@ namespace Chroma.Graphics
       return sprites[name].Clone();
     }
 
+    public Sprite GetSprite(SpriteName name, MagicColor? color = null)
+    {
+      return GetSprite(name.ToString(), color);
+    }
+
     public Texture2D GetTexture(string name)
     {
       Debug.Assert(textures.ContainsKey(name), String.Format("SpriteManager.GetTexture() : Texture {0} is missing", name));

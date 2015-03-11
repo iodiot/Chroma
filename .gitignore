@@ -15,3 +15,5 @@ Art/_make.app/Contents/MacOS/Application Stub
 Art/atlas.png
 
 Art/atlas.json
+
+Art/SpriteNames.cs
