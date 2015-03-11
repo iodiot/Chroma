@@ -41,6 +41,11 @@ namespace Chroma.Graphics
     {
       return this.MemberwiseClone() as Sprite;
     }
+
+    public Vector2 GetLink()
+    {
+      return new Vector2(LinkX, LinkY);
+    }
   }
 
   public sealed class SpriteManager

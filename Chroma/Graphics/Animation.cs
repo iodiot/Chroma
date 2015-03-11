@@ -7,14 +7,24 @@ namespace Chroma.Graphics
   {
     public string CurrentSequence { get; private set; }
     public float Speed { get; set; }
+    public bool Loop { get; set; }
+    public bool Paused { get; set; }
+    public bool Reverse { get; set; }
+    public bool Pong { get; set; }
+    public bool JustStopped { get; private set; }
 
     private readonly Dictionary<string, List<Sprite>> animations;
 
     private float timeLine;
 
-    public Animation(float speed = 0.2f)
+    public Animation(float speed = 0.2f, bool loop = true)
     {
       Speed = speed;
+      Loop = loop;
+      Paused = false;
+      Reverse = false;
+      Pong = false;
+      JustStopped = false;
       CurrentSequence = "";
 
       animations = new Dictionary<string, List<Sprite>>();
@@ -24,7 +34,10 @@ namespace Chroma.Graphics
 
     public void Reset()
     {
-      timeLine = 0;
+      if (!Reverse)
+        timeLine = 0;
+      else
+        timeLine = animations[CurrentSequence].Count - 1;
     }
 
     public void Add(string name, IEnumerable<Sprite> frames)
@@ -43,6 +56,8 @@ namespace Chroma.Graphics
     {
       Debug.Assert(animations[name] != null, String.Format("Animation.Play() : Sequence {0} is missing", name));
 
+      Paused = false;
+
       if (CurrentSequence == name)
         return;
 
@@ -54,13 +69,32 @@ namespace Chroma.Graphics
     {
       Debug.Assert(animations[CurrentSequence] != null, "Animation.InternalUpdate() : Current sequence is missing");
 
-      if (forward)
+      JustStopped = false;
+
+      if (Paused)
+        return;
+
+      if (forward ^ Reverse)
       {
         timeLine += Speed;
 
         if (timeLine >= animations[CurrentSequence].Count)
         {
-          Reset();
+          if (Pong)
+          {
+            Reverse = !Reverse;
+            timeLine -= Speed * 2;
+          }
+          else
+          { 
+            Reset();
+          }
+          if (!Loop) 
+          {
+            timeLine -= Speed;
+            Paused = true;
+            JustStopped = true;
+          }
         }
       }
       else
@@ -69,7 +103,21 @@ namespace Chroma.Graphics
 
         if (timeLine < 0f)
         {
-          timeLine = animations[CurrentSequence].Count - 1;
+          if (Pong)
+          {
+            Reverse = !Reverse;
+            timeLine += 2 * Speed;
+          }
+          else
+          {
+            Reset();
+          }
+          if (!Loop) 
+          {
+            timeLine += Speed;
+            Paused = true;
+            JustStopped = true;
+          }
         }
       }
     }

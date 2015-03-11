@@ -20,7 +20,9 @@ namespace Chroma.Actors
       this.spriteFlip = flip ? SpriteFlip.Horizontal : SpriteFlip.None;
 
       sprite = core.SpriteManager.GetSprite(spriteName);
+
       boundingBox = new Rectangle(0, 0, (int)(sprite.Width * scale), (int)(sprite.Height * scale));
+      //boundingBox = Rectangle.Empty;
 
       CanMove = false;
     }

@@ -102,6 +102,7 @@ namespace Chroma.Gameplay
       Slime,
       SlimeRoll,
       SlimeWalk,
+      Plant,
       // Ruins,
       Golem,
       Zapper
@@ -141,31 +142,37 @@ namespace Chroma.Gameplay
 
           #region Enemies
         case Encounter.Slime:
-          var newSlime = new SlimeActor(core, position, MagicManager.GetRandomColor(core, 0.2f), false);
+          var newSlime = new SlimeActor(core, position, MagicManager.GetRandomColor(0.2f), false);
           width += newSlime.GetBoundingBoxW().Width;
           actorManager.Add(newSlime);
           break;
 
         case Encounter.SlimeRoll:
-          var newSlimeRoller = new SlimeActor(core, position, MagicManager.GetRandomColor(core, 0.2f), true);
+          var newSlimeRoller = new SlimeActor(core, position, MagicManager.GetRandomColor(0.2f), true);
           width += newSlimeRoller.GetBoundingBoxW().Width;
           actorManager.Add(newSlimeRoller);
           break;
 
         case Encounter.SlimeWalk:
-          var newSlimeWalker = new SlimeWalkActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
+          var newSlimeWalker = new SlimeWalkActor(core, position, MagicManager.GetRandomColor(0.2f));
           width += newSlimeWalker.GetBoundingBoxW().Width;
           actorManager.Add(newSlimeWalker);
           break;
 
+        case Encounter.Plant:
+          var newPlant = new PlantActor(core, position);
+          width += 36;
+          actorManager.Add(newPlant);
+          break;
+
         case Encounter.Golem:
-          var newGolem = new GolemActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
+          var newGolem = new GolemActor(core, position, MagicManager.GetRandomColor(0.2f));
           width += newGolem.GetBoundingBoxW().Width;
           actorManager.Add(newGolem);
           break;
 
         case Encounter.Zapper:
-          var newZapper = new ZapperActor(core, position, MagicManager.GetRandomColor(core, 0.2f));
+          var newZapper = new ZapperActor(core, position, MagicManager.GetRandomColor(0.2f));
           actorManager.Add(newZapper);
           break;
           #endregion

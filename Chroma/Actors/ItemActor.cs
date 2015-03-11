@@ -26,7 +26,7 @@ namespace Chroma.Actors
       itemAnim.AddAndPlay("rotate", core.SpriteManager.GetFrames("heart_", new List<int> { 1, 1, 2, 3, 4 }));
 
       bubble = true;
-      color = MagicManager.GetRandomColor(core, 0.5f);
+      color = MagicManager.GetRandomColor(0.5f);
 
       CanFall = false;
       CanLick = false;

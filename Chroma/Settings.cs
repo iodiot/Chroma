@@ -5,11 +5,12 @@ namespace Chroma
   public sealed class Settings
   {
     public const float ScreenScale = 3.0f;
-    public const bool DrawBoundingBoxes = false;
-    public const bool DrawColliders = false;
-    public const bool DrawFps = true;
-    public const bool DrawActorsCount = true;
-    public const bool DrawDebugMessages = true;
+
+    public static bool DrawBoundingBoxes = false;
+    public static bool DrawColliders = false;
+    public static bool DrawFps = true;
+    public static bool DrawActorsCount = true;
+    public static bool DrawDebugMessages = true;
   }
 }
 

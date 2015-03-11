@@ -62,7 +62,7 @@ namespace Chroma.Actors
 
     public override void OnBoundingBoxTrigger(Actor other)
     {
-      if (other is PlatformActor || other is BoulderActor) // TODO: features!
+      if (other is PlatformActor || other is BoulderActor)
       {
         Explode();
       }

@@ -201,6 +201,7 @@
     <Compile Include="Actors\RuinsFlatPlatformActor.cs" />
     <Compile Include="Actors\ZapperActor.cs" />
     <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Actors\PlantActor.cs" />
     <Compile Include="Graphics\SpriteNames.cs" />
   </ItemGroup>
   <ItemGroup>

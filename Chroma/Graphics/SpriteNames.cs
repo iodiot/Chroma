@@ -25,6 +25,12 @@ namespace Chroma.Graphics
     golem_6,                            // colored |
                                                 // |
     // Plant ---------------------------------------
+    plant_stem1_1,                     // has link |
+    plant_stem1_2,                     // has link |
+    plant_stem1_3,                     // has link |
+    plant_stem_1,                      // has link |
+    plant_stem_2,                      // has link |
+    plant_stem_3,                      // has link |
     plant_base,                                 // |
     plant_colar_1,                              // |
     plant_colar_2,                              // |
@@ -33,12 +39,6 @@ namespace Chroma.Graphics
     plant_head_1,                       // colored |
     plant_head_2,                       // colored |
     plant_head_3,                       // colored |
-    plant_stem1_1,                              // |
-    plant_stem1_2,                              // |
-    plant_stem1_3,                              // |
-    plant_stem_1,                               // |
-    plant_stem_2,                               // |
-    plant_stem_3,                               // |
                                                 // |
     // Slime crawl ---------------------------------
     slime_crawl_1,                      // colored |
@@ -156,6 +156,8 @@ namespace Chroma.Graphics
     cp_arrows,                                  // |
     cp_checkers,                                // |
     cp_ring,                                    // |
+                                                // |
+    // Glow ----------------------------------------
     glow,                                       // |
     projectile,                         // colored |
                                                 // |

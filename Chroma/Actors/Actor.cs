@@ -156,11 +156,11 @@ namespace Chroma.Actors
 
     #endregion
 
-    protected void DropCoin() 
+    protected void DropCoin(float chance = 1f, Vector2? from = null) 
     {
-      if (ScienceHelper.ChanceRoll(1f))
+      if (ScienceHelper.ChanceRoll(chance))
       {
-        core.MessageManager.Send(new AddActorMessage(new CoinActor(core, this.Position, true)), this);
+        core.MessageManager.Send(new AddActorMessage(new CoinActor(core, from ?? Position, true)), this);
       } 
     }
   }

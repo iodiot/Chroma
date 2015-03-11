@@ -25,6 +25,9 @@ namespace Chroma.Gui
     
   public class GameHudGui : Gui
   {
+    // DEBUG
+    private bool stop = false;
+
     private PlayState playState;
     private PlayerActor player;
 
@@ -70,6 +73,10 @@ namespace Chroma.Gui
 
     public override void Update(int ticks)
     {
+      // DEBUG
+      if (stop)
+        player.Position.X -= 2.0f;
+
       base.Update(ticks);
     }
 
@@ -116,9 +123,21 @@ namespace Chroma.Gui
       {
 
         // Debug: stop
-        if (touch.Position.Y < core.Renderer.ScreenHeight / 2 && touch.State == TouchLocationState.Moved)
+        if (touch.Position.Y < core.Renderer.ScreenHeight / 2 && touch.Position.X > core.Renderer.ScreenWidth / 2 
+          && touch.State == TouchLocationState.Released)
         {
-          player.Position.X -= 1.9f;
+          stop = !stop;
+          core.DebugMessage(stop ? "[Stopped]" : "[Resumed]");
+        }
+
+        // Debug: show colliders
+        if (touch.Position.Y < core.Renderer.ScreenHeight / 2 && touch.Position.X < core.Renderer.ScreenWidth / 2 
+          && touch.State == TouchLocationState.Released)
+        {
+          Settings.DrawBoundingBoxes = !Settings.DrawBoundingBoxes;
+          Settings.DrawColliders = !Settings.DrawColliders;
+
+          core.DebugMessage(Settings.DrawBoundingBoxes ? "[Rectangles shown]" : "[Rectangles hidden]");
         }
 
         // Jump

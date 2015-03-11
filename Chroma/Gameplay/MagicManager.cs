@@ -28,9 +28,16 @@ namespace Chroma.Gameplay
       { MagicColor.Purple, Color.Magenta }
     };
 
-    public static MagicColor GetRandomColor(Core core, float chanceOfComplexColor = 0.5f)
+    public static MagicColor GetRandomColor(float chanceOfComplexColor = 0.5f, MagicColor? except = null)
     {
-      return (MagicColor)(ScienceHelper.GetRandom(1, 3) + (ScienceHelper.ChanceRoll(chanceOfComplexColor) ? 3 : 0));
+      MagicColor result;
+
+      do
+      {
+        result = (MagicColor)(ScienceHelper.GetRandom(1, 3) + (ScienceHelper.ChanceRoll(chanceOfComplexColor) ? 3 : 0));
+      } while (!(except == null || result != except));
+
+      return result;
     }
 
     public static MagicColor Mix(MagicColor first, MagicColor second) 

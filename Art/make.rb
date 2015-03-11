@@ -221,7 +221,7 @@ File.open("atlas.json", "w") do |map|
 
       imgs.sort! {|a, b| b.a <=> a.a}
 
-      node = Node.new(0, 0, 512, 4096)
+      node = Node.new(0, 0, 1024, 2048)
       imgs.each do |b|
          node.insert(b)
       end

@@ -52,7 +52,7 @@ namespace Chroma.Messages
 
     public void Send(Message message, object sender, int delay = 0)
     {
-      Debug.Print(String.Format("{0} {1}", message.ToString(), sender.ToString()));
+      //Debug.Print(String.Format("{0} {1}", message.ToString(), sender.ToString()));
       messagesDesc.Add(new MessageDesc() { Message = message, Sender = sender, Handle = String.Empty, Delay = delay });
     }
 
