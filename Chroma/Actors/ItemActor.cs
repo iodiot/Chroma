@@ -58,6 +58,11 @@ namespace Chroma.Actors
         core.Renderer[-1].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(14, 14), MagicManager.MagicColors[color] * 0.2f, new Vector2(0.7f));
         core.Renderer[2].DrawSpriteW(bubbleAnim.GetCurrentFrame(), Position, MagicManager.MagicColors[color]);
       }
+      else
+      {
+        core.Renderer[4].DrawSpriteW("glow", Position - new Vector2(4, 4), 
+          Color.Red * 0.20f, new Vector2(0.4f, 0.4f));
+      }
       core.Renderer[1].DrawSpriteW(itemAnim.GetCurrentFrame(), Position + new Vector2(4, 5));
 
       base.Draw();

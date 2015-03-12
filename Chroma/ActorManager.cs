@@ -283,8 +283,15 @@ namespace Chroma
               minY = y;
             }
           }
-            
-          v.Y = minY * Math.Sign(v.Y);
+           
+          if (actor.CanBounce)
+          {
+            v.Y = -v.Y * 0.5f;
+          }
+          else
+          {
+            v.Y = minY * Math.Sign(v.Y);
+          }
         }
       }
 
@@ -317,7 +324,14 @@ namespace Chroma
             return;
           }
 
-          v.X = minX * Math.Sign(v.X);
+          if (actor.CanBounce)
+          {
+            v.X = -v.X * 0.5f;
+          }
+          else
+          {
+            v.X = minX * Math.Sign(v.X);
+          }
         }
       }
 

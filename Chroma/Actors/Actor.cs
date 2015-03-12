@@ -26,6 +26,7 @@ namespace Chroma.Actors
     public bool CanMove { get; protected set; }
     public bool CanFall { get; protected set; }
     public bool CanLick { get; protected set; }
+    public bool CanBounce { get; protected set; }
 
     private readonly List<Collider> colliders;
     protected Rectangle boundingBox;

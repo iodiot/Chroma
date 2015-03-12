@@ -23,6 +23,7 @@ namespace Chroma.Actors
 
       CanMove = canMove;
       CanFall = canMove;
+      CanBounce = canMove;
 
       // Flying out
       if (CanMove) {
@@ -43,7 +44,7 @@ namespace Chroma.Actors
     public override void Draw()
     {
 
-      core.Renderer[4].DrawSpriteW("glow", new Vector2(Position.X - 8, Position.Y - 8), 
+      core.Renderer[4].DrawSpriteW("glow", Position - new Vector2(8, 8), 
         Color.Gold * 0.20f, new Vector2(0.4f, 0.4f));
 
       core.Renderer[5].DrawSpriteW(animation.GetCurrentFrame(), Position);
