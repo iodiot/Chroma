@@ -305,17 +305,24 @@ namespace Chroma.Graphics
       Vector2? scale = null, float rotation = 0.0f, 
       SpriteFlip flip = SpriteFlip.None)
     {
-      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position, tint ?? Color.White, scale, rotation, flip);
+      var sprite = core.SpriteManager.GetSprite(spriteName);
+      DrawSpriteS(sprite, position, tint ?? Color.White, scale, rotation, flip);
     }
 
     public void DrawSpriteS(Sprite sprite, Vector2 position, Color? tint = null,
       Vector2? scale = null, float rotation = 0.0f, 
       SpriteFlip flip = SpriteFlip.None)
     {
+      var offset = sprite.GetOffset();
+      if (scale != null)
+      {
+        offset.X *= ((Vector2)scale).X;
+        offset.Y *= ((Vector2)scale).Y;
+      }
       InternalDrawSprite(
         core.SpriteManager.GetTexture(sprite.TextureName),
-        position + sprite.GetOffset(),
-        new Rectangle(sprite.X, sprite.Y, sprite.Width, sprite.Height),
+        position + offset,
+        new Rectangle(sprite.X, sprite.Y, sprite.SrcWidth, sprite.SrcHeight),
         tint ?? Color.White,
         rotation,
         scale ?? new Vector2(1.0f, 1.0f),

@@ -73,7 +73,7 @@ namespace Chroma.Actors
             core.SpriteManager.GetSprite(SpriteName.plant_stem1_3),
             core.SpriteManager.GetSprite(SpriteName.plant_stem1_die)
           });
-        headOffset = new Vector2(-16, -15);
+        headOffset = new Vector2(-16, -13);
       }
       else
       {
@@ -200,7 +200,7 @@ namespace Chroma.Actors
         wave = new Vector2(stem.GetCurrentFrameNumber() * 10, 0);
 
       headPos = stemPos + stem.GetCurrentFrame().GetLink() + headOffset + wave 
-        + new Vector2(sm.IsIn(PlantState.Shooting) ? -7 : 0, 0);
+        + new Vector2(sm.IsIn(PlantState.Shooting) ? -5 : 0, 0);
 
       if (!sm.IsIn(PlantState.Dying))
       {
@@ -237,7 +237,7 @@ namespace Chroma.Actors
       {
         core.Renderer[4].DrawSpriteW(
           head.GetCurrentFrame(), 
-          headPos + new Vector2(-6, 2) + new Vector2(sm.currentState == PlantState.Shooting ? -3 : 0, 0)
+          headPos + new Vector2(-6, 2) + new Vector2(sm.currentState == PlantState.Shooting ? -4 : 0, 0)
         );
       }
 

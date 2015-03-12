@@ -10,7 +10,7 @@ $padding = 1
 $colors = ['Red', 'Yellow', 'Blue', 'Orange', 'Green', 'Purple']
 
 class Box
-   def initialize(name, img, imgn, offX, offY, linkX = -1, linkY = -1, tileAid = false) 
+   def initialize(name, img, imgn, offX, offY, origW, origH, linkX = -1, linkY = -1, tileAid = false) 
       @name, @img, @imgn = name, img, imgn
       @linkX = linkX
       @linkY = linkY
@@ -22,9 +22,11 @@ class Box
       @x = @y = 0
       @offX = offX
       @offY = offY
+      @origW = origW
+      @origH = origH
    end 
    attr_reader :w, :h, :a, :name, :img, :imgn, :hasNormals, :x, :y, 
-               :linkX, :linkY, :tileAid, :offX, :offY
+               :linkX, :linkY, :tileAid, :offX, :offY, :origW, :origH
    attr_writer :x, :y
 end
    
@@ -149,6 +151,8 @@ File.open("atlas.json", "w") do |map|
          linkY = -1
          offX = 0
          offY = 0
+         origW = img.columns
+         origH = img.rows
          tileAid = false
 
          npath = File.path(file).split('/').drop(1).unshift('_normals').join('/')
@@ -182,30 +186,23 @@ File.open("atlas.json", "w") do |map|
             tileAid = true        
          end
 
-         # Trim
-         noTrim = false
-         if name[0] == "^"
-            name[0] = ''
-            noTrim = true        
-         else
-            # Trim X
-            img = img.splice(img.columns, 0, 1, 0, "red")
-            offX = img.columns
-            img.border!(1, 1, "transparent")
-            img.trim!
-            offX -= img.columns
-            img = img.chop(img.columns - 1, 0, 1, 0)
-            # Trim Y
-            img = img.splice(0, img.rows, 0, 1, "red")
-            offY = img.rows
-            img.border!(1, 1, "transparent")
-            img.trim!
-            offY -= img.rows
-            img = img.chop(0, img.rows - 1, 0, 1)
-            # Trim rest
-            img.border!(1, 1, "transparent")
-            img.trim!
-         end
+         # Trim X
+         img = img.splice(img.columns, 0, 1, 0, "red")
+         offX = img.columns
+         img.border!(1, 1, "transparent")
+         img.trim!
+         offX -= img.columns
+         img = img.chop(img.columns - 1, 0, 1, 0)
+         # Trim Y
+         img = img.splice(0, img.rows, 0, 1, "red")
+         offY = img.rows
+         img.border!(1, 1, "transparent")
+         img.trim!
+         offY -= img.rows
+         img = img.chop(0, img.rows - 1, 0, 1)
+         # Trim rest
+         img.border!(1, 1, "transparent")
+         img.trim!
 
          # Palette id
          space = name.index(" ")
@@ -229,12 +226,12 @@ File.open("atlas.json", "w") do |map|
                   end
 
                end
-               b = Box.new(cname, colored, imgn, offX, offY, linkX, linkY, tileAid)
+               b = Box.new(cname, colored, imgn, offX, offY, origW, origH, linkX, linkY, tileAid)
                imgs << b
             end
 
          else
-            b = Box.new(name, img, imgn, offX, offY, linkX, linkY, tileAid)
+            b = Box.new(name, img, imgn, offX, offY, origW, origH, linkX, linkY, tileAid)
             imgs << b
          end
          
@@ -243,7 +240,6 @@ File.open("atlas.json", "w") do |map|
          enumComment = ""
          enumComment += " has link |" if linkX != -1
          enumComment += " tiled |" if tileAid
-         enumComment += " no trim |" if noTrim
          enumComment += " colored |" if space
          enumComment += " |" if enumComment == ""
          enumComment = " " * (50 - enumLine.length - enumComment.length) + "//" + enumComment
@@ -278,6 +274,8 @@ File.open("atlas.json", "w") do |map|
          map.puts("\t\t\t\"height\": \"#{box.h - 2 * $padding - (box.tileAid ? 2 : 0)}\",")
          map.puts("\t\t\t\"off-x\": \"#{box.offX}\",")
          map.puts("\t\t\t\"off-y\": \"#{box.offY}\",")
+         map.puts("\t\t\t\"full-width\": \"#{box.origW}\",")
+         map.puts("\t\t\t\"full-height\": \"#{box.origH}\",")
          
          if box.linkX != -1 
             map.puts("\t\t\t\"link\": \"true\",")

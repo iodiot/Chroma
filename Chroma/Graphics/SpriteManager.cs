@@ -14,6 +14,8 @@ namespace Chroma.Graphics
   {
     public int X;
     public int Y;
+    public int SrcWidth;
+    public int SrcHeight;
     public int Width;
     public int Height;
     public int OffX;
@@ -25,17 +27,17 @@ namespace Chroma.Graphics
     public Sprite ClampWidth(int maxWidth)
     {
       var result = Clone();
-      result.Width = Math.Min(Width, maxWidth);
+      result.SrcWidth = Math.Min(SrcWidth, maxWidth);
       return result;
     }
 
     public Sprite Reduce(int left, int top, int right, int bottom)
     {
       var result = Clone();
-      result.X += Math.Min(left, Width);
-      result.Y += Math.Min(top, Height);
-      result.Width = Math.Max(Width - left - right, 0);
-      result.Height = Math.Max(Height - top - bottom, 0);
+      result.X += Math.Min(left, SrcWidth);
+      result.Y += Math.Min(top, SrcHeight);
+      result.SrcWidth = Math.Max(SrcWidth - left - right, 0);
+      result.SrcHeight = Math.Max(SrcHeight - top - bottom, 0);
       return result;
     }
 
@@ -86,7 +88,7 @@ namespace Chroma.Graphics
       AddTexture("one", OnePixel);
       AddTexture("font", Font);
 
-      OnePixelSprite = new Sprite() { Width = 1, Height = 1, TextureName = "one" };
+      OnePixelSprite = new Sprite() { SrcWidth = 1, SrcHeight = 1, TextureName = "one" };
     }
 
     public void Unload()
@@ -125,6 +127,15 @@ namespace Chroma.Graphics
         var y = sprite["y"];
         var width = sprite["width"];
         var height = sprite["height"];
+
+        var fullWidth = width;
+        var fullHeight = height;
+        if (sprite.ContainsKey("full-width"))
+        {
+          fullWidth = sprite["full-width"];
+          fullHeight = sprite["full-height"];
+        }
+
         var offX = 0;
         var offY = 0;
         if (sprite.ContainsKey("off-x"))
@@ -132,6 +143,7 @@ namespace Chroma.Graphics
           offX = sprite["off-x"];
           offY = sprite["off-y"];
         }
+
         var linkX = 0;
         var linkY = 0;
         if (sprite["link"] == "true")
@@ -145,7 +157,8 @@ namespace Chroma.Graphics
           new Sprite() {  
             TextureName = textureName, 
             X = x, Y = y, 
-            Width = width, Height = height,
+            SrcWidth = width, SrcHeight = height,
+            Width = fullWidth, Height = fullHeight,
             OffX = offX, OffY = offY,
             LinkX = linkX, LinkY = linkY 
           }
@@ -209,8 +222,8 @@ namespace Chroma.Graphics
       var sprite = new Sprite() {
         X = (n % CharsPerRow) * CharWidth,
         Y = (n / CharsPerRow) * CharHeight,
-        Width = CharWidth,
-        Height = CharHeight,
+        SrcWidth = CharWidth,
+        SrcHeight = CharHeight,
         TextureName = "font"
       };
 

@@ -64,9 +64,9 @@ namespace Chroma.Actors
       var textureData = core.SpriteManager.GetTextureData(sprite.TextureName);
       var random = new Random();
 
-      for (var y = sprite.Y; y < sprite.Y + sprite.Height; ++y)
+      for (var y = sprite.Y; y < sprite.Y + sprite.SrcHeight; ++y)
       {
-        for (var x = sprite.X; x < sprite.X + sprite.Width; ++x)
+        for (var x = sprite.X; x < sprite.X + sprite.SrcWidth; ++x)
         {
           var color = textureData[x + y * texture.Width];
 
@@ -77,7 +77,7 @@ namespace Chroma.Actors
 
           var p = new Particle();
 
-          p.Position = position + new Vector2(x - sprite.X, y - sprite.Y);
+          p.Position = position + new Vector2(x - sprite.X, y - sprite.Y) + sprite.GetOffset();
           p.Color = color;
           p.Ttl = 100 + random.Next() % 25;
           p.Sprite = core.SpriteManager.OnePixelSprite;

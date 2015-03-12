@@ -172,14 +172,14 @@ namespace Chroma.Graphics
     water_surface_edge,                   // tiled |
                                                 // |
     // HUD =========================================
-    gem_blue,                           // no trim |
-    gem_blue_active,                    // no trim |
-    gem_red,                            // no trim |
-    gem_red_active,                     // no trim |
-    gem_yellow,                         // no trim |
-    gem_yellow_active,                  // no trim |
     btn_jump,                                   // |
     btn_jump_pressed,                           // |
+    gem_blue,                                   // |
+    gem_blue_active,                            // |
+    gem_red,                                    // |
+    gem_red_active,                             // |
+    gem_yellow,                                 // |
+    gem_yellow_active,                          // |
     pad_base,                                   // |
                                                 // |
     // OBJECTS =====================================
@@ -196,10 +196,10 @@ namespace Chroma.Graphics
     coin_3,                                     // |
     coin_4,                                     // |
     // Heart                                    // |
-    heart_1,                            // no trim |
-    heart_2,                            // no trim |
-    heart_3,                            // no trim |
-    heart_4,                            // no trim |
+    heart_1,                                    // |
+    heart_2,                                    // |
+    heart_3,                                    // |
+    heart_4,                                    // |
                                                 // |
     // Obstacles -----------------------------------
     boulder_1,                                  // |
