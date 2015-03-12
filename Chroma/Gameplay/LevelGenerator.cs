@@ -219,7 +219,7 @@ namespace Chroma.Gameplay
       layer.LoadTape(tape);
     }
 
-    public void DrawBackground()
+    public virtual void DrawBackground()
     {
       core.GraphicsDevice.Clear(bgColor);
 

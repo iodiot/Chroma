@@ -256,9 +256,10 @@ namespace Chroma.Actors
         core.SpriteManager.GetSprite(SpriteName.pellet_3, color),
       });
       var pellet = new FragmentActor(core, headPos + new Vector2(-8, 8), anim);
-      pellet.Velocity.X = -4;
+      pellet.Velocity.X = ScienceHelper.GetRandom(-5, -2);
       pellet.Velocity.Y = 0;
       pellet.hurtPlayer = true;
+      pellet.zIndex = 5;
       core.MessageManager.Send(new AddActorMessage(pellet), this);
     }
 

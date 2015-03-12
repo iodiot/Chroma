@@ -35,7 +35,7 @@ namespace Chroma
     private readonly Stack<State> states;
 
     private FrameCounter frameCounter;
-    private int ticks = 0;
+    public int Ticks { get; private set; }
 
     private readonly Stopwatch stopwatch;
 
@@ -44,6 +44,8 @@ namespace Chroma
 
     public Core(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
     {
+      Ticks = 0;
+
       debugMessages = new List<Pair<string, int>>();
       GraphicsDevice = graphicsDevice;
 
@@ -131,7 +133,7 @@ namespace Chroma
     public void Update(GameTime gameTime)
     {
 
-      TimerManager.Update(ticks);
+      TimerManager.Update(Ticks);
 
       foreach (var message in debugMessages) 
       {
@@ -145,20 +147,20 @@ namespace Chroma
 
       foreach (State state in states)
       {
-        state.Update(ticks);
+        state.Update(Ticks);
       }
 
-      MessageManager.Update(ticks);
-      Renderer.Update(ticks);
+      MessageManager.Update(Ticks);
+      Renderer.Update(Ticks);
 
       // -------------------------------------
 
-      ++ticks;
+      ++Ticks;
     }
 
     public int GetTicks()
     {
-      return ticks;
+      return Ticks;
     }
 
     public void DebugMessage(string message)

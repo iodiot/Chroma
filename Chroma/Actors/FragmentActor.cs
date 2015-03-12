@@ -14,6 +14,7 @@ namespace Chroma.Actors
     private Animation animation;
 
     public bool hurtPlayer = false;
+    public int zIndex = 0;
 
     public FragmentActor(Core core, Vector2 position, Sprite sprite) : base(core, position)
     {
@@ -59,7 +60,7 @@ namespace Chroma.Actors
     public override void Draw()
     {
       var sprite = (this.sprite == null) ? animation.GetCurrentFrame() : this.sprite;
-      core.Renderer.DrawSpriteW(sprite, Position);
+      core.Renderer[zIndex].DrawSpriteW(sprite, Position);
       base.Draw();
     }
 

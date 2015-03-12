@@ -11,6 +11,7 @@ namespace Chroma.Graphics
     private Core core;
     private float parallax;
     private int y;
+    private int zIndex;
 
     private string[] tape;
     private int tapePos;
@@ -20,11 +21,12 @@ namespace Chroma.Graphics
     private Vector2 screenPos;
     private int dX = 0;
 
-    public ParallaxLayer(Core core, int y,  float parallax)
+    public ParallaxLayer(Core core, int y,  float parallax, int zIndex = 0)
     {
       this.core = core;
       this.parallax = parallax;
       this.y = y;
+      this.zIndex = zIndex;
 
       onScreen = new List<Sprite>();
       screenPos = new Vector2(0, y);
@@ -64,7 +66,7 @@ namespace Chroma.Graphics
       var x = screenPos.X - (core.deviceTilt + 1.5f) * 20 * parallax;
       foreach (var s in onScreen)
       {
-        core.Renderer["bg"].DrawSpriteS(s, new Vector2(x, y));
+        core.Renderer["bg", zIndex].DrawSpriteS(s, new Vector2(x, y));
         x += s.Width;
       }
     }

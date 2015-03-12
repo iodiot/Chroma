@@ -21,10 +21,10 @@ namespace Chroma.Gameplay
       bgColor = new Color(17, 22, 42);
 
       BG = new List<ParallaxLayer>();
-      BG.Add(new ParallaxLayer(core, 31, 0.1f));
-      BG.Add(new ParallaxLayer(core, 31, 0.2f));
-      BG.Add(new ParallaxLayer(core, 17, 0.5f));
-      BG.Add(new ParallaxLayer(core, 0, 0.7f));
+      BG.Add(new ParallaxLayer(core, 31, 0.1f, 1));
+      BG.Add(new ParallaxLayer(core, 31, 0.2f, 2));
+      BG.Add(new ParallaxLayer(core, 17, 0.5f, 3));
+      BG.Add(new ParallaxLayer(core, 0, 0.7f, 4));
 
       LoadBGTape(1, new string[] { "trees_l1" });
       LoadBGTape(2, new string[] { "trees_l2" });
@@ -35,6 +35,12 @@ namespace Chroma.Gameplay
     public override Sprite GetGroundSprite()
     {
       return core.SpriteManager.GetSprite("earth");
+    }
+
+    public override void DrawBackground()
+    {
+
+      base.DrawBackground();
     }
 
     protected override void StartLevel()
