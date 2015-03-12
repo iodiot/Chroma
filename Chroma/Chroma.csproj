@@ -205,6 +205,7 @@
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Actors\PlantActor.cs" />
     <Compile Include="Graphics\SpriteNames.cs" />
+    <Compile Include="Actors\FragmentActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

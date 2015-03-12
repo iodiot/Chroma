@@ -58,7 +58,7 @@ namespace Chroma.Gameplay
           SetRatioOf(LevelModule.Pond, 10);
 
           SetRatioOf(Encounter.None, 100);
-          SetRatioOf(Encounter.Plant, 5);
+          SetRatioOf(Encounter.Plant, 30);
           SetRatioOf(Encounter.Slime, 20);
           SetRatioOf(Encounter.Bridge, 2);
           SetRatioOf(Encounter.Boulder, 2);

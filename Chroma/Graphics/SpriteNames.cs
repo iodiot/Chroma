@@ -35,6 +35,9 @@ namespace Chroma.Graphics
     plant_stem_die_1,                  // has link |
     plant_stem_die_2,                  // has link |
     plant_stem_die_3,                  // has link |
+    pellet_1,                           // colored |
+    pellet_2,                           // colored |
+    pellet_3,                           // colored |
     plant_base,                                 // |
     plant_colar_1,                              // |
     plant_colar_2,                              // |

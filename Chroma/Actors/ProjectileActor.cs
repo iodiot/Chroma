@@ -47,7 +47,7 @@ namespace Chroma.Actors
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-      if (!(other is ProjectileActor || other is CoinActor || other is PlayerActor || other is ItemActor))
+      if (!(other is ProjectileActor || other is CoinActor || other is PlayerActor || other is ItemActor || other is FragmentActor))
       {
         Explode();
       }

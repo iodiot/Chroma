@@ -25,10 +25,9 @@ namespace Chroma.Actors
       this.Position.Y -= 55;
 
       ballSprites = new Dictionary<int, Sprite>();
-      for (var i = 1; i <= 3; i++)
-      {
-        ballSprites.Add(i, core.SpriteManager.GetSprite("zapper_ball_" + i.ToString()));
-      }
+      ballSprites.Add(1, core.SpriteManager.GetSprite(SpriteName.zapper_ball_1));
+      ballSprites.Add(2, core.SpriteManager.GetSprite(SpriteName.zapper_ball_2));
+      ballSprites.Add(3, core.SpriteManager.GetSprite(SpriteName.zapper_ball_3));
 
       balls = new List<Vector3>();
       for (var i = 0; i < N_BALLS; i++)
@@ -86,6 +85,15 @@ namespace Chroma.Actors
       if (other is ProjectileActor && ((ProjectileActor)other).color == this.color)
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
+
+        for (var i = 0; i < N_BALLS; i++)
+        {
+          var ball = balls[i];
+          var z = (int)(Math.Ceiling(ball.Z + 3) / 2);
+          z = Math.Min(Math.Max(z, 1), 3);
+
+          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, Position + ball.XY(), ballSprites[z])), this);
+        }
 
         DropCoin();
       }

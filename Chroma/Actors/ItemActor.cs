@@ -31,6 +31,7 @@ namespace Chroma.Actors
       CanFall = false;
       CanLick = false;
       CanMove = true;
+      CanBounce = true;
 
       animOffset = ScienceHelper.GetRandom(0, 10000);
 

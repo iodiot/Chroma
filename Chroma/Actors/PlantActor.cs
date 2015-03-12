@@ -181,6 +181,9 @@ namespace Chroma.Actors
         }
       }
 
+      if (sm.IsIn(PlantState.Shooting) && sm.TicksInState == 10)
+        Shoot();
+
       //==================================
 
       stem.Update(ticks);
@@ -237,7 +240,7 @@ namespace Chroma.Actors
       {
         core.Renderer[4].DrawSpriteW(
           head.GetCurrentFrame(), 
-          headPos + new Vector2(-6, 2) + new Vector2(sm.currentState == PlantState.Shooting ? -4 : 0, 0)
+          headPos + new Vector2(-7, 4) + new Vector2(sm.currentState == PlantState.Shooting ? -4 : 0, 0)
         );
       }
 
@@ -246,6 +249,17 @@ namespace Chroma.Actors
 
     private void Shoot() 
     {
+      var anim = new Animation();
+      anim.Add("live", new List<Sprite> {
+        core.SpriteManager.GetSprite(SpriteName.pellet_1, color),
+        core.SpriteManager.GetSprite(SpriteName.pellet_2, color),
+        core.SpriteManager.GetSprite(SpriteName.pellet_3, color),
+      });
+      var pellet = new FragmentActor(core, headPos + new Vector2(-8, 8), anim);
+      pellet.Velocity.X = -4;
+      pellet.Velocity.Y = 0;
+      pellet.hurtPlayer = true;
+      core.MessageManager.Send(new AddActorMessage(pellet), this);
     }
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)

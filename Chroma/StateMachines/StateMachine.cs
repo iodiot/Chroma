@@ -55,7 +55,7 @@ namespace Chroma.StateMachines
 
     //=================================================================
 
-    private int ticksInState = 0;
+    public int TicksInState { get; private set; }
 
     private readonly Dictionary<TState, StateConfig> states;
     private TState initialState;
@@ -67,7 +67,7 @@ namespace Chroma.StateMachines
     // Whether the current state was entered during this tick
     public bool justEnteredState {
       get { 
-        return (ticksInState == 1); 
+        return (TicksInState == 1); 
       }
     }
 
@@ -75,7 +75,7 @@ namespace Chroma.StateMachines
     {
       states = new Dictionary<TState, StateConfig>();
       forcedTransitions = new Dictionary<TEvent, TState>();
-
+      TicksInState = 0;
     }
 
     // Configuration --------------------------------------------------
@@ -122,7 +122,7 @@ namespace Chroma.StateMachines
         
       currentState = state;
       currentStateConfig = states[state];
-      ticksInState = 0;
+      TicksInState = 0;
       return true;
     }
 
@@ -152,14 +152,14 @@ namespace Chroma.StateMachines
     }
 
     public void Update(int ticks) {
-      ticksInState++;
+      TicksInState++;
 
       if (currentStateConfig == null)
         return;
 
       // Handle autotransition
       if (currentStateConfig.autoTransition && currentStateConfig.autoDelay > 0 &&
-          ticksInState >= currentStateConfig.autoDelay)
+          TicksInState >= currentStateConfig.autoDelay)
       {
         EnterState(currentStateConfig.autoTransitionTarget);
       }
