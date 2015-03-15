@@ -12,14 +12,14 @@ namespace Chroma.Actors
     private readonly float scale;
     private Sprite sprite;
 
-    public DecalActor(Core core, Vector2 position, string spriteName, string layer = "", int depth = 0, bool flip = false, float scale = 1) : base(core, position)
+    public DecalActor(Core core, Vector2 position, Sprite sprite, string layer = "", int depth = 0, bool flip = false, float scale = 1) : base(core, position)
     {
       this.layer = layer;
       this.depth = depth;
       this.scale = scale;
       this.spriteFlip = flip ? SpriteFlip.Horizontal : SpriteFlip.None;
 
-      sprite = core.SpriteManager.GetSprite(spriteName);
+      this.sprite = sprite;
 
       boundingBox = new Rectangle(0, 0, (int)(sprite.Width * scale), (int)(sprite.Height * scale));
       //boundingBox = Rectangle.Empty;

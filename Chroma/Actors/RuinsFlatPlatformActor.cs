@@ -21,38 +21,36 @@ namespace Chroma.Actors
       // Vines
       if (ScienceHelper.ChanceRoll(0.5f))
       {
-        var x = Position.X + ScienceHelper.GetRandom(4, width - 12);
-        var vine = ScienceHelper.GetRandom(1, 4);
+        var n = ScienceHelper.GetRandom(1, 4);
+        var vine = core.SpriteManager.GetSprite("vine_" + n.ToString());
+        var x = Position.X + ScienceHelper.GetRandom(4, width - vine.Width);
         core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
-              new Vector2(x, Position.Y),
-              "vine_" + vine.ToString(),
-              flip: ScienceHelper.ChanceRoll(0.5f),
-              depth: 10
-            )), this);
+          new Vector2(x, Position.Y),
+          vine,
+          flip: ScienceHelper.ChanceRoll(0.5f),
+          depth: 10
+        )), this);
         if (ScienceHelper.ChanceRoll(0.3f))
         {
           x += 8;
-          var vine2 = ScienceHelper.GetRandom(1, 4);
-          while (vine == vine2)
-          {
-            vine2 = ScienceHelper.GetRandom(1, 4);
-          }
+          var m = ScienceHelper.GetRandom(1, 4);
+          while (m == n) m = ScienceHelper.GetRandom(1, 4);
+          var vine2 = core.SpriteManager.GetSprite("vine_" + m.ToString());
           core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
-                new Vector2(x, Position.Y),
-                "vine_" + vine2.ToString(),
-                flip: ScienceHelper.ChanceRoll(0.5f),
-                depth: 10
-              )), this);
+            new Vector2(x, Position.Y),
+            vine2,
+            flip: ScienceHelper.ChanceRoll(0.5f),
+            depth: 10
+          )), this);
         }
       }
       else
       {
-
-        var x = Position.X + ScienceHelper.GetRandom(4, width - 12);
-        var leaves = ScienceHelper.GetRandom(1, 3);
+        var leaves = core.SpriteManager.GetSprite("leaves_" + ScienceHelper.GetRandom(1, 3).ToString());
+        var x = Position.X + ScienceHelper.GetRandom(2, width - leaves.Width - 2);
         core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
           new Vector2(x, Position.Y),
-          "leaves_" + leaves.ToString(),
+          leaves,
           flip: ScienceHelper.ChanceRoll(0.5f),
           depth: 10
         )), this);

@@ -74,6 +74,8 @@ namespace Chroma.Actors
         default:
         case Area.Jungle:
           return new JungleSlopedPlatformActor(core, position, direction, area, sections);
+        case Area.Ruins:
+          return new RuinsSlopedPlatformActor(core, position, direction, area, sections);
       }
     }
       

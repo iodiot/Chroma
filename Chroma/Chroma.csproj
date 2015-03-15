@@ -191,7 +191,6 @@
     <Compile Include="Actors\ItemActor.cs" />
     <Compile Include="Helpers\ScienceHelper.cs" />
     <Compile Include="Graphics\ParallaxLayer.cs" />
-    <Compile Include="Actors\ParallaxDecalActor.cs" />
     <Compile Include="Actors\SlimeActor.cs" />
     <Compile Include="States\GameOverState.cs" />
     <Compile Include="Messages\CoreEventMessage.cs" />
@@ -206,6 +205,8 @@
     <Compile Include="Actors\PlantActor.cs" />
     <Compile Include="Graphics\SpriteNames.cs" />
     <Compile Include="Actors\FragmentActor.cs" />
+    <Compile Include="Graphics\ParallaxDecal.cs" />
+    <Compile Include="Actors\RuinsSlopedPlatformActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -229,5 +230,6 @@
     </Content>
     <Content Include="Content\Sounds\coin.wav" />
     <Content Include="Content\Sounds\bubble_pop.wav" />
+    <Content Include="Content\Sounds\coin_bounce.wav" />
   </ItemGroup>
 </Project>

@@ -25,6 +25,7 @@ namespace Chroma.Gameplay
     // Background
     protected Color bgColor;
     protected List<ParallaxLayer> BG;
+    protected List<ParallaxDecal> BGDecals;
 
     // Platforms
     public PlatformActor LastPlatform { get; private set; }
@@ -66,6 +67,9 @@ namespace Chroma.Gameplay
       EncounterRatios = new List<Pair<Encounter, int>>();
 
       bgColor = Color.Black;
+
+      BG = new List<ParallaxLayer>();
+      BGDecals = new List<ParallaxDecal>();
     }
 
     public static LevelGenerator Create(Core core, ActorManager actorManager, Area area) {
@@ -204,19 +208,15 @@ namespace Chroma.Gameplay
     //--------------------------------------------------
     #region Backgrounds
 
-    protected void SpawnParallaxDecal()
-    {
-      var lvl = ScienceHelper.GetRandom(7, 9);
-      var scale = 1;//ScienceHelper.GetRandom(10, 15) / 10f;
-      var newDecal = new ParallaxDecalActor(core, new Vector2(CurrentX, CurrentY - 90 * scale), new Vector2(lvl * 0.1f, 1), 
-        "trees_l5_" + ScienceHelper.GetRandom(1, 4).ToString(), "bg", lvl, scale: scale);
-      core.MessageManager.Send(new AddActorMessage(newDecal), this);
-    }
-
     protected void LoadBGTape(int layerId, string[] tape) 
     {
       var layer = BG[layerId - 1];
       layer.LoadTape(tape);
+    }
+
+    protected void PlaceDecal(ParallaxDecal decal)
+    {
+      BGDecals.Add(decal);
     }
 
     public virtual void DrawBackground()
@@ -226,6 +226,11 @@ namespace Chroma.Gameplay
       foreach (var layer in BG)
       {
         layer.Draw();
+      }
+
+      foreach (var decal in BGDecals)
+      {
+        decal.Draw();
       }
     }
 
@@ -253,6 +258,17 @@ namespace Chroma.Gameplay
       foreach (var layer in BG)
       {
         layer.Update();
+      }
+        
+      foreach (var decal in BGDecals)
+      {
+        decal.Update();
+      }
+
+      for (var i = BGDecals.Count - 1; i >= 0; i--)
+      {
+        if (BGDecals[i].IsDead())
+          BGDecals.RemoveAt(i);
       }
 
       if (!startedLevel)
@@ -351,9 +367,6 @@ namespace Chroma.Gameplay
       var newPlatform = FlatPlatformActor.Create(core, new Vector2(CurrentX, CurrentY), length, area);
       actorManager.Add(newPlatform);
       AttachToLast(newPlatform);
-
-      if (ScienceHelper.ChanceRoll(0.2f))
-        SpawnParallaxDecal();
 
       CurrentX += newPlatform.width;
     }

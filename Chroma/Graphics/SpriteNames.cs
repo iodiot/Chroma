@@ -89,6 +89,12 @@ namespace Chroma.Graphics
                                                 // |
     // Jungle --------------------------------------
     // Background                               // |
+    forest_floor_0,                             // |
+    forest_floor_1,                             // |
+    forest_floor_2,                             // |
+    forest_floor_3,                             // |
+    rays,                                       // |
+    tree_leaves,                                // |
     trees_l1,                                   // |
     trees_l2,                                   // |
     trees_l3_1,                                 // |
@@ -100,7 +106,6 @@ namespace Chroma.Graphics
     trees_l5_3,                                 // |
     trees_l5_4,                                 // |
     trees_l5_5,                                 // |
-    trees_l6,                                   // |
     // Decorations                              // |
     earth_boulder_1,                            // |
     earth_boulder_2,                            // |
@@ -130,10 +135,12 @@ namespace Chroma.Graphics
     bricks,                               // tiled |
     ruins_floor_1,                        // tiled |
     ruins_floor_2,                        // tiled |
+    ruins_slope,                          // tiled |
     bricks_edge,                                // |
     stone_edge,                                 // |
     stone_edge_1,                               // |
     stone_edge_2,                               // |
+    stone_edge_bottom,                          // |
                                                 // |
     // DRUID =======================================
     arm_hit_1,                         // has link |

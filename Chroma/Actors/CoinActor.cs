@@ -64,6 +64,13 @@ namespace Chroma.Actors
       base.OnColliderTrigger(other, otherCollider, thisCollider);
     }
 
+    public override void OnBounce()
+    {
+      core.SoundManager.Play("coin_bounce");
+
+      base.OnBounce();
+    }
+
     public override bool IsPassableFor(Actor actor)
     {
       return true;

@@ -21,12 +21,17 @@ namespace Chroma.Graphics
     private Vector2 screenPos;
     private int dX = 0;
 
-    public ParallaxLayer(Core core, int y,  float parallax, int zIndex = 0)
+    private Color extendColor = Color.Black;
+    private int extendHeight = 0;
+
+    public ParallaxLayer(Core core, int y,  float parallax, int zIndex = 0, Color extendColor = default(Color), int extendHeight = 0)
     {
       this.core = core;
       this.parallax = parallax;
       this.y = y;
       this.zIndex = zIndex;
+      this.extendColor = extendColor;
+      this.extendHeight = extendHeight;
 
       onScreen = new List<Sprite>();
       screenPos = new Vector2(0, y);
@@ -36,6 +41,8 @@ namespace Chroma.Graphics
     {
       tape = newTape;
       tapePos = 0;
+
+      Update(); // Prevent flickering in the first tick
     }
 
     public void Update()
@@ -51,7 +58,7 @@ namespace Chroma.Graphics
       screenPos.X = dX + core.Renderer.World.X * parallax;
 
       // Add to the right
-      if (onScreenWidth + screenPos.X < core.Renderer.ScreenWidth + 100)
+      while (tape.Length > 0 && onScreenWidth + screenPos.X < core.Renderer.ScreenWidth + 100)
       {
         var newSprite = core.SpriteManager.GetSprite(tape[tapePos]);
         onScreen.Add(newSprite);
@@ -63,10 +70,15 @@ namespace Chroma.Graphics
 
     public void Draw()
     {
-      var x = screenPos.X - (core.deviceTilt + 1.5f) * 20 * parallax;
+      var x = screenPos.X; // - (core.deviceTilt + 1.5f) * 20 * parallax;
       foreach (var s in onScreen)
       {
         core.Renderer["bg", zIndex].DrawSpriteS(s, new Vector2(x, y));
+        if (extendHeight > 0)
+        {
+          core.Renderer["bg", zIndex].DrawRectangleS(new Rectangle().FromFloats(x, y - extendHeight, s.Width, extendHeight), extendColor);
+          core.Renderer["bg", zIndex].DrawRectangleS(new Rectangle().FromFloats(x, y + s.Height, s.Width, extendHeight), extendColor);
+        }
         x += s.Width;
       }
     }

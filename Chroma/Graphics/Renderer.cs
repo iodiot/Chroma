@@ -84,7 +84,7 @@ namespace Chroma.Graphics
     #region Fields
     public Vector2 ScreenCenter { get { return new Vector2(ScreenWidth * 0.5f, ScreenHeight * 0.5f); } }
     public Vector2 World;
-    public float WorldYOffset;
+    public float WorldYOffset { get; set; }
 
     public readonly float ScreenWidth;
     public readonly float ScreenHeight;

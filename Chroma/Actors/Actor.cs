@@ -150,6 +150,10 @@ namespace Chroma.Actors
     {
     } 
 
+    public virtual void OnBounce()
+    {
+    }
+
     public void AddCollider(Collider collider)
     {
       colliders.Add(collider);

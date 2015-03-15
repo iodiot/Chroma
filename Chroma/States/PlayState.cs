@@ -48,16 +48,18 @@ namespace Chroma.States
 
       core.MessageManager.Subscribe(MessageType.AddActor, this);
       core.MessageManager.Subscribe(MessageType.RemoveActor, this);
-
-      ActorManager = new ActorManager(core, this);
-      LevelGenerator = LevelGenerator.Create(core, ActorManager, this.area);
     }
 
     public override void Load()
     {
-      substate = SubState.Beginning;
-      ActorManager.Load();
       core.Renderer.World = new Vector2(0, (core.Renderer.ScreenHeight - 130) * 0.9f + 50/2);
+
+      ActorManager = new ActorManager(core, this);
+      ActorManager.Load();
+
+      LevelGenerator = LevelGenerator.Create(core, ActorManager, this.area);
+
+      substate = SubState.Beginning;
     }
 
     public override void Unload()
@@ -75,9 +77,12 @@ namespace Chroma.States
         levelDistance = player.Position.X;
 
         #region Positioning camera
-        core.Renderer.WorldYOffset = (player.PlatformY + player.Position.Y) / 2;
-        var targetWorldY = (core.Renderer.ScreenHeight - 130) * 0.9f - core.Renderer.WorldYOffset;
+        var targetPlatformScreenPos = (core.Renderer.ScreenHeight - 120) * 0.9f;
+        var targetWorldY = targetPlatformScreenPos - (player.PlatformY + player.Position.Y) / 2;
         var currentWorldY = core.Renderer.World.Y;
+          
+        //var targetWorldYOffset = player.PlatformY - (targetPlatformScreenPos - currentWorldY);
+        core.Renderer.WorldYOffset = 0;// += (targetWorldYOffset - core.Renderer.WorldYOffset) * 0.02f;
 
         core.Renderer.World = new Vector2(
           25 - player.Position.X, 

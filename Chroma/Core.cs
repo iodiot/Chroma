@@ -224,24 +224,26 @@ namespace Chroma
 
     private void TrackTilt(bool track)
     {
-      if (track)
-      {
-        MotionManager.StartDeviceMotionUpdates(NSOperationQueue.CurrentQueue, (data, error) =>
-          {
-            // Math from 
-            // http://www.dulaccc.me/2013/03/computing-the-ios-device-tilt.html
-            // http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Conversion
+      // TODO: Fix or remove
 
-            CMQuaternion q = data.Attitude.Quaternion;
-            this.deviceTilt = (float)Math.Atan(2 * (q.x * q.w + q.y * q.z)/(1 - 2 * (q.z * q.z + q.w * q.w)));
-          }
-        );
-      }
-      else
-      {
-        MotionManager.StopDeviceMotionUpdates();
-        deviceTilt = 0f;
-      }
+//      if (track)
+//      {
+//        MotionManager.StartDeviceMotionUpdates(NSOperationQueue.CurrentQueue, (data, error) =>
+//          {
+//            // Math from 
+//            // http://www.dulaccc.me/2013/03/computing-the-ios-device-tilt.html
+//            // http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Conversion
+//
+//            CMQuaternion q = data.Attitude.Quaternion;
+//            this.deviceTilt = (float)Math.Atan(2 * (q.x * q.w + q.y * q.z)/(1 - 2 * (q.z * q.z + q.w * q.w)));
+//          }
+//        );
+//      }
+//      else
+//      {
+//        MotionManager.StopDeviceMotionUpdates();
+//        deviceTilt = 0f;
+//      }
     }
 
     // -------------------------------------------------

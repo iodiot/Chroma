@@ -24,25 +24,24 @@ namespace Chroma.Actors
       // Vines
       if (ScienceHelper.ChanceRoll(0.5f))
       {
-        var x = Position.X + ScienceHelper.GetRandom(4, width - 12);
-        var vine = ScienceHelper.GetRandom(1, 4);
+        var n = ScienceHelper.GetRandom(1, 4);
+        var vine = core.SpriteManager.GetSprite("vine_" + n.ToString());
+        var x = Position.X + ScienceHelper.GetRandom(4, width - vine.Width);
         core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
           new Vector2(x, Position.Y),
-          "vine_" + vine.ToString(),
+          vine,
           flip: ScienceHelper.ChanceRoll(0.5f),
           depth: 10
         )), this);
         if (ScienceHelper.ChanceRoll(0.3f))
         {
           x += 8;
-          var vine2 = ScienceHelper.GetRandom(1, 4);
-          while (vine == vine2)
-          {
-            vine2 = ScienceHelper.GetRandom(1, 4);
-          }
+          var m = ScienceHelper.GetRandom(1, 4);
+          while (m == n) m = ScienceHelper.GetRandom(1, 4);
+          var vine2 = core.SpriteManager.GetSprite("vine_" + m.ToString());
           core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
             new Vector2(x, Position.Y),
-            "vine_" + vine2.ToString(),
+            vine2,
             flip: ScienceHelper.ChanceRoll(0.5f),
             depth: 10
           )), this);
@@ -52,11 +51,11 @@ namespace Chroma.Actors
       // Boulders
       if (ScienceHelper.ChanceRoll(0.8f))
       {
-        var boulder = ScienceHelper.GetRandom(1, 4);
+        var boulder = core.SpriteManager.GetSprite("earth_boulder_" + ScienceHelper.GetRandom(1, 4).ToString());
         var x = Position.X + ScienceHelper.GetRandom(4, width - 4 - 30);
         core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
           new Vector2(x, Position.Y + ScienceHelper.GetRandom(15, 60)),
-          "earth_boulder_" + boulder.ToString()
+          boulder
         )), this);
       }
     }

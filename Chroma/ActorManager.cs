@@ -259,8 +259,8 @@ namespace Chroma
       }
 
       const float LickStep = 2.0f;
-
       var v = actor.Velocity;
+      var bounced = false;
 
       // y-axis
       if (Math.Abs(v.Y) > ScienceHelper.Eps)
@@ -287,6 +287,7 @@ namespace Chroma
           if (actor.CanBounce)
           {
             v.Y = -v.Y * 0.5f;
+            bounced = Math.Abs(v.Y) > 0.2f;
           }
           else
           {
@@ -327,6 +328,7 @@ namespace Chroma
           if (actor.CanBounce)
           {
             v.X = -v.X * 0.5f;
+            bounced = Math.Abs(v.X) > 0;
           }
           else
           {
@@ -334,6 +336,9 @@ namespace Chroma
           }
         }
       }
+
+      if (bounced)
+        actor.OnBounce();
 
       // Final check
       if (!ScienceHelper.IsZero(v) && GetObstacles(actor, v.X, v.Y).Count > 0)

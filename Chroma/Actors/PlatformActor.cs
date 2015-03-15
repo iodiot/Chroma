@@ -26,7 +26,7 @@ namespace Chroma.Actors
       Sprite top;
       Sprite middle;
       Sprite bottomEdge;
-      int edx, edy, tdx, tdy;
+      int edx, edy, tdx, tdy, bdx;
 
       switch (area) {
         default:
@@ -38,15 +38,17 @@ namespace Chroma.Actors
           edy = 0;
           tdx = 1;
           tdy = 9;
+          bdx = 12;
           break;
         case Area.Ruins:
           top = core.SpriteManager.GetSprite("stone_edge");
           middle = core.SpriteManager.GetSprite("bricks_edge");
-          bottomEdge = core.SpriteManager.GetSprite("edge_earth_bottom");
+          bottomEdge = core.SpriteManager.GetSprite("stone_edge_bottom");
           edx = 5;
           edy = 6;
           tdx = 0;
           tdy = 6;
+          bdx = 12;
           break;
       }
 
@@ -69,8 +71,8 @@ namespace Chroma.Actors
 
         // Bottom
         i = bottom - bottomEdge.Height + 20;
-        core.Renderer.DrawSpriteW(bottomEdge, 
-          new Vector2(GetBoundingBoxW().Right - edx, i));
+        core.Renderer[1].DrawSpriteW(bottomEdge, 
+          new Vector2(GetBoundingBoxW().Right - bdx, i));
 
         // Top
         core.Renderer.DrawSpriteW(top, 

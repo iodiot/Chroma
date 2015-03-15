@@ -110,11 +110,6 @@ namespace Chroma.Gui
 
     public void HandleInput()
     {
-      if (Keyboard.GetState().IsKeyDown(Keys.Space))
-      {
-        player.TryToJump();
-      }
-
       //---------------------------------------------------------------
 
       var touchState = TouchPanel.GetState();
@@ -123,7 +118,7 @@ namespace Chroma.Gui
       {
 
         // Debug: stop
-        if (touch.Position.Y < core.Renderer.ScreenHeight / 2 && touch.Position.X > core.Renderer.ScreenWidth / 2 
+        if (touch.Position.Y < core.Renderer.ScreenHeight / 3 && touch.Position.X > core.Renderer.ScreenWidth / 2 
           && touch.State == TouchLocationState.Released)
         {
           stop = !stop;
@@ -131,7 +126,7 @@ namespace Chroma.Gui
         }
 
         // Debug: show colliders
-        if (touch.Position.Y < core.Renderer.ScreenHeight / 2 && touch.Position.X < core.Renderer.ScreenWidth / 2 
+        if (touch.Position.Y < core.Renderer.ScreenHeight / 3 && touch.Position.X < core.Renderer.ScreenWidth / 2 
           && touch.State == TouchLocationState.Released)
         {
           Settings.DrawBoundingBoxes = !Settings.DrawBoundingBoxes;
