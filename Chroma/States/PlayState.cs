@@ -77,19 +77,21 @@ namespace Chroma.States
         levelDistance = player.Position.X;
 
         #region Positioning camera
-        var targetPlatformScreenPos = (core.Renderer.ScreenHeight - 120) * 0.9f;
-        var targetWorldY = targetPlatformScreenPos - (player.PlatformY + player.Position.Y) / 2;
-        var currentWorldY = core.Renderer.World.Y;
-          
-        //var targetWorldYOffset = player.PlatformY - (targetPlatformScreenPos - currentWorldY);
-        core.Renderer.WorldYOffset = 0;// += (targetWorldYOffset - core.Renderer.WorldYOffset) * 0.02f;
+        if (!player.HasLost) {
+          var targetPlatformScreenPos = (core.Renderer.ScreenHeight - 120) * 0.9f;
+          var targetWorldY = targetPlatformScreenPos - (player.PlatformY + player.Position.Y) / 2;
+          var currentWorldY = core.Renderer.World.Y;
+            
+          //var targetWorldYOffset = player.PlatformY - (targetPlatformScreenPos - currentWorldY);
+          core.Renderer.WorldYOffset = 0;// += (targetWorldYOffset - core.Renderer.WorldYOffset) * 0.02f;
 
-        core.Renderer.World = new Vector2(
-          25 - player.Position.X, 
-          currentWorldY + (targetWorldY - currentWorldY) * 0.05f
-        );
-        core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - player.Position.Y);
-        core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
+          core.Renderer.World = new Vector2(
+            25 - player.Position.X, 
+            currentWorldY + (targetWorldY - currentWorldY) * 0.05f
+          );
+          core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - player.Position.Y);
+          core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
+        }
         #endregion
 
         GameControls.Update(ticks);

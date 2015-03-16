@@ -385,13 +385,17 @@ namespace Chroma.Gameplay
 
     protected void SpawnGap(int length)
     {
+
+      var newGap = new GapActor(core, new Vector2(CurrentX, CurrentY), length, area);
+      actorManager.Add(newGap);
+
       CurrentX += length;
       LastPlatform = null;
     }
 
     protected void SpawnWater(int width)
     {
-      WaterBodyActor newWater = new WaterBodyActor(core, new Vector2(CurrentX, CurrentY + 30), width);
+      WaterBodyActor newWater = new WaterBodyActor(core, new Vector2(CurrentX, CurrentY), width, area);
       actorManager.Add(newWater);
       LastPlatform = null;
 
@@ -431,8 +435,8 @@ namespace Chroma.Gameplay
           break;
 
         case LevelModule.Gap:
-          SpawnGap(50);
-          SpawnFlat(30);
+          SpawnGap(ScienceHelper.GetRandom(50, 100));
+          SpawnFlat(50);
           break;
 
         case LevelModule.Pond:

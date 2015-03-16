@@ -275,6 +275,54 @@ namespace Chroma.Graphics
       DrawSpriteS(sprite, position + World, tint, scale, rotation, flip);
     }
 
+    public void DrawSpriteTiledW(Sprite tile, 
+      Rectangle box, 
+      bool tileHorizontally = true,
+      bool tileVertically = true,
+      Vector2? tileOffset = null
+    )
+    {
+      var tileWidth = tile.Width;
+      var tileHeight = tile.Height;
+      var offset = (Vector2)(tileOffset ?? Vector2.Zero);
+
+      var layer = currentLayerName;
+      var depth = currentDepth;
+
+      var offx = Math.Abs(offset.X) % tileWidth;
+      if (offset.X < 0)
+        offx = tileWidth - offx;
+
+      var offy = Math.Abs(offset.Y) % tileHeight;
+      if (offset.Y < 0)
+        offy = tileHeight - offy;
+
+      var x = box.Left - offx;
+      do
+      {
+        var y = box.Top - offy;
+        do {
+          var reducedTile = tile.Reduce(
+            (int)Math.Max(box.Left - x, 0),
+            (int)Math.Max(box.Top - y, 0),
+            (int)Math.Max(x + tileWidth - box.Right, 0),
+            (int)Math.Max(y + tileHeight - box.Bottom, 0)
+          );
+
+          var pos = new Vector2(
+            Math.Max(x, box.Left), 
+            Math.Max(y, box.Top)
+          );
+
+          core.Renderer[layer, depth].DrawSpriteW(reducedTile, pos);
+
+          y += tileHeight;
+        } while (tileVertically && y < box.Bottom);
+
+        x += tileWidth;
+      } while (tileHorizontally && x < box.Right);
+    }
+
     public void DrawRectangleW(Vector2 position, float width, float height, Color color)
     {
       DrawRectangleS(position + World, width, height, color);

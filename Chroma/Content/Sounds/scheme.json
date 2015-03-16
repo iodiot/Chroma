@@ -12,6 +12,16 @@
 		{
 			"name": "bubble_pop",
 			"fileName": "bubble_pop.wav"
+		},
+
+		{
+			"name": "fall",
+			"fileName": "fall.wav"
+		},
+
+		{
+			"name": "splash",
+			"fileName": "splash.wav"
 		}
 	]
 }

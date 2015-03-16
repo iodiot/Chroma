@@ -77,46 +77,12 @@ namespace Chroma
     public void Draw()
     {
       var tile = playState.LevelGenerator.GetGroundSprite();
-      var tileWidth = tile.Width;
-      var tileHeight = tile.Height;
       foreach (var actor in actors)
       {
         if (actor is PlatformActor)
         {
           var box = actor.GetBoundingBoxW();
-
-          var offx = Math.Abs(box.Left) % tileWidth;
-          if (box.Left < 0)
-            offx = tileWidth - offx;
-
-          var offy = Math.Abs(box.Top) % tileHeight;
-          if (box.Top < 0)
-            offy = tileHeight - offy;
-            
-          var x = box.Left - offx;
-          do
-          {
-            var y = box.Top - offy;
-            do {
-              var reducedTile = tile.Reduce(
-                Math.Max(box.Left - x, 0),
-                Math.Max(box.Top - y, 0),
-                Math.Max(x + tileWidth - box.Right, 0),
-                Math.Max(y + tileHeight - box.Bottom, 0)
-              );
-
-              var pos = new Vector2(
-                Math.Max(x, box.Left), 
-                Math.Max(y, box.Top)
-              );
-
-              core.Renderer.DrawSpriteW(reducedTile, pos);
-
-              y += tileHeight;
-            } while (y < box.Bottom);
-
-            x += tileWidth;
-          } while (x < box.Right);
+          core.Renderer.DrawSpriteTiledW(tile, box, tileOffset: new Vector2(box.Left, box.Top));
         }
       }
 

@@ -28,6 +28,9 @@ namespace Chroma.Actors
     public bool CanLick { get; protected set; }
     public bool CanBounce { get; protected set; }
 
+    public bool Fell { get; protected set; }
+    public bool Drowned { get; protected set; }
+
     private readonly List<Collider> colliders;
     protected Rectangle boundingBox;
 
@@ -52,6 +55,8 @@ namespace Chroma.Actors
       colliders = new List<Collider>();
 
       Ttl = -1;
+
+      Fell = false;
     }
       
     public virtual void Load()
@@ -69,6 +74,11 @@ namespace Chroma.Actors
       if (Ttl > 0)
       {
         --Ttl;
+      }
+
+      if (Drowned)
+      {
+        Velocity.Y /= 1.2f;
       }
     }
 
@@ -152,6 +162,18 @@ namespace Chroma.Actors
 
     public virtual void OnBounce()
     {
+    }
+
+    public virtual void OnFall()
+    {
+      Fell = true;
+      CanBounce = true;
+    }
+
+    public virtual void OnDrown()
+    {
+      Drowned = true;
+      CanBounce = true;
     }
 
     public void AddCollider(Collider collider)

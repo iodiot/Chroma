@@ -118,6 +118,7 @@ namespace Chroma.Graphics
     fg_grass_1,                                 // |
     // Platforms                                // |
     earth,                                // tiled |
+    earth_hole_brim,                            // |
     edge_earth,                                 // |
     edge_earth_bottom,                          // |
     edge_grass,                                 // |
@@ -141,6 +142,7 @@ namespace Chroma.Graphics
     stone_edge_1,                               // |
     stone_edge_2,                               // |
     stone_edge_bottom,                          // |
+    stone_hole_brim,                            // |
                                                 // |
     // DRUID =======================================
     arm_hit_1,                         // has link |

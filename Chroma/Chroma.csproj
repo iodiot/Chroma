@@ -207,6 +207,7 @@
     <Compile Include="Actors\FragmentActor.cs" />
     <Compile Include="Graphics\ParallaxDecal.cs" />
     <Compile Include="Actors\RuinsSlopedPlatformActor.cs" />
+    <Compile Include="Actors\GapActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -231,5 +232,7 @@
     <Content Include="Content\Sounds\coin.wav" />
     <Content Include="Content\Sounds\bubble_pop.wav" />
     <Content Include="Content\Sounds\coin_bounce.wav" />
+    <Content Include="Content\Sounds\fall.wav" />
+    <Content Include="Content\Sounds\splash.wav" />
   </ItemGroup>
 </Project>

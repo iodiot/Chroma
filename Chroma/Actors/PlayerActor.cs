@@ -113,32 +113,10 @@ namespace Chroma.Actors
       animation.Update(ticks);
       armAnimation.Update(ticks);
 
-      Velocity.X = 2.0f;
+      if (!Fell && !Drowned)
+        Velocity.X = 2.0f;
 
       base.Update(ticks);
-    }
-
-    public override void Draw()
-    {
-      var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.GetTicks() / 2));
-
-      var pos = new Vector2(Position.X, Position.Y);
-      if (sm.currentState == DruidState.Landing)
-        pos.Y += 5;
-
-      core.Renderer[10].DrawSpriteW(animation.GetCurrentFrame(), pos, tint);
-
-      if (charging)
-      {
-        core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(22, 15),
-          MagicManager.MagicColors[chargeColor] * 0.8f);
-      }
-
-      pos.X += animation.GetCurrentFrame().LinkX - armAnimation.GetCurrentFrame().LinkX;
-      pos.Y += animation.GetCurrentFrame().LinkY - armAnimation.GetCurrentFrame().LinkY;
-      core.Renderer[10].DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
-
-      base.Draw();
     }
 
     public void TryToJump()
@@ -151,6 +129,29 @@ namespace Chroma.Actors
         //animation.Play("jump");
         //sm.Trigger(DruidEvent.Jump);
       }
+    }
+
+    public override void Draw()
+    {
+      var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.GetTicks() / 2));
+
+      var pos = new Vector2(Position.X, Position.Y);
+      if (sm.currentState == DruidState.Landing)
+        pos.Y += 5;
+
+      core.Renderer[10].DrawSpriteW(animation.GetCurrentFrame(), pos, tint);
+
+      pos.X += animation.GetCurrentFrame().LinkX - armAnimation.GetCurrentFrame().LinkX;
+      pos.Y += animation.GetCurrentFrame().LinkY - armAnimation.GetCurrentFrame().LinkY;
+      core.Renderer[10].DrawSpriteW(armAnimation.GetCurrentFrame(), pos, tint);
+
+      if (charging)
+      {
+        core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(22, 15),
+          MagicManager.MagicColors[chargeColor] * 0.8f);
+      }
+
+      base.Draw();
     }
 
     public void Charge(MagicColor first, MagicColor second)
@@ -214,6 +215,20 @@ namespace Chroma.Actors
       {
         Die();
       }
+    }
+
+    public override void OnFall()
+    {
+      HasLost = true;
+
+      base.OnFall();
+    }
+
+    public override void OnDrown()
+    {
+      HasLost = true;
+
+      base.OnDrown();
     }
 
     private void Die() {
