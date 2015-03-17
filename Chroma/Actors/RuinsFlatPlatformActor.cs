@@ -23,7 +23,7 @@ namespace Chroma.Actors
       {
         var n = ScienceHelper.GetRandom(1, 4);
         var vine = core.SpriteManager.GetSprite("vine_" + n.ToString());
-        var x = Position.X + ScienceHelper.GetRandom(4, width - vine.Width);
+        var x = Position.X + ScienceHelper.GetRandom(4, width - vine.Width - 4);
         core.MessageManager.Send(new AddActorMessage(new DecalActor(core, 
           new Vector2(x, Position.Y),
           vine,

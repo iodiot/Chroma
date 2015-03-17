@@ -232,6 +232,8 @@ namespace Chroma.Graphics
 
         layer.DrawsDesc.Clear();
       }
+
+      core.DebugWatch("sprites/drawcalls", spritesCounter.ToString() + "/" + drawCallsCounter.ToString());
     }
 
     public void Begin(BlendState blendState)
@@ -263,9 +265,9 @@ namespace Chroma.Graphics
 
     #region World draw
 
-    public void DrawTextW(string text, Vector2 position, Color tint, float scale = 1.0f)
+    public float DrawTextW(string text, Vector2 position, Color tint, float scale = 1.0f)
     {
-      DrawTextS(text, position + World, tint, scale);
+      return DrawTextS(text, position + World, tint, scale);
     }
 
     public void DrawSpriteW(Sprite sprite, Vector2 position, Color? tint = null, 
@@ -421,7 +423,7 @@ namespace Chroma.Graphics
       );
     }
 
-    public void DrawTextS(string text, Vector2 position, Color tint, float scale = 1.0f)
+    public float DrawTextS(string text, Vector2 position, Color tint, float scale = 1.0f)
     {
       const int CharWidth = 6;
       var layer = currentLayerName;
@@ -433,6 +435,8 @@ namespace Chroma.Graphics
         SetCurrentDepth(depth);
         DrawSpriteS(core.SpriteManager.MakeCharSprite(text[i]), new Vector2(position.X + i * scale * CharWidth, position.Y), tint, new Vector2(scale, scale));
       }
+
+      return text.Length * CharWidth * scale;
     }
 
     public void FillScreen(Color color)

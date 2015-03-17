@@ -19,6 +19,7 @@ namespace Chroma
   public sealed class Core : ISubscriber
   {
     private readonly List<Pair<string, int>> debugMessages;
+    private readonly Dictionary<string, string> debugWatches;
 
     public SpriteManager SpriteManager { get; private set; }
     public Renderer Renderer { get; private set; }
@@ -47,6 +48,8 @@ namespace Chroma
       Ticks = 0;
 
       debugMessages = new List<Pair<string, int>>();
+      debugWatches = new Dictionary<string, string>();
+
       GraphicsDevice = graphicsDevice;
 
       SpriteManager = new SpriteManager(this);
@@ -135,6 +138,8 @@ namespace Chroma
 
       TimerManager.Update(Ticks);
 
+      // -------------------------------------
+
       foreach (var message in debugMessages) 
       {
         message.B--;
@@ -155,6 +160,8 @@ namespace Chroma
 
       // -------------------------------------
 
+      DebugWatch("fps", Math.Round(frameCounter.AverageFramesPerSecond).ToString());
+
       ++Ticks;
     }
 
@@ -163,10 +170,21 @@ namespace Chroma
       return Ticks;
     }
 
+    #region Debug
     public void DebugMessage(string message)
     {
       debugMessages.Insert(0, new Pair<string, int>(message, 200) );
     }
+
+    public void DebugWatch(string watchName, string watchValue)
+    {
+      debugWatches[watchName] = watchValue;
+    }
+    public void RemoveDebugWatch(string watchName)
+    {
+      debugWatches.Remove(watchName);
+    }
+    #endregion
 
     public void Draw(GameTime gameTime)
     {
@@ -178,26 +196,31 @@ namespace Chroma
         state.Draw();
       }
 
-      if (Settings.DrawFps)
-      {
-        Renderer.DrawTextS(
-          String.Format("{0} fps", Math.Round(frameCounter.AverageFramesPerSecond)),
-          new Vector2(10, 5),
-          Color.White * 0.25f
-        );
-      }
-
       if (Settings.DrawDebugMessages)
       {
         float i = -5;
         foreach (var message in debugMessages) {
           i += 10;
-          Renderer.DrawTextS(
+          Renderer["fg", 1000].DrawTextS(
             message.A,
             new Vector2(Renderer.ScreenWidth - 150, i),
             Color.White * 0.5f * ((float)message.B / 200)
           );
         }
+
+        i = -2;
+        var maxWidth = 0f;
+        foreach (var watch in debugWatches) {
+          i += 7;
+          var w = Renderer["fg", 1000].DrawTextS(
+            watch.Key + ": " + watch.Value,
+            new Vector2(5, i),
+            Color.White * 0.5f,
+            0.66f
+          );
+          maxWidth = Math.Max(w, maxWidth);
+        }
+        Renderer["fg", 999].DrawRectangleS(new Rectangle(0, 0, (int)maxWidth + 10, 7 * debugWatches.Count + 7), Color.Black * 0.5f);
       }
 
       // Final draw

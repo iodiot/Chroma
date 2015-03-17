@@ -91,14 +91,7 @@ namespace Chroma
         actor.Draw();
       }
 
-      if (Settings.DrawActorsCount)
-      {
-        core.Renderer.DrawTextS(
-          String.Format("actors: {0}", actors.Count),
-          new Vector2(10, 15),
-          Color.White * 0.25f
-        );
-      }
+      core.DebugWatch("actors", actors.Count.ToString());
     }
 
     public Actor Add(Actor actor)

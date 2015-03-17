@@ -102,6 +102,7 @@ namespace Chroma.Gameplay
       Bridge,
 
       // Enemies --------
+
       // Jungle
       Slime,
       SlimeRoll,
@@ -140,7 +141,7 @@ namespace Chroma.Gameplay
 
           #region Structures
         case Encounter.Bridge:
-          SpawnBridge();
+          //SpawnBridge();
           break;
           #endregion
 
@@ -185,24 +186,24 @@ namespace Chroma.Gameplay
       SpawnFlat(width);
     }
 
-    protected void SpawnBridge()
+    protected void SpawnBridge(int length)
     {
-      var n = ScienceHelper.GetRandom(10, 30);
-      var x = CurrentX;
-      var y = CurrentY - ScienceHelper.GetRandom(30, 50);
-
-      for (var i = 1; i <= n; i++)
-      {
-        PlankActor newPlank = new PlankActor(core, new Vector2(x, y), 
-          area,
-          (i == 1) ? PlankActor.PlankOrigin.Left :
-          (i == n) ? PlankActor.PlankOrigin.Right:
-          PlankActor.PlankOrigin.Middle
-        );
-        actorManager.Add(newPlank);
-        x += newPlank.Width;
-        //y += core.GetRandom(-2, 2);
-      }
+//      var n = ScienceHelper.GetRandom(10, 30);
+//      var x = CurrentX;
+//      var y = CurrentY - ScienceHelper.GetRandom(30, 50);
+//
+//      for (var i = 1; i <= n; i++)
+//      {
+//        PlankActor newPlank = new PlankActor(core, new Vector2(x, y), 
+//          area,
+//          (i == 1) ? PlankActor.PlankOrigin.Left :
+//          (i == n) ? PlankActor.PlankOrigin.Right:
+//          PlankActor.PlankOrigin.Middle
+//        );
+//        actorManager.Add(newPlank);
+//        x += newPlank.Width;
+//        //y += core.GetRandom(-2, 2);
+//      }
     }
 
     //--------------------------------------------------

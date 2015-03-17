@@ -121,14 +121,7 @@ namespace Chroma.States
         HealthGui.Draw();
       }
 
-      if (Settings.DrawDebugMessages)
-      {
-        core.Renderer.DrawTextS(
-          String.Format("{0} m", LevelGenerator.distanceMeters),
-          new Vector2(60, 5),
-          Color.White * 0.25f
-        );
-      }
+      core.DebugWatch("distance", LevelGenerator.distanceMeters.ToString() + " m");
 
       base.Draw();
     }
