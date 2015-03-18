@@ -11,35 +11,33 @@ using Chroma.Gameplay;
 
 namespace Chroma.States
 {
-
   public class GameResult
   {
-    public readonly int distance;
+    public readonly int Distance;
 
-    public GameResult(int distance) {
-      this.distance = distance;
+    public GameResult(int distance)
+    {
+      this.Distance = distance;
     }
   }
 
   public class PlayState : State
   {
-
     private enum SubState
     {
       Beginning,
       Playing,
       GameOver
     }
-    private SubState substate;
 
     public ActorManager ActorManager { get; private set; }
-    private Area area;
-
     public GameHudGui GameControls { get; private set; }
-    public HealthGui HealthGui { get; set; }
+    public HealthGui HealthGui { get; private set; }
+    public LevelGenerator LevelGenerator { get; private set; }
+    public PlayerActor Player { get; private set; }
 
-    public LevelGenerator LevelGenerator;
-    private PlayerActor player;
+    private SubState substate;
+    private Area area;
     private float levelDistance = 0;
 
     public PlayState(Core core, Area area) : base(core)
@@ -74,33 +72,35 @@ namespace Chroma.States
 
       if (substate == SubState.Playing)
       {
-        levelDistance = player.Position.X;
+        levelDistance = Player.Position.X;
 
-        core.DebugWatch("platform Y", player.PlatformY.ToString());
+        core.DebugWatch("platform Y", Player.PlatformY.ToString());
 
         #region Positioning camera
-        if (!player.HasLost) {
+        if (!Player.HasLost) {
           var targetPlatformScreenPos = (core.Renderer.ScreenHeight - 120) * 0.9f;
-          var targetWorldY = targetPlatformScreenPos - (player.PlatformY + player.Position.Y) / 2;
+          var targetWorldY = targetPlatformScreenPos - (Player.PlatformY + Player.Position.Y) / 2;
           var currentWorldY = core.Renderer.World.Y;
             
           //var targetWorldYOffset = player.PlatformY - (targetPlatformScreenPos - currentWorldY);
           core.Renderer.WorldYOffset = 0;// += (targetWorldYOffset - core.Renderer.WorldYOffset) * 0.02f;
 
           core.Renderer.World = new Vector2(
-            25 - player.Position.X, 
+            25 - Player.Position.X, 
             currentWorldY + (targetWorldY - currentWorldY) * 0.05f
           );
-          core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - player.Position.Y);
-          core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - player.Position.Y);
+          core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - Player.Position.Y);
+          core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - Player.Position.Y);
         }
         #endregion
 
         GameControls.Update(ticks);
         HealthGui.Update(ticks);
 
-        if (player.HasLost)
+        if (Player.HasLost)
+        {
           GameOver();
+        }
       }
         
       base.Update(ticks);
@@ -108,6 +108,7 @@ namespace Chroma.States
 
     public override void HandleInput()
     {
+
       GameControls.HandleInput();
       base.HandleInput();
     }
@@ -150,11 +151,11 @@ namespace Chroma.States
       substate = SubState.Playing;
       LevelGenerator.Go();
 
-      player = new PlayerActor(core, new Vector2(25, -27));
-      ActorManager.Add(player);
+      Player = new PlayerActor(core, new Vector2(25, -27));
+      ActorManager.Add(Player);
 
-      GameControls = new GameHudGui(core, this, player);
-      HealthGui = new HealthGui(core, player);
+      GameControls = new GameHudGui(core, this, Player);
+      HealthGui = new HealthGui(core, Player);
     }
 
     public void GameOver()

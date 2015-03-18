@@ -382,6 +382,13 @@ namespace Chroma.Graphics
 
     public void DrawLineS(Vector2 from, Vector2 to, Color color)
     {
+      if (from.X > to.X)
+      {
+        var t = from;
+        from = to;
+        to = t;
+      }
+
       var v = to - from;
       var length = v.Length();
       var rect = new Rectangle(0, 0, (int)length, 1);

@@ -18,6 +18,11 @@ namespace Chroma.Helpers
       r.Height = (int)height;
       return r;
     }
+
+    public static bool IsZero(this Vector3 v)
+    {
+      return v.Length() < ScienceHelper.Eps;
+    }
   }
 }
 

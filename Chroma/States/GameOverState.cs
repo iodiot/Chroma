@@ -42,7 +42,7 @@ namespace Chroma.States
     {
       core.Renderer["fg"].FillScreen(Color.Black * 0.5f);
 
-      core.Renderer["fg"].DrawTextS("Distance: " + core.GameResult.distance.ToString() + " m", new Vector2(45, 60), Color.White, 3);
+      core.Renderer["fg"].DrawTextS("Distance: " + core.GameResult.Distance.ToString() + " m", new Vector2(45, 60), Color.White, 3);
 
       if (timeout == 0)
       {

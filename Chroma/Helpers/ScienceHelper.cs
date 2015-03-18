@@ -29,6 +29,11 @@ namespace Chroma.Helpers
     {
       return v.Length() < Eps;
     }
+
+    public static float GetRandom(float from, float to)
+    {
+      return (float)random.NextDouble() * (to - from + 1f) + from;
+    }
   }
 }
 
