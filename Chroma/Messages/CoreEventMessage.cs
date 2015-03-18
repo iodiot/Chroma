@@ -3,7 +3,8 @@ using Chroma.Actors;
 
 namespace Chroma.Messages
 {
-  public enum CoreEvent {
+  public enum CoreEvent 
+  {
     StartGame,
     GameOver,
     ResetGame
@@ -11,11 +12,11 @@ namespace Chroma.Messages
 
   public class CoreEventMessage : Message
   {
-    public readonly CoreEvent coreEvent;
+    public readonly CoreEvent CoreEvent;
 
     public CoreEventMessage(CoreEvent coreEvent) : base(MessageType.CoreEvent)
     {
-      this.coreEvent = coreEvent;
+      CoreEvent = coreEvent;
     }
   }
 }

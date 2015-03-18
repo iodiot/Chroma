@@ -13,7 +13,7 @@ namespace Chroma.Actors
     private Animation bubbleAnim, itemAnim;
 
     private bool bubble;
-    MagicColor color;
+    private MagicColor color;
 
     private int animOffset;
 

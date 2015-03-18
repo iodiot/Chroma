@@ -5,7 +5,8 @@ using System.Collections.Generic;
 namespace Chroma.States
 {
 
-  public enum Resource {
+  public enum Resource 
+  {
     Coin
   }
 

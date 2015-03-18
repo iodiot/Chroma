@@ -10,7 +10,8 @@ using Chroma.Messages;
 
 namespace Chroma.Gameplay
 {
-  public enum Area {
+  public enum Area 
+  {
     Jungle = 0,
     Ruins
   }
@@ -72,7 +73,8 @@ namespace Chroma.Gameplay
       BGDecals = new List<ParallaxDecal>();
     }
 
-    public static LevelGenerator Create(Core core, ActorManager actorManager, Area area) {
+    public static LevelGenerator Create(Core core, ActorManager actorManager, Area area) 
+    {
       switch (area)
       {
         default:
@@ -306,8 +308,14 @@ namespace Chroma.Gameplay
     protected void ResetRatios<T>(List<Pair<T, int>> Ratios)
     {
       Ratios.Clear();
-      foreach (T item in Enum.GetValues(typeof(T))) {
+      foreach (T item in Enum.GetValues(typeof(T))) 
+      {
         Ratios.Add(new Pair<T, int>(item, 0));
+      }
+
+      if (Ratios.Count > 0)
+      {
+        Ratios[0].B = 1;
       }
     }
 

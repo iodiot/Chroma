@@ -30,6 +30,7 @@ namespace Chroma.Actors
 
     public bool Fell { get; protected set; }
     public bool Drowned { get; protected set; }
+    public bool IsOnPlatform;
 
     private readonly List<Collider> colliders;
     protected Rectangle boundingBox;

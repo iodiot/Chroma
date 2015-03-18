@@ -28,8 +28,8 @@ namespace Chroma.States
         if (leftSideTouched)
         {
           // Next area
-          int a = (int)(core.profileData.CurrentArea) + 1;
-          core.profileData.CurrentArea = (Enum.IsDefined(typeof(Area), a)) ? (Area)a : (Area)0;
+          int a = (int)(core.ProfileData.CurrentArea) + 1;
+          core.ProfileData.CurrentArea = (Enum.IsDefined(typeof(Area), a)) ? (Area)a : (Area)0;
           core.MessageManager.Send(new CoreEventMessage(CoreEvent.ResetGame), this);
         }
         else

@@ -451,7 +451,7 @@ namespace Chroma.Graphics
     {
       const float D = 1.0f; // delta
 
-      // Draw only sprites that are on screen
+      // Draw only on-screen sprites
       if (position.X < ScreenWidth + D && 
           position.Y < ScreenHeight + D && 
           position.X + sourceRect.Width * scale.X >= -D && 

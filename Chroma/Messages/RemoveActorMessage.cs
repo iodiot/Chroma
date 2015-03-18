@@ -5,7 +5,7 @@ namespace Chroma.Messages
 {
   public class RemoveActorMessage : Message
   {
-    public Actor Actor { get; private set; }
+    public readonly Actor Actor;
 
     public RemoveActorMessage(Actor actor) : base(MessageType.RemoveActor)
     {

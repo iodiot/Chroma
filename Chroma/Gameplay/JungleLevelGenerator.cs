@@ -12,10 +12,8 @@ namespace Chroma.Gameplay
 {
   public class JungleLevelGenerator : LevelGenerator
   {
-
     private int lastDistance;
     private int nextTreeIn = 0;
-
 
     public JungleLevelGenerator(Core core, ActorManager actorManager, Area area) : base(core, actorManager, area)
     {
@@ -130,17 +128,16 @@ namespace Chroma.Gameplay
 //        lastGrassDistance = this.distanceMeters;
 //      }
 
-      if (nextTreeIn > 0)
-        nextTreeIn -= dDistance;
-      else {
+      if (nextTreeIn <= 0)
+      {
         var lvl = (float)ScienceHelper.GetRandom(0, 20);
 
         var sprite = core.SpriteManager.GetSprite("trees_l5_" + ScienceHelper.GetRandom(1, 4).ToString());
         var newDecal = new ParallaxDecal(core, 
-          sprite, 
-          distance + core.Renderer.ScreenWidth + 40, 95 + lvl - sprite.Height, 
-          .7f + lvl / 100, "bg", 5 + (int)lvl
-        );
+                         sprite, 
+                         distance + core.Renderer.ScreenWidth + 40, 95 + lvl - sprite.Height, 
+                         .7f + lvl / 100, "bg", 5 + (int)lvl
+                       );
         PlaceDecal(newDecal);
 
         sprite = core.SpriteManager.GetSprite(SpriteName.tree_leaves);
@@ -153,8 +150,11 @@ namespace Chroma.Gameplay
 
         nextTreeIn = ScienceHelper.GetRandom(5, 20);
       }
+      else
+      {
+        nextTreeIn -= dDistance;
+      }
     }
-
   }
 }
 

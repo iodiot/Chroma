@@ -27,9 +27,9 @@ namespace Chroma
     public SoundManager SoundManager { get; private set; }
     public MessageManager MessageManager { get; private set; }
     public TimerManager TimerManager { get; private set; }
-
     private CMMotionManager MotionManager;
-    public float deviceTilt { get; private set; }
+
+    public float DeviceTilt { get; private set; }
 
     public GraphicsDevice GraphicsDevice;
 
@@ -40,8 +40,8 @@ namespace Chroma
 
     private readonly Stopwatch stopwatch;
 
-    public ProfileData profileData;
-    public GameResult gameResult;
+    public ProfileData ProfileData;
+    public GameResult GameResult;
 
     public Core(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
     {
@@ -70,7 +70,7 @@ namespace Chroma
       frameCounter = new FrameCounter();
       stopwatch = new Stopwatch();
 
-      profileData = new ProfileData();
+      ProfileData = new ProfileData();
 
       Debug.Print(String.Format("screen size: {0}x{1}", screenWidth, screenHeight));
     }
@@ -135,7 +135,6 @@ namespace Chroma
 
     public void Update(GameTime gameTime)
     {
-
       TimerManager.Update(Ticks);
 
       // -------------------------------------
@@ -165,15 +164,10 @@ namespace Chroma
       ++Ticks;
     }
 
-    public int GetTicks()
-    {
-      return Ticks;
-    }
-
     #region Debug
     public void DebugMessage(string message)
     {
-      debugMessages.Insert(0, new Pair<string, int>(message, 200) );
+      debugMessages.Insert(0, new Pair<string, int>(message, 200));
     }
 
     public void DebugWatch(string watchName, string watchValue)
@@ -233,11 +227,11 @@ namespace Chroma
       stopwatch.Start();
     }
 
-    public void StopBenchmark(bool printOnlyPositiveMs = false)
+    public void StopBenchmark(int ticksTreshold = 10000)
     {
       stopwatch.Stop();
 
-      if (debugMessages.Count < 10 && (!printOnlyPositiveMs || (printOnlyPositiveMs && stopwatch.ElapsedMilliseconds > 0)))
+      if (debugMessages.Count < 5 && stopwatch.ElapsedTicks >= ticksTreshold)
       {
         DebugMessage(String.Format("Elapsed {0} ms, {1} ts", stopwatch.ElapsedMilliseconds, stopwatch.ElapsedTicks));
       }
@@ -274,7 +268,7 @@ namespace Chroma
     private void Reset() 
     {
       ClearStates();
-      PushState(new PlayState(this, profileData.CurrentArea));
+      PushState(new PlayState(this, ProfileData.CurrentArea));
       PushState(new MenuState(this));
       TrackTilt(true);
     }
@@ -305,7 +299,7 @@ namespace Chroma
       switch (message.Type)
       {
         case MessageType.CoreEvent:
-          switch ((message as CoreEventMessage).coreEvent)
+          switch ((message as CoreEventMessage).CoreEvent)
           {
             case CoreEvent.ResetGame:
               Reset();

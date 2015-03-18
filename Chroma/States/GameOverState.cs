@@ -26,7 +26,9 @@ namespace Chroma.States
       this.ticks = ticks;
 
       if (timeout > 0)
+      {
         timeout--;
+      }
 
       if (wasTouched)
       {
@@ -40,10 +42,12 @@ namespace Chroma.States
     {
       core.Renderer["fg"].FillScreen(Color.Black * 0.5f);
 
-      core.Renderer["fg"].DrawTextS("Distance: " + core.gameResult.distance.ToString() + " m", new Vector2(45, 60), Color.White, 3);
+      core.Renderer["fg"].DrawTextS("Distance: " + core.GameResult.distance.ToString() + " m", new Vector2(45, 60), Color.White, 3);
 
       if (timeout == 0)
+      {
         core.Renderer["fg"].DrawTextS("Tap to retry", new Vector2(45, 100), Color.White * ((1 + (float)Math.Sin((float)ticks / 10)) / 2f), 2);
+      }
 
       base.Draw();
     }
@@ -51,7 +55,9 @@ namespace Chroma.States
     public override void HandleInput()
     {
       if (timeout > 0)
+      {
         return;
+      }
 
       var touchState = TouchPanel.GetState();
 

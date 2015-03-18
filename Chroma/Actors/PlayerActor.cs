@@ -87,6 +87,8 @@ namespace Chroma.Actors
 
     public override void Update(int ticks)
     {
+      core.DebugWatch("On the platform", IsOnPlatform.ToString());
+
       sm.Update(ticks);
 
       if (sm.currentState == DruidState.Running && sm.justEnteredState)
@@ -133,7 +135,7 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
-      var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.GetTicks() / 2));
+      var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.Ticks / 2));
 
       var pos = new Vector2(Position.X, Position.Y);
       if (sm.currentState == DruidState.Landing)

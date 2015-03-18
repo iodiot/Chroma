@@ -11,9 +11,10 @@ namespace Chroma.Actors
 {
   public class ZapperActor : Actor
   {
+    private const int BallsCount = 4;
+
     private readonly Dictionary<int, Sprite> ballSprites;
     private readonly List<Vector3> balls;
-    private const int N_BALLS = 4;
     private MagicColor color;
 
     private int animOffset;
@@ -30,7 +31,7 @@ namespace Chroma.Actors
       ballSprites.Add(3, core.SpriteManager.GetSprite(SpriteName.zapper_ball_3));
 
       balls = new List<Vector3>();
-      for (var i = 0; i < N_BALLS; i++)
+      for (var i = 0; i < BallsCount; i++)
       {
         balls.Add(new Vector3(0));
       }
@@ -51,7 +52,7 @@ namespace Chroma.Actors
       Velocity.X = 0.1f * (float)Math.Cos((ticks) / 20) - 0.2f;
       Velocity.Y = 0.2f * (float)Math.Cos((ticks) / 17);
 
-      for (var i = 0; i < N_BALLS; i++)
+      for (var i = 0; i < BallsCount; i++)
       {
         var ball = balls[i];
         ball.X = (float)Math.Sin((double)ticks / (23 + 3 * i)) * 10;
@@ -68,7 +69,7 @@ namespace Chroma.Actors
       var color = MagicManager.MagicColors[this.color];
       core.Renderer[2].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(10), color, scale: new Vector2(0.35f));
 
-      for (var i = 0; i < N_BALLS; i++)
+      for (var i = 0; i < BallsCount; i++)
       {
         var ball = balls[i];
 
@@ -86,7 +87,7 @@ namespace Chroma.Actors
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
 
-        for (var i = 0; i < N_BALLS; i++)
+        for (var i = 0; i < BallsCount; i++)
         {
           var ball = balls[i];
           var z = (int)(Math.Ceiling(ball.Z + 3) / 2);

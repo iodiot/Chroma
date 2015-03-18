@@ -5,7 +5,7 @@ namespace Chroma.Messages
 {
   public class TextMessage : Message
   {
-    public string Text { get; private set; }
+    public readonly string Text;
 
     public TextMessage(string text) : base(MessageType.Text)
     {

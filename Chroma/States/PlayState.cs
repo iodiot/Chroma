@@ -158,7 +158,7 @@ namespace Chroma.States
     public void GameOver()
     {
       substate = SubState.GameOver;
-      core.gameResult = new GameResult(LevelGenerator.distanceMeters); 
+      core.GameResult = new GameResult(LevelGenerator.distanceMeters); 
       core.MessageManager.Send(new CoreEventMessage(CoreEvent.GameOver), this);
     }
   }

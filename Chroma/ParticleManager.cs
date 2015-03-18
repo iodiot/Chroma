@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Chroma.Graphics;
+using Chroma.Helpers;
 
 namespace Chroma
 {

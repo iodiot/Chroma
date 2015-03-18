@@ -9,10 +9,11 @@ namespace Chroma.Actors
 {
   public class PlankActor : OneWayPlatform
   {
-    Sprite sprite;
     public int Width { get; private set; }
+
+    private Sprite sprite;
     private bool isSteppedOn = false;
-    private int dy = 0;
+    private int dy;
 
     public enum PlankOrigin
     {
@@ -46,6 +47,7 @@ namespace Chroma.Actors
     public override void OnBoundingBoxTrigger(Actor other)
     {
       isSteppedOn = true;
+
       base.OnBoundingBoxTrigger(other);
     }
 

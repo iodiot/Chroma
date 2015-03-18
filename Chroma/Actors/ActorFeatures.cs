@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Chroma.Actors
 {
+  public enum Feature
+  {
+    CanMove,
+    CanLick,
+    CanFall,
+
+    OneWayObstacle
+  }
+
   public sealed class ActorFeatures
   {
-    public enum Feature
-    {
-      CanMove,
-      CanLick,
-      CanFall,
-
-      OneWayObstacle
-    }
-
     #region Factory
     public static ActorFeatures MakeTypicalBeing()
     {
@@ -26,16 +26,14 @@ namespace Chroma.Actors
     }
     #endregion
 
-    #region Handy getters
-    //public IsObstacle { get { return !Contains(CanMove) && !Contains(CanFall); } }
-    #endregion
+    private readonly HashSet<Feature> features;
+
+    public bool IsObstacle { get { return !Contains(Feature.CanMove) && !Contains(Feature.CanFall); } }
 
     public bool this[Feature feature] 
     {
       get { return Contains(feature); }
     }
-
-    private readonly HashSet<Feature> features;
 
     public ActorFeatures()
     {

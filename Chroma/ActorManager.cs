@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace Chroma
   {
     private readonly Core core;
     private readonly PlayState playState;
-    private List<Actor> actors, actorsToAdd, actorsToRemove;
+    private readonly List<Actor> actors, actorsToAdd, actorsToRemove;
 
     public ActorManager(Core core, PlayState playState)
     {
@@ -218,16 +218,20 @@ namespace Chroma
       }
 
       const float LickStep = 2.0f;
+
       var v = actor.Velocity;
       var bounced = false;
 
       // y-axis
       if (Math.Abs(v.Y) > ScienceHelper.Eps)
       {
-        var obstaclesY = GetObstacles(actor, 0, v.Y);
+        actor.IsOnPlatform = false;
+        var dy = (actor.CanLick && v.Y >= 0f) ? Math.Max(LickStep * 1.5f, v.Y) : v.Y;
+
+        var obstaclesY = GetObstacles(actor, 0, dy);
         if (obstaclesY.Count > 0)
         {
-          var minY = (int)Math.Abs(v.Y);
+          var minY = (int)Math.Abs(dy);
           var box = actor.GetBoundingBoxW();
           foreach (var o in obstaclesY)
           {
@@ -236,13 +240,17 @@ namespace Chroma
             var topBox = box.Y < otherBox.Y ? box : otherBox;
             var bottomBox = box.Y < otherBox.Y ? otherBox : box;
 
-            var y = Math.Abs(topBox.Y + topBox.Height - bottomBox.Y);
-            if (y < minY)
-            {
-              minY = y;
-            }
+            minY = Math.Min(minY, Math.Abs(topBox.Y + topBox.Height - bottomBox.Y));
           }
-           
+
+          // Try to down-lick
+          if (actor.CanLick && minY > Math.Abs(actor.Velocity.Y))
+          {
+            actor.IsOnPlatform = true;
+            actor.Position += new Vector2(v.X, minY);
+            return;
+          }
+
           if (actor.CanBounce)
           {
             v.Y = -v.Y * 0.5f;
@@ -250,7 +258,8 @@ namespace Chroma
           }
           else
           {
-            v.Y = minY * Math.Sign(v.Y);
+            v.Y = minY * Math.Sign(dy);
+            actor.IsOnPlatform = minY == 0;
           }
         }
       }
@@ -270,14 +279,10 @@ namespace Chroma
             var leftBox = box.X < otherBox.X ? box : otherBox;
             var rightBox = box.X < otherBox.X ? otherBox : box;
 
-            var x = Math.Abs(rightBox.X - leftBox.X - leftBox.Width);
-            if (x < minX)
-            {
-              minX = x;
-            }
+            minX = Math.Min(minX, Math.Abs(rightBox.X - leftBox.X - leftBox.Width));
           }
                         
-          // Try to lick
+          // Try to up-lick
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep).Count == 0)
           {
             actor.Position += new Vector2(v.X, -LickStep);
@@ -297,11 +302,14 @@ namespace Chroma
       }
 
       if (bounced)
+      {
         actor.OnBounce();
+      }
 
       // Final check
       if (!ScienceHelper.IsZero(v) && GetObstacles(actor, v.X, v.Y).Count > 0)
       {
+        core.DebugMessage("final check");
         actor.Velocity = v * 0.75f;
         MoveActor(actor);
         return;
@@ -345,7 +353,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if ((a is PlatformActor) || (a is InvisiblePlatformActor))
+        if (a is PlatformActor)
         {
           var box = a.GetBoundingBoxW();
 
