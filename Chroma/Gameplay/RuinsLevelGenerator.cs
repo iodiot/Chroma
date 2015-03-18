@@ -70,6 +70,7 @@ namespace Chroma.Gameplay
           SetRatioOf(Encounter.Golem, 30);
           SetRatioOf(Encounter.Zapper, 30);
           SetRatioOf(Encounter.HealthItem, 1);
+          SetRatioOf(Encounter.Spikes, 30);
 
           SetRatioOf(Encounter.Plant, 30);
           break;

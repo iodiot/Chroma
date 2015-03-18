@@ -9,12 +9,14 @@ namespace Chroma.Actors
 {
   public class ProjectileActor : Actor
   {
+    public Actor Owner { get; protected set; }
     public readonly MagicColor color;
     private readonly Sprite sprite;
 
-    public ProjectileActor(Core core, Vector2 position, MagicColor color) : base(core, position)
+    public ProjectileActor(Core core, Vector2 position, MagicColor color, Actor owner) : base(core, position)
     {
       this.color = color;
+      Owner = owner;
 
       boundingBox = new Rectangle(0, 0, 14, 8);
 
@@ -23,6 +25,8 @@ namespace Chroma.Actors
       CanMove = true;
       CanFall = false;
       CanLick = false;
+
+      IsSolid = false;
 
       AddCollider(new Collider() { Name = "projectile", BoundingBox = boundingBox });
 
@@ -47,7 +51,7 @@ namespace Chroma.Actors
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-      if (!(other is ProjectileActor || other is CoinActor || other is PlayerActor || other is ItemActor || other is FragmentActor))
+      if (other.IsSolid && other != Owner) 
       {
         Explode();
       }

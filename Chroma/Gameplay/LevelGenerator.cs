@@ -96,6 +96,7 @@ namespace Chroma.Gameplay
 
       // Obstacles ------
       Boulder,
+      Spikes,
 
       // Items ----------
       HealthItem,
@@ -138,6 +139,11 @@ namespace Chroma.Gameplay
           var newBoulder = new BoulderActor(core, position);
           width += newBoulder.GetBoundingBoxW().Width;
           actorManager.Add(newBoulder);
+          break;
+        case Encounter.Spikes:
+          var newSpikes = new SpikesActor(core, position, ScienceHelper.GetRandom(50, 80));
+          width += newSpikes.GetBoundingBoxW().Width;
+          actorManager.Add(newSpikes);
           break;
           #endregion
 

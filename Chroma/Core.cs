@@ -139,11 +139,14 @@ namespace Chroma
 
       // -------------------------------------
 
-      foreach (var message in debugMessages) 
+      if (Settings.DrawDebugMessages)
       {
-        message.B--;
+        foreach (var message in debugMessages)
+        {
+          message.B--;
+        }
+        debugMessages.RemoveAll(m => m.B == 0);
       }
-      debugMessages.RemoveAll(m => m.B == 0);
 
       // -------------------------------------
 
@@ -167,15 +170,22 @@ namespace Chroma
     #region Debug
     public void DebugMessage(string message)
     {
+      if (!Settings.DrawDebugMessages)
+        return;
+
       debugMessages.Insert(0, new Pair<string, int>(message, 200));
     }
 
     public void DebugWatch(string watchName, string watchValue)
     {
+      if (!Settings.DrawDebugMessages)
+        return;
       debugWatches[watchName] = watchValue;
     }
     public void RemoveDebugWatch(string watchName)
-    {
+    {      
+      if (!Settings.DrawDebugMessages)
+        return;
       debugWatches.Remove(watchName);
     }
     #endregion

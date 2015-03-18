@@ -46,6 +46,8 @@ namespace Chroma.Actors
       CanFall = true;
       CanBounce = true;
 
+      IsSolid = false;
+
       Velocity.X = (float)ScienceHelper.GetRandom(-20, 20) / 10f;
       Velocity.Y = (float)ScienceHelper.GetRandom(-30, -10) / 10f;
     }

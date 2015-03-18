@@ -22,6 +22,8 @@ namespace Chroma.Actors
       CanMove = false;
       CanFall = false;
 
+      IsSolid = false;
+
       switch (area)
       {
         default:

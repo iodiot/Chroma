@@ -28,6 +28,8 @@ namespace Chroma.Actors
     public bool CanLick { get; protected set; }
     public bool CanBounce { get; protected set; }
 
+    public bool IsSolid { get; protected set; }
+
     public bool Fell { get; protected set; }
     public bool Drowned { get; protected set; }
     public bool IsOnPlatform;
@@ -58,6 +60,9 @@ namespace Chroma.Actors
       Ttl = -1;
 
       Fell = false;
+      Drowned = false;
+
+      IsSolid = true;
     }
       
     public virtual void Load()

@@ -122,7 +122,7 @@ namespace Chroma
     #region Physics
     private void Step()
     {
-      const float G = 0.08f;
+      const float G = 0.12f;
       const float DragFactor = 0.99f;
 
       // Apply gravity

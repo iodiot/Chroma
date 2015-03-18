@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -163,40 +163,28 @@
     <Compile Include="Gui\Gui.cs" />
     <Compile Include="Gui\HealthGui.cs" />
     <Compile Include="Actors\ProjectileActor.cs" />
-    <Compile Include="Actors\SpikeActor.cs" />
     <Compile Include="Graphics\FrameCounter.cs" />
     <Compile Include="TimerManager.cs" />
     <Compile Include="ActorManager.cs" />
     <Compile Include="States\SandboxState.cs" />
-    <Compile Include="Actors\GolemActor.cs" />
     <Compile Include="Actors\CoinActor.cs" />
-    <Compile Include="Actors\SlimeWalkActor.cs" />
     <Compile Include="StateMachines\StateMachine.cs" />
     <Compile Include="Gameplay\MagicManager.cs" />
     <Compile Include="Gui\GameHudGui.cs" />
-    <Compile Include="Actors\SpriteDestroyerActor.cs" />
     <Compile Include="ParticleManager.cs" />
     <Compile Include="Gameplay\LevelGenerator.cs" />
-    <Compile Include="Actors\DecalActor.cs" />
     <Compile Include="Helpers\SmallHelpers.cs" />
-    <Compile Include="Actors\BoulderActor.cs" />
     <Compile Include="Actors\ActorFeatures.cs" />
-    <Compile Include="Actors\FlashActor.cs" />
-    <Compile Include="Actors\PlankActor.cs" />
     <Compile Include="Actors\ItemActor.cs" />
     <Compile Include="Helpers\ScienceHelper.cs" />
     <Compile Include="Graphics\ParallaxLayer.cs" />
-    <Compile Include="Actors\SlimeActor.cs" />
     <Compile Include="States\GameOverState.cs" />
     <Compile Include="Messages\CoreEventMessage.cs" />
     <Compile Include="Gameplay\JungleLevelGenerator.cs" />
     <Compile Include="Gameplay\RuinsLevelGenerator.cs" />
     <Compile Include="States\ProfileData.cs" />
-    <Compile Include="Actors\ZapperActor.cs" />
     <Compile Include="Helpers\Extensions.cs" />
-    <Compile Include="Actors\PlantActor.cs" />
     <Compile Include="Graphics\SpriteNames.cs" />
-    <Compile Include="Actors\FragmentActor.cs" />
     <Compile Include="Graphics\ParallaxDecal.cs" />
     <Compile Include="Actors\Platforms\InvisiblePlatformActor.cs">
     </Compile>
@@ -210,6 +198,18 @@
     <Compile Include="Actors\Platforms\PlatformActor.cs" />
     <Compile Include="Actors\Platforms\WaterBodyActor.cs" />
     <Compile Include="Actors\Platforms\SlopedPlatformActor.cs" />
+    <Compile Include="Actors\Enemies\GolemActor.cs" />
+    <Compile Include="Actors\Enemies\PlantActor.cs" />
+    <Compile Include="Actors\Enemies\SlimeActor.cs" />
+    <Compile Include="Actors\Enemies\SlimeWalkActor.cs" />
+    <Compile Include="Actors\Enemies\ZapperActor.cs" />
+    <Compile Include="Actors\Effects\DecalActor.cs" />
+    <Compile Include="Actors\Effects\FlashActor.cs" />
+    <Compile Include="Actors\Effects\FragmentActor.cs" />
+    <Compile Include="Actors\Effects\SpriteDestroyerActor.cs" />
+    <Compile Include="Actors\Platforms\PlankActor.cs" />
+    <Compile Include="Actors\Objects\BoulderActor.cs" />
+    <Compile Include="Actors\Objects\SpikesActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -224,6 +224,9 @@
     <Folder Include="Gameplay\" />
     <Folder Include="Helpers\" />
     <Folder Include="Actors\Platforms\" />
+    <Folder Include="Actors\Enemies\" />
+    <Folder Include="Actors\Effects\" />
+    <Folder Include="Actors\Objects\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\scheme.json">

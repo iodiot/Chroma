@@ -16,6 +16,13 @@ namespace Chroma.Graphics
                                                 // |
     // ACTORS ======================================
                                                 // |
+    // Cube ----------------------------------------
+    cube_1,                            // has link |
+    cube_2,                            // has link |
+    cube_3,                            // has link |
+    cube_4,                            // has link |
+    cube_5,                            // has link |
+                                                // |
     // Golem ---------------------------------------
     golem_1,                            // colored |
     golem_2,                            // colored |
@@ -214,8 +221,13 @@ namespace Chroma.Graphics
     heart_4,                                    // |
                                                 // |
     // Obstacles -----------------------------------
+    // Boulders                                 // |
     boulder_1,                                  // |
-    spike,                                      // |
+    // Spikes                                   // |
+    spike_1,                                    // |
+    spike_2,                                    // |
+    spike_3,                                    // |
+    spike_4,                                    // |
                                                 // |
     // Platforms -----------------------------------
     plank_1,                                    // |

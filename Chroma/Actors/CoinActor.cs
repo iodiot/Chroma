@@ -25,6 +25,8 @@ namespace Chroma.Actors
       CanFall = canMove;
       CanBounce = canMove;
 
+      IsSolid = false;
+
       // Flying out
       if (CanMove) {
         Velocity.X = ScienceHelper.GetRandom(1, 2);

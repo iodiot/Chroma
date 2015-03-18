@@ -139,6 +139,7 @@ namespace Chroma.Gui
         if (touch.Id == jumpTouchId && touch.State == TouchLocationState.Released)
         {
           jumpTouchId = -1;
+          player.StopJump();
           continue;
         }
         if (!swipes.ContainsKey(touch.Id) && jumpBox.Contains((int)touch.Position.X, (int)touch.Position.Y))

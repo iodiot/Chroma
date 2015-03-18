@@ -18,10 +18,12 @@ namespace Chroma.Actors
     public bool charging = false;
 
     public float PlatformY { get; private set; }
+    private bool holdingJump = false;
 
     #region Player stats
     public int MaxHearts { get; private set; }
     public int Hearts { get; private set; }
+
     public bool HasLost { get; private set; }
     #endregion
 
@@ -29,18 +31,18 @@ namespace Chroma.Actors
     private int hurtTimeout;
     #endregion
 
-    enum DruidState {
+    enum PlayerState {
       Running,
       Jumping,
       Falling,
       Landing
     }
-    enum DruidEvent {
+    enum PlayerEvent {
       Jump,
       Fall,
       Land
     }
-    private StateMachine<DruidState, DruidEvent> sm;
+    //private StateMachine<PlayerState, PlayerEvent> sm;
 
     public PlayerActor(Core core, Vector2 position) : base(core, position)
     {
@@ -58,18 +60,18 @@ namespace Chroma.Actors
       animation.Play("run");
       armAnimation.Play("run");
 
-      sm = new StateMachine<DruidState, DruidEvent>();
-      sm.State(DruidState.Running)
-        .IsInitial()
-        .On(DruidEvent.Jump, DruidState.Jumping)
-        .On(DruidEvent.Fall, DruidState.Falling);
-      sm.State(DruidState.Jumping)
-        .On(DruidEvent.Fall, DruidState.Falling);
-      sm.State(DruidState.Falling)
-        .On(DruidEvent.Land, DruidState.Landing);
-      sm.State(DruidState.Landing)
-        .After(10).AutoTransitionTo(DruidState.Running);
-      sm.Start();
+//      sm = new StateMachine<PlayerState, PlayerEvent>();
+//      sm.State(PlayerState.Running)
+//        .IsInitial()
+//        .On(PlayerEvent.Jump, PlayerState.Jumping)
+//        .On(PlayerEvent.Fall, PlayerState.Falling);
+//      sm.State(PlayerState.Jumping)
+//        .On(PlayerEvent.Fall, PlayerState.Falling);
+//      sm.State(PlayerState.Falling)
+//        .On(PlayerEvent.Land, PlayerState.Landing);
+//      sm.State(PlayerState.Landing)
+//        .After(10).AutoTransitionTo(PlayerState.Running);
+//      sm.Start();
 
       CanMove = true;
       CanFall = true;
@@ -87,24 +89,42 @@ namespace Chroma.Actors
 
     public override void Update(int ticks)
     {
-      core.DebugWatch("on platform", IsOnPlatform.ToString());
+      core.DebugWatch("On the platform", IsOnPlatform.ToString());
 
-      sm.Update(ticks);
-
-      if (sm.currentState == DruidState.Running && sm.justEnteredState)
-      {
-        animation.Play("run");
-      }
-        
-//      if (jumpTtl > 0)
+//      if (touchingFloor)
+//        sm.Trigger(PlayerEvent.Land);
+//      else if (Velocity.Y >= 0)
+//        sm.Trigger(PlayerEvent.Fall);
+//
+//      sm.Update(ticks);
+//
+//      // Initializing body states
+//      if (sm.justEnteredState)
+//        switch (sm.currentState)
+//        {
+//          case PlayerState.Running:
+//            animation.Play("run");
+//            break;
+//          case PlayerState.Jumping:
+//            animation.Play("jump");
+//            break;
+//          case PlayerState.Falling:
+//            animation.Play("fall");
+//            break;
+//          case PlayerState.Landing:
+//            animation.Play("land");
+//            break;
+//        }
+//
+//      // Processing body states
+//      switch (sm.currentState)
 //      {
-//        animation.Play("fall");
-//        sm.Trigger(DruidEvent.Fall);
-//      }
-//      else
-//      {
-//        animation.Play("land");
-//        sm.Trigger(DruidEvent.Land);
+//        case PlayerState.Jumping:
+//          if (holdingJump)
+//            Velocity.Y = -4f;
+//          break;
+//        case PlayerState.Falling:
+//          break;
 //      }
 
       if (hurtTimeout > 0)
@@ -119,18 +139,24 @@ namespace Chroma.Actors
         Velocity.X = 2.0f;
 
       base.Update(ticks);
+
+      //core.DebugWatch("player", sm.currentState.ToString());
     }
 
     public void TryToJump()
     {
-      //if (sm.currentState == DruidState.Running)
+      if (IsOnPlatform)
       {
-        Velocity.Y = -3.0f;
-        //Velocity.X = 2f;
-
-        //animation.Play("jump");
-        //sm.Trigger(DruidEvent.Jump);
+        //sm.Trigger(PlayerEvent.Jump);
+        holdingJump = true;
       }
+
+      Velocity.Y = -4f;
+    }
+
+    public void StopJump()
+    {
+      holdingJump = false;
     }
 
     public override void Draw()
@@ -138,8 +164,8 @@ namespace Chroma.Actors
       var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.Ticks / 2));
 
       var pos = new Vector2(Position.X, Position.Y);
-      if (sm.currentState == DruidState.Landing)
-        pos.Y += 5;
+//      if (sm.currentState == PlayerState.Landing)
+//        pos.Y += 5;
 
       core.Renderer[10].DrawSpriteW(animation.GetCurrentFrame(), pos, tint);
 
@@ -166,7 +192,7 @@ namespace Chroma.Actors
     {
       core.MessageManager.Send(
         new AddActorMessage(
-          new ProjectileActor(core, Position + new Vector2(10, 10), chargeColor)
+          new ProjectileActor(core, Position + new Vector2(10, 10), chargeColor, this)
         ),
         this
       );
@@ -215,7 +241,7 @@ namespace Chroma.Actors
 
       if (Hearts == 0)
       {
-        Die();
+        //Die();
       }
     }
 

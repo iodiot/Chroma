@@ -33,6 +33,8 @@ namespace Chroma.Actors
       CanMove = true;
       CanBounce = true;
 
+      IsSolid = false;
+
       animOffset = ScienceHelper.GetRandom(0, 10000);
 
       boundingBox = new Rectangle(0, 0, bubbleAnim.GetCurrentFrame().Width, bubbleAnim.GetCurrentFrame().Height);
