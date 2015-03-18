@@ -87,7 +87,7 @@ namespace Chroma.Actors
 
     public override void Update(int ticks)
     {
-      core.DebugWatch("On the platform", IsOnPlatform.ToString());
+      core.DebugWatch("on platform", IsOnPlatform.ToString());
 
       sm.Update(ticks);
 

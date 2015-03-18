@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -176,18 +176,12 @@
     <Compile Include="Gui\GameHudGui.cs" />
     <Compile Include="Actors\SpriteDestroyerActor.cs" />
     <Compile Include="ParticleManager.cs" />
-    <Compile Include="Actors\SlopedPlatformActor.cs" />
-    <Compile Include="Actors\InvisiblePlatformActor.cs" />
-    <Compile Include="Actors\PlatformActor.cs" />
-    <Compile Include="Actors\FlatPlatformActor.cs" />
-    <Compile Include="Actors\OneWayPlatform.cs" />
     <Compile Include="Gameplay\LevelGenerator.cs" />
     <Compile Include="Actors\DecalActor.cs" />
     <Compile Include="Helpers\SmallHelpers.cs" />
     <Compile Include="Actors\BoulderActor.cs" />
     <Compile Include="Actors\ActorFeatures.cs" />
     <Compile Include="Actors\FlashActor.cs" />
-    <Compile Include="Actors\WaterBodyActor.cs" />
     <Compile Include="Actors\PlankActor.cs" />
     <Compile Include="Actors\ItemActor.cs" />
     <Compile Include="Helpers\ScienceHelper.cs" />
@@ -198,17 +192,24 @@
     <Compile Include="Gameplay\JungleLevelGenerator.cs" />
     <Compile Include="Gameplay\RuinsLevelGenerator.cs" />
     <Compile Include="States\ProfileData.cs" />
-    <Compile Include="Actors\JungleFlatPlatformActor.cs" />
-    <Compile Include="Actors\JungleSlopedPlatformActor.cs" />
-    <Compile Include="Actors\RuinsFlatPlatformActor.cs" />
     <Compile Include="Actors\ZapperActor.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Actors\PlantActor.cs" />
     <Compile Include="Graphics\SpriteNames.cs" />
     <Compile Include="Actors\FragmentActor.cs" />
     <Compile Include="Graphics\ParallaxDecal.cs" />
-    <Compile Include="Actors\RuinsSlopedPlatformActor.cs" />
-    <Compile Include="Actors\GapActor.cs" />
+    <Compile Include="Actors\Platforms\InvisiblePlatformActor.cs">
+    </Compile>
+    <Compile Include="Actors\Platforms\FlatPlatformActor.cs" />
+    <Compile Include="Actors\Platforms\JungleFlatPlatformActor.cs" />
+    <Compile Include="Actors\Platforms\JungleSlopedPlatformActor.cs" />
+    <Compile Include="Actors\Platforms\RuinsFlatPlatformActor.cs" />
+    <Compile Include="Actors\Platforms\RuinsSlopedPlatformActor.cs" />
+    <Compile Include="Actors\Platforms\OneWayPlatform.cs" />
+    <Compile Include="Actors\Platforms\GapActor.cs" />
+    <Compile Include="Actors\Platforms\PlatformActor.cs" />
+    <Compile Include="Actors\Platforms\WaterBodyActor.cs" />
+    <Compile Include="Actors\Platforms\SlopedPlatformActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -222,6 +223,7 @@
     <Folder Include="StateMachines\" />
     <Folder Include="Gameplay\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Actors\Platforms\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sounds\scheme.json">
