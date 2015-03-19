@@ -45,13 +45,14 @@ namespace Chroma.Actors
     {
       bubbleAnim.Update(ticks);
       itemAnim.Update(ticks);
-      base.Update(ticks);
 
       if (bubble)
       {
         Velocity.X = 0.6f * (float)Math.Cos((ticks + animOffset) / 20);
         Velocity.Y = 0.3f * (float)Math.Cos((ticks + animOffset) / 17);
       }
+
+      base.Update(ticks);
     }
 
     public override void Draw()

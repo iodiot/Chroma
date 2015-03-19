@@ -62,10 +62,11 @@ namespace Chroma
       particlesToAdd.Add(particle);
     }
 
-    public void Update(int ticks)
+    public void Update()
     {
       deadCounter = 0;
 
+      // TODO: normal distribution
       for (var i = 0; i < (int)Math.Floor(SpawnRate); ++i)
       {
         Spawn();

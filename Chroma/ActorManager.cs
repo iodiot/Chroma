@@ -346,9 +346,9 @@ namespace Chroma
       return result;
     }
 
-    public Actor FindPlatformUnder(Vector2 position)
+    public PlatformActor FindPlatformUnder(Vector2 position)
     {
-      Actor closestActor = null;
+      PlatformActor closestActor = null;
       var minY = ScienceHelper.BigFloat;
 
       foreach (var a in actors)
@@ -367,7 +367,7 @@ namespace Chroma
           if (y < minY)
           {
             minY = y;
-            closestActor = a;
+            closestActor = a as PlatformActor;
           }
         }
       }
