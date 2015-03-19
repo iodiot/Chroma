@@ -54,23 +54,42 @@ namespace Chroma.Gameplay
 
     protected override void ProgressLevel()
     {
+      if (milestone > 0)
+        return;
+
+      ResetAllRatios();
+
+      SetRatioOf(LevelModule.Flat, 300);
+      SetRatioOf(LevelModule.Raise, 00);
+      SetRatioOf(LevelModule.Descent, 00);
+      SetRatioOf(LevelModule.Gap, 00);
+      SetRatioOf(LevelModule.Pond, 00);
+      SetRatioOf(LevelModule.CliffRight, 00);
+      SetRatioOf(LevelModule.CliffLeft, 00);
+
+      SetRatioOf(Encounter.None, 100);
+      SetRatioOf(Encounter.Cube, 30);
+
+      return;
+
       switch (milestone)
       {
         case 0:
           ResetAllRatios();
 
           SetRatioOf(LevelModule.Flat, 100);
-          SetRatioOf(LevelModule.Raise, 10);
-          SetRatioOf(LevelModule.Descent, 10);
-          SetRatioOf(LevelModule.CliffRight, 10);
-          SetRatioOf(LevelModule.Gap, 50);
-          SetRatioOf(LevelModule.Pond, 50);
+          SetRatioOf(LevelModule.Raise, 2);
+          SetRatioOf(LevelModule.Descent, 2);
+          SetRatioOf(LevelModule.CliffRight, 1);
+          SetRatioOf(LevelModule.Gap, 1);
+          SetRatioOf(LevelModule.Pond, 1);
 
           SetRatioOf(Encounter.None, 100);
-          SetRatioOf(Encounter.Golem, 30);
+          SetRatioOf(Encounter.Spikes, 20);
+          SetRatioOf(Encounter.Golem, 10);
           SetRatioOf(Encounter.Zapper, 30);
           SetRatioOf(Encounter.HealthItem, 1);
-          SetRatioOf(Encounter.Spikes, 30);
+          SetRatioOf(Encounter.Cube, 30);
 
           SetRatioOf(Encounter.Plant, 30);
           break;

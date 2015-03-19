@@ -22,6 +22,31 @@ namespace Chroma.Graphics
     cube_3,                            // has link |
     cube_4,                            // has link |
     cube_5,                            // has link |
+    cube_face_scared_0,                         // |
+    cube_face_scared_10,                        // |
+    cube_face_scared_15,                        // |
+    cube_face_scared_5,                         // |
+    // Marks                                    // |
+    cube_marks_0,                       // colored |
+    cube_marks_1,                       // colored |
+    cube_marks_10,                      // colored |
+    cube_marks_11,                      // colored |
+    cube_marks_12,                      // colored |
+    cube_marks_13,                      // colored |
+    cube_marks_14,                      // colored |
+    cube_marks_15,                      // colored |
+    cube_marks_16,                      // colored |
+    cube_marks_17,                      // colored |
+    cube_marks_18,                      // colored |
+    cube_marks_19,                      // colored |
+    cube_marks_2,                       // colored |
+    cube_marks_3,                       // colored |
+    cube_marks_4,                       // colored |
+    cube_marks_5,                       // colored |
+    cube_marks_6,                       // colored |
+    cube_marks_7,                       // colored |
+    cube_marks_8,                       // colored |
+    cube_marks_9,                       // colored |
                                                 // |
     // Golem ---------------------------------------
     golem_1,                            // colored |

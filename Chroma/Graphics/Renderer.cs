@@ -335,6 +335,11 @@ namespace Chroma.Graphics
       DrawRectangleS(new Vector2(rect.X + World.X, rect.Y + World.Y), rect.Width, rect.Height, color);
     }
 
+    public void DrawDotW(float x, float y, Color color, int radius = 2)
+    {
+      DrawRectangleW(new Rectangle((int)x - radius, (int)y - radius, radius * 2, radius * 2), color);
+    }
+
     public void DrawLineW(Vector2 from, Vector2 to, Color color)
     {
       DrawLineS(from + World, to + World, color);

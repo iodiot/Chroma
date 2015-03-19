@@ -13,6 +13,7 @@ using Chroma.Graphics;
 using Chroma.Gameplay;
 using CoreMotion;
 using Foundation;
+using System.Linq;
 
 namespace Chroma
 {
@@ -20,6 +21,8 @@ namespace Chroma
   {
     private readonly List<Pair<string, int>> debugMessages;
     private readonly Dictionary<string, string> debugWatches;
+    private readonly Dictionary<string, int> debugWatchTtls;
+    private readonly List<string> debugWatchesToRemove;
 
     public SpriteManager SpriteManager { get; private set; }
     public Renderer Renderer { get; private set; }
@@ -49,6 +52,8 @@ namespace Chroma
 
       debugMessages = new List<Pair<string, int>>();
       debugWatches = new Dictionary<string, string>();
+      debugWatchTtls = new Dictionary<string, int>();
+      debugWatchesToRemove = new List<string>();
 
       GraphicsDevice = graphicsDevice;
 
@@ -146,8 +151,20 @@ namespace Chroma
           message.B--;
         }
         debugMessages.RemoveAll(m => m.B == 0);
-      }
 
+        foreach (var key in debugWatchTtls.Keys.ToList())
+        {
+          debugWatchTtls[key] -= 1;
+          if (debugWatchTtls[key] == 0)
+            debugWatchesToRemove.Add(key);
+        }
+        foreach (var watchName in debugWatchesToRemove) {
+          debugWatches.Remove(watchName);
+          debugWatchTtls.Remove(watchName);
+        }
+        debugWatchesToRemove.Clear();
+      }
+        
       // -------------------------------------
 
       GetCurrentState().HandleInput();
@@ -176,17 +193,36 @@ namespace Chroma
       debugMessages.Insert(0, new Pair<string, int>(message, 200));
     }
 
-    public void DebugWatch(string watchName, string watchValue)
+    public void DebugMessage(bool condition, string message) 
+    {
+      if (condition)
+        DebugMessage(message);
+    }
+
+    public void DebugWatch(string watchName, string watchValue, int ttl = 10)
     {
       if (!Settings.DrawDebugMessages)
         return;
       debugWatches[watchName] = watchValue;
+      debugWatchTtls[watchName] = ttl;
     }
+
+    public void DebugWatch(Object obj, string watchName, string watchValue, int ttl = 10)
+    {
+      if (!Settings.DrawDebugMessages)
+        return;
+
+      DebugWatch(
+        obj.GetType().Name + " " + String.Format("{0,3:X}", obj.GetHashCode() % 1000) + ((watchName != "") ? " " + watchName : ""), 
+        watchValue, ttl);
+    }
+
     public void RemoveDebugWatch(string watchName)
     {      
       if (!Settings.DrawDebugMessages)
         return;
       debugWatches.Remove(watchName);
+      debugWatchTtls.Remove(watchName);
     }
     #endregion
 
@@ -216,13 +252,19 @@ namespace Chroma
         var maxWidth = 0f;
         foreach (var watch in debugWatches) {
           i += 7;
-          var w = Renderer["fg", 1000].DrawTextS(
-            watch.Key + ": " + watch.Value,
+          var w1 = Renderer["fg", 1000].DrawTextS(
+            watch.Key + ": ",
             new Vector2(5, i),
+            Color.Lime * 0.6f,
+            0.66f
+          );
+          var w2 = Renderer["fg", 1000].DrawTextS(
+            watch.Value,
+            new Vector2(5 + w1, i),
             Color.White * 0.5f,
             0.66f
           );
-          maxWidth = Math.Max(w, maxWidth);
+          maxWidth = Math.Max(w1 + w2, maxWidth);
         }
         Renderer["fg", 999].DrawRectangleS(new Rectangle(0, 0, (int)maxWidth + 10, 7 * debugWatches.Count + 7), Color.Black * 0.5f);
       }

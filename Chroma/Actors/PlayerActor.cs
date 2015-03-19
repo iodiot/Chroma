@@ -89,8 +89,6 @@ namespace Chroma.Actors
 
     public override void Update(int ticks)
     {
-      core.DebugWatch("On the platform", IsOnPlatform.ToString());
-
 //      if (touchingFloor)
 //        sm.Trigger(PlayerEvent.Land);
 //      else if (Velocity.Y >= 0)
@@ -211,6 +209,7 @@ namespace Chroma.Actors
       if (other is PlatformActor)
       {
         PlatformY = other.GetBoundingBoxW().Top;
+        core.DebugWatch("platform Y", PlatformY.ToString(), 1000000);
       }
 
       base.OnBoundingBoxTrigger(other);

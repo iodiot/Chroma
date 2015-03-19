@@ -8,7 +8,7 @@ namespace Chroma.Graphics
     public string CurrentSequence { get; private set; }
     public float Speed { get; set; }
     public bool Loop { get; set; }
-    public bool Paused { get; set; }
+    public bool Paused { get; private set; }
     public bool Reverse { get; set; }
     public bool Pong { get; set; }
     public bool JustStopped { get; private set; }
@@ -52,8 +52,11 @@ namespace Chroma.Graphics
       Play(name);
     }
 
-    public void Play(string name)
+    public void Play(string name = "")
     {
+      if (name == "")
+        name = CurrentSequence;
+
       Debug.Assert(animations[name] != null, String.Format("Animation.Play() : Sequence {0} is missing", name));
 
       Paused = false;
@@ -63,6 +66,10 @@ namespace Chroma.Graphics
 
       CurrentSequence = name;
       Reset();
+    }
+
+    public void Pause() {
+      Paused = true;
     }
 
     private void InternalUpdate(bool forward = true)

@@ -113,7 +113,8 @@ namespace Chroma.Gameplay
       Plant,
       // Ruins,
       Golem,
-      Zapper
+      Zapper,
+      Cube
     }
       
     protected void SpawnEncounter(Encounter encounter)
@@ -187,6 +188,12 @@ namespace Chroma.Gameplay
         case Encounter.Zapper:
           var newZapper = new ZapperActor(core, position, MagicManager.GetRandomColor(0.2f));
           actorManager.Add(newZapper);
+          break;
+
+        case Encounter.Cube:
+          var newCube = new CubeActor(core, position);
+          width += newCube.GetBoundingBoxW().Width + 20;
+          actorManager.Add(newCube);
           break;
           #endregion
       }

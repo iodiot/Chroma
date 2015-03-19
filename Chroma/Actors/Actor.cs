@@ -82,24 +82,30 @@ namespace Chroma.Actors
         --Ttl;
       }
 
-      if (Drowned)
-      {
-        Velocity.Y /= 1.2f;
-      }
+//      if (Drowned)
+//      {
+//        Velocity.Y /= 1.2f;
+//      }
     }
 
     public virtual void Draw()
     {
       if (Settings.DrawBoundingBoxes)
       {
-        core.Renderer.DrawRectangleW(GetBoundingBoxW(), boundingBoxColor * 0.25f);
+        core.Renderer["fg", 1001].DrawRectangleW(GetBoundingBoxW(), boundingBoxColor * 0.25f);
+        core.Renderer["fg", 1001].DrawTextW(
+          String.Format("{0:X}", GetHashCode() % 1000), 
+          new Vector2(GetBoundingBoxW().Left, GetBoundingBoxW().Top),
+          Color.White,
+          0.33f
+        );
       }
 
       if (Settings.DrawColliders)
       {
         for (var i = 0; i < GetCollidersCount(); ++i)
         {
-          core.Renderer.DrawRectangleW(GetColliderW(i).BoundingBox, Color.Yellow * 0.25f);
+          core.Renderer["fg", 1000].DrawRectangleW(GetColliderW(i).BoundingBox, Color.Yellow * 0.25f);
         }
       }
     }

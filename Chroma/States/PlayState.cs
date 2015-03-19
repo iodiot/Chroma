@@ -74,8 +74,6 @@ namespace Chroma.States
       {
         levelDistance = Player.Position.X;
 
-        core.DebugWatch("platform Y", Player.PlatformY.ToString());
-
         #region Positioning camera
         if (!Player.HasLost) {
           var targetPlatformScreenPos = (core.Renderer.ScreenHeight - 120) * 0.9f;
