@@ -9,75 +9,108 @@ using Chroma.Helpers;
 
 namespace Chroma.Actors
 {
+  class LightingVertex
+  {
+    public Vector2 Center;
+    public float Amplitude;
+    public float Phase;
+    public float PhaseSpeed;
+    public Vector2 Axis;
+
+    public Vector2 Position {get { return Center + Amplitude * (float)Math.Sin(Phase) * Axis; }}
+  }
+
   class Lighting
   {
     public int Ttl { get; private set; }
 
-    private Core core;
-    private List<Vector2> points;
-
-    public Lighting(Core core, Vector2 from, Vector2 to)
-    {
-      this.core = core;
-
-      points = new List<Vector2>();
-
-      GeneratePoints(from, to);
-
-      Ttl = 10;
-    }
+    private readonly Core core;
+    private readonly List<LightingVertex> vertices;
 
     public Lighting(Core core, Vector2 from)
     {
       this.core = core;
 
-      points = new List<Vector2>();
+      Ttl = ScienceHelper.GetRandom(30, 50);
 
-      const float R = 100f;
-      var to = from + new Vector2(ScienceHelper.GetRandom(-R, R), ScienceHelper.GetRandom(.5f * R, R));
+      // Compute aim of lighting
+      var r = ScienceHelper.GetRandom(50f, 100f);
+      var to = from + new Vector2(ScienceHelper.GetRandom(-r, r), 0f);
+      var platform = core.GetPlayState().ActorManager.FindPlatformUnder(to);
+      to.Y = (platform != null) ? platform.Y : ScienceHelper.GetRandom(0f, r * .5f);
 
-      GeneratePoints(from, to);
-
-      Ttl = 50;
+      vertices = GenerateVertices(from, to, 5, 10f);
     }
 
-    private void GeneratePoints(Vector2 from, Vector2 to)
+    private static List<LightingVertex> GenerateVertices(Vector2 from, Vector2 to, int count, float deviation)
     {
+      var result = new List<LightingVertex>();
+
       var length = (to - from).Length();
-      var step = length * 0.2f;
-      var stepsCount = (int)(length / step);
+      var step = length / (float)count;
       var dir = (to - from);
       dir.Normalize();
 
-      const float R = 5f;
+      result.Add(new LightingVertex() { Center = from });
 
-      for (var i = 0; i <= stepsCount; ++i)
+      Vector2 perp;
+      perp.X = 1f;
+      perp.Y = -(dir.X * perp.X) / dir.Y;
+
+      for (var i = 1; i < count; ++i)
       {
-        var r = (i != 0 && i != stepsCount) ? new Vector2(ScienceHelper.GetRandom(-R, R), ScienceHelper.GetRandom(-R, R)) : Vector2.Zero;
-        points.Add(from + dir * i * step + r);
+        var axis = new Vector2(ScienceHelper.GetRandom(-1f, 1f), ScienceHelper.GetRandom(-1f, 1f));
+        axis.Normalize();
+
+        var amp = ScienceHelper.GetRandom(.5f * deviation, deviation);
+
+        result.Add(new LightingVertex() {
+          Center = from + dir * i * step + perp * amp,
+          Amplitude = amp,
+          PhaseSpeed = ScienceHelper.GetRandom(0, .5f), // (float)Math.Sin(i * .01f) * 5f, //
+          Axis = axis,
+          //Phase = ScienceHelper.GetRandom(0f, 100f)
+        });
+      }
+
+      result.Add(new LightingVertex() { Center = to });
+
+      return result;
+    }
+
+    private void UpdateVertices()
+    {
+      foreach (var v in vertices)
+      {
+        if (v.Amplitude > 0f)
+        {
+          v.Phase += v.PhaseSpeed;
+        }
       }
     }
 
-    public void Update(int ticks)
+    public void Update()
     {
       if (Ttl > 0)
       {
         --Ttl;
+
+        UpdateVertices();
       }
     }
 
-    public void Draw(Vector2 startPoint)
+    public void Draw(Vector2 from, Color color)
     {
-      points[0] = startPoint;
+      vertices[0].Center = from;
 
-      for (var i = 1; i < points.Count; ++i)
+      for (var i = 1; i < vertices.Count; ++i)
       {
-        core.Renderer.DrawLineW(points[i - 1], points[i], Color.Yellow);
+        core.Renderer[1000].DrawLineW(vertices[i - 1].Position, vertices[i].Position, color);
       }
 
-      for (var i = 0; i < points.Count; ++i)
+      for (var i = 0; i < vertices.Count; ++i)
       {
-        core.Renderer.DrawRectangleW(points[i] - new Vector2(1.5f, 1.5f), 3f, 3f, Color.Red);
+       // core.Renderer[1001].DrawRectangleW(vertices[i].Position - new Vector2(1.5f, 1.5f), 3f, 3f, Color.Red);
       }
     }
   }
@@ -131,7 +164,7 @@ namespace Chroma.Actors
 
       if (lighting != null)
       {
-        lighting.Update(ticks);
+        lighting.Update();
 
         if (lighting.Ttl == 0)
         {
@@ -173,7 +206,7 @@ namespace Chroma.Actors
 
       if (lighting != null)
       {
-        lighting.Draw(Position);
+        lighting.Draw(Position, color);
       }
 
       base.Draw();

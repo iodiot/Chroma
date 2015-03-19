@@ -38,7 +38,7 @@ namespace Chroma.Actors
 
     public override void Update(int ticks)
     {
-      pm.Update(ticks);
+      pm.Update();
 
       base.Update(ticks);
     }

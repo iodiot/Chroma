@@ -138,20 +138,35 @@ namespace Chroma
       Renderer.Unload();
     }
 
-    public void Update(GameTime gameTime)
+    public PlayState GetPlayState()
     {
-      TimerManager.Update(Ticks);
+      PlayState result = null;
+      foreach (var state in states)
+      {
+        if (state is PlayState)
+        {
+        result = state as PlayState;
+          break;
+        }
+      }
 
-      // -------------------------------------
+      Debug.Assert(result != null, "Core.GetPlayState() : Play state is missing");
 
+      return result;
+    }
+
+    private void UpdateDebugMessages()
+    {
       if (Settings.DrawDebugMessages)
       {
+        // Messages
         foreach (var message in debugMessages)
         {
           message.B--;
         }
         debugMessages.RemoveAll(m => m.B == 0);
 
+        // Watches
         foreach (var key in debugWatchTtls.Keys.ToList())
         {
           debugWatchTtls[key] -= 1;
@@ -164,20 +179,64 @@ namespace Chroma
         }
         debugWatchesToRemove.Clear();
       }
-        
-      // -------------------------------------
+    }
+
+    private void DrawDebugMessages()
+    {
+      if (Settings.DrawDebugMessages)
+      {
+        // Messages
+        float i = -5;
+        foreach (var message in debugMessages) {
+          i += 10;
+          Renderer["fg", 1000].DrawTextS(
+            message.A,
+            new Vector2(Renderer.ScreenWidth - 150, i),
+            Color.White * 0.5f * ((float)message.B / 200)
+          );
+        }
+
+        // Wawtches
+        i = -2;
+        var maxWidth = 0f;
+        foreach (var watch in debugWatches) {
+          i += 7;
+          var w1 = Renderer["fg", 1000].DrawTextS(
+            watch.Key + ": ",
+            new Vector2(5, i),
+            Color.Lime * 0.6f,
+            0.66f
+          );
+          var w2 = Renderer["fg", 1000].DrawTextS(
+            watch.Value,
+            new Vector2(5 + w1, i),
+            Color.White * 0.5f,
+            0.66f
+          );
+          maxWidth = Math.Max(w1 + w2, maxWidth);
+        }
+        Renderer["fg", 999].DrawRectangleS(
+          new Rectangle(0, 0, (int)maxWidth + 10, 7 * debugWatches.Count + 7), 
+          Color.Black * 0.5f
+        );
+      }
+    }
+
+    public void Update(GameTime gameTime)
+    {
+      TimerManager.Update(Ticks);
+
+      UpdateDebugMessages();
 
       GetCurrentState().HandleInput();
 
-      foreach (State state in states)
+      foreach (var state in states)
       {
         state.Update(Ticks);
       }
 
       MessageManager.Update(Ticks);
       Renderer.Update(Ticks);
-
-      // -------------------------------------
 
       DebugWatch("fps", Math.Round(frameCounter.AverageFramesPerSecond).ToString());
 
@@ -231,44 +290,13 @@ namespace Chroma
       var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
       frameCounter.Update(deltaTime);
 
-      foreach (State state in states)
+      foreach (var state in states)
       {
         state.Draw();
       }
 
-      if (Settings.DrawDebugMessages)
-      {
-        float i = -5;
-        foreach (var message in debugMessages) {
-          i += 10;
-          Renderer["fg", 1000].DrawTextS(
-            message.A,
-            new Vector2(Renderer.ScreenWidth - 150, i),
-            Color.White * 0.5f * ((float)message.B / 200)
-          );
-        }
-
-        i = -2;
-        var maxWidth = 0f;
-        foreach (var watch in debugWatches) {
-          i += 7;
-          var w1 = Renderer["fg", 1000].DrawTextS(
-            watch.Key + ": ",
-            new Vector2(5, i),
-            Color.Lime * 0.6f,
-            0.66f
-          );
-          var w2 = Renderer["fg", 1000].DrawTextS(
-            watch.Value,
-            new Vector2(5 + w1, i),
-            Color.White * 0.5f,
-            0.66f
-          );
-          maxWidth = Math.Max(w1 + w2, maxWidth);
-        }
-        Renderer["fg", 999].DrawRectangleS(new Rectangle(0, 0, (int)maxWidth + 10, 7 * debugWatches.Count + 7), Color.Black * 0.5f);
-      }
-
+      DrawDebugMessages();
+     
       // Final draw
       Renderer.Draw();
     }
@@ -327,7 +355,8 @@ namespace Chroma
 
     private void StartGame()
     {
-      while (!(GetCurrentState() is PlayState || states.Count == 0)) {
+      while (!(GetCurrentState() is PlayState || states.Count == 0)) 
+      {
         PopState();
       }
 

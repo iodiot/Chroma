@@ -32,7 +32,7 @@ namespace Chroma.Helpers
 
     public static float GetRandom(float from, float to)
     {
-      return (float)random.NextDouble() * (to - from + 1f) + from;
+      return (float)random.NextDouble() * (to - from) + from;
     }
   }
 }
