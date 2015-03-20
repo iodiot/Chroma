@@ -69,7 +69,7 @@ namespace Chroma.Actors
         faceColor[(CubeFace)i] = color;
       }
 
-      goRight = true;//ScienceHelper.ChanceRoll();
+      goRight = ScienceHelper.ChanceRoll();
       anchor = (goRight) ? X : X - 32;
 
       DirOfTop = CubeFace.Top;
@@ -107,7 +107,7 @@ namespace Chroma.Actors
         face = 20 + face;
       if (face >= 20)
         face -= 20;
-      Debug.Print("Face: " + face.ToString());
+
       return (CubeFace)face;
     }
     #endregion
@@ -161,6 +161,14 @@ namespace Chroma.Actors
           frameN = 4;
         }
       }
+
+      Rectangle collider = GetCollider(0).BoundingBox;
+      GetCollider(0).BoundingBox = new Rectangle(
+        (int)(anchor - X),
+        collider.Y,
+        collider.Width,
+        collider.Height
+      );
         
       //core.DebugWatch(this, "", (goRight ? ">>" : "<<") + ", Top: " + DirOfTop.ToString() + ", angle = " + Angle().ToString());
 
@@ -242,7 +250,6 @@ namespace Chroma.Actors
       if (other is ProjectileActor)
       {
         var hitColor = faceColor[FaceOnSide(CubeFace.Left)];
-        core.DebugMessage(hitColor.ToString());
 
         if (((ProjectileActor)other).color == hitColor || hitColor == null) {
           core.MessageManager.Send(new RemoveActorMessage(this), this);

@@ -64,8 +64,7 @@ namespace Chroma.Gameplay
         if (first == MagicColor.Yellow && second == MagicColor.Blue)
           result = MagicColor.Green;
       }
-
-      Debug.Print(result.ToString());
+        
       return result;
     }
   }
