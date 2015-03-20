@@ -25,8 +25,8 @@ namespace Chroma.Actors
     //-------------------
 
     const int width = 32;
-    const int rollX = 23;
-    const float movementSpeed = 0.7f;
+    const int rollX = 25;
+    const float movementSpeed = 0.5f;
 
     private List<Sprite> frames;
     private int frameN;
@@ -97,6 +97,18 @@ namespace Chroma.Actors
     {
       var newFace = (int)face - 5;
       return newFace >= 0 ? (CubeFace)newFace : CubeFace.Left;
+    }
+
+    private CubeFace FaceOnSide(CubeFace side)
+    {
+      var face = (int)side - Angle();
+      face = (int)(Math.Round(face * 0.2) / 0.2);
+      if (face < 0)
+        face = 20 + face;
+      if (face >= 20)
+        face -= 20;
+      Debug.Print("Face: " + face.ToString());
+      return (CubeFace)face;
     }
     #endregion
 
@@ -171,7 +183,7 @@ namespace Chroma.Actors
       // Face
       var dfx = 0;
       var dfy = 0;
-      switch (frameN)
+      switch (frameN) // Adjust face position
       {
         case 0:
           dfx = 5;
@@ -227,13 +239,19 @@ namespace Chroma.Actors
 
     public override void OnColliderTrigger(Actor other, int otherCollider, int thisCollider)
     {
-//      if (other is ProjectileActor && ((ProjectileActor)other).color == this.color)
-//      {
-//        core.MessageManager.Send(new RemoveActorMessage(this), this);
-//        core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, animation.GetCurrentFrame())), this);
-//
-//        DropCoin();
-//      }
+      if (other is ProjectileActor)
+      {
+        var hitColor = faceColor[FaceOnSide(CubeFace.Left)];
+        core.DebugMessage(hitColor.ToString());
+
+        if (((ProjectileActor)other).color == hitColor || hitColor == null) {
+          core.MessageManager.Send(new RemoveActorMessage(this), this);
+          core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, 
+            new Vector2(anchor, Y - frames[frameN].LinkY - 5), 
+            frames[frameN])), this);
+          DropCoin(from: new Vector2(anchor + 10, Y - frames[frameN].LinkY + 10));
+        }
+      }
 
       if (other is PlayerActor)
       {

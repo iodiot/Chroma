@@ -208,6 +208,7 @@ namespace Chroma.Graphics
     cp_ring,                                    // |
                                                 // |
     // Glow ----------------------------------------
+    glow_line,                            // tiled |
     glow,                                       // |
     projectile,                         // colored |
                                                 // |

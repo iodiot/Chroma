@@ -188,6 +188,9 @@ namespace Chroma.Actors
 
     public void Shoot()
     {
+      if (chargeColor == 0)
+        return;
+
       core.MessageManager.Send(
         new AddActorMessage(
           new ProjectileActor(core, Position + new Vector2(10, 10), chargeColor, this)

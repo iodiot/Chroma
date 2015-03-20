@@ -65,6 +65,7 @@ namespace Chroma.Gameplay
           result = MagicColor.Green;
       }
 
+      Debug.Print(result.ToString());
       return result;
     }
   }

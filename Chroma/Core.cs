@@ -196,7 +196,7 @@ namespace Chroma
           );
         }
 
-        // Wawtches
+        // Watches
         i = -2;
         var maxWidth = 0f;
         foreach (var watch in debugWatches) {
