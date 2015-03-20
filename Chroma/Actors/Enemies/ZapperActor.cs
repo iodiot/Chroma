@@ -22,6 +22,8 @@ namespace Chroma.Actors
     private Lightning lightning;
     private Vector2 lightningAim;
 
+    private readonly ParticleManager pm;
+
     public ZapperActor(Core core, Vector2 position, MagicColor color) : base(core, position)
     {
       this.color = color;
@@ -54,6 +56,25 @@ namespace Chroma.Actors
       lightningAim = Position + new Vector2(ScienceHelper.GetRandom(-r, r), 0f);
       var platform = core.GetPlayState().ActorManager.FindPlatformUnder(lightningAim);
       lightningAim.Y = (platform != null) ? platform.Y : ScienceHelper.GetRandom(0f, r * .5f);
+
+      pm = new ParticleManager(core, 1f);
+      pm.OnSpawn = OnParticleSpawn;
+      pm.OnPreUpdate = OnParticleUpdate;
+    }
+
+    private void OnParticleSpawn(Particle particle)
+    {
+      particle.Position = Position + ScienceHelper.GetRandomVectorInCircle(5f);
+      particle.Ttl = ScienceHelper.GetRandom(50, 75);
+      particle.RotationSpeed = ScienceHelper.GetRandom(-.1f, .1f);
+      particle.Color = MagicManager.MagicColors[color];
+      particle.Velocity = new Vector2(ScienceHelper.GetRandom(-.1f, .1f), ScienceHelper.GetRandom(0f, -.5f));
+      particle.Scale = new Vector2(2f, 2f);
+    }
+
+    private void OnParticleUpdate(Particle particle)
+    {
+      particle.Color *= .99f;
     }
 
     public override void Update(int ticks)
@@ -82,6 +103,8 @@ namespace Chroma.Actors
             (float)Math.Sin((double)ticks / (17 + 7 * i)) * 3
           ));
       }
+
+      pm.Update();
         
       base.Update(ticks);
     }
@@ -89,7 +112,7 @@ namespace Chroma.Actors
     public override void Draw()
     {
       var color = MagicManager.MagicColors[this.color];
-      core.Renderer[2].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(10), color, scale: new Vector2(0.35f));
+      //core.Renderer[2].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(10), color, scale: new Vector2(0.35f));
 
       for (var i = 0; i < BallsCount; ++i)
       {
@@ -104,6 +127,8 @@ namespace Chroma.Actors
       {
         lightning.Draw(color);
       }
+
+      pm.Draw();
 
       base.Draw();
     }

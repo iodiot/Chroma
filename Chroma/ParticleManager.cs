@@ -51,10 +51,32 @@ namespace Chroma
 
       if (OnSpawn != null)
       {
+        // Defaults
+        particle.Sprite = core.SpriteManager.OnePixelSprite;
+        particle.Scale = new Vector2(1f, 1f);
+
         OnSpawn(particle);
       }
 
-      particlesToAdd.Add(particle);
+      // Try to find free slot
+      var n = -1;
+      for (var i = 0; i < particles.Count; ++i)
+      {
+        if (particles[i].Ttl == 0)
+        {
+          n = i;
+          break;
+        }
+      }
+
+      if (n != -1)
+      {
+        particles[n] = particle;
+      }
+      else
+      {
+        particlesToAdd.Add(particle);
+      }
     }
 
     public void Spawn(Particle particle)
@@ -143,7 +165,7 @@ namespace Chroma
       {
         if (p.Ttl > 0)
         {
-          core.Renderer[1000].DrawSpriteW(
+          core.Renderer[0].DrawSpriteW(
             p.Sprite,
             p.Position,
             p.Color,

@@ -34,6 +34,11 @@ namespace Chroma.Helpers
     {
       return (float)random.NextDouble() * (to - from) + from;
     }
+
+    public static Vector2 GetRandomVectorInCircle(float radius)
+    {
+      return new Vector2(ScienceHelper.GetRandom(-radius, radius), ScienceHelper.GetRandom(-radius, radius));
+    }
   }
 }
 
