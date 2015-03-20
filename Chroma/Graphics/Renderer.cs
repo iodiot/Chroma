@@ -340,9 +340,9 @@ namespace Chroma.Graphics
       DrawRectangleW(new Rectangle((int)x - radius, (int)y - radius, radius * 2, radius * 2), color);
     }
 
-    public void DrawLineW(Vector2 from, Vector2 to, Color color)
+    public void DrawLineW(Vector2 from, Vector2 to, Color color, float thickness = 1f)
     {
-      DrawLineS(from + World, to + World, color);
+      DrawLineS(from + World, to + World, color, thickness);
     }
 
     public void DrawSpriteW(string spriteName, Vector2 position, Color? tint = null, 
@@ -385,7 +385,7 @@ namespace Chroma.Graphics
       );
     }
 
-    public void DrawLineS(Vector2 from, Vector2 to, Color color)
+    public void DrawLineS(Vector2 from, Vector2 to, Color color, float thickness = 1f)
     {
       if (from.X > to.X)
       {
@@ -396,7 +396,7 @@ namespace Chroma.Graphics
 
       var v = to - from;
       var length = v.Length();
-      var rect = new Rectangle(0, 0, (int)length, 1);
+      var rect = new Rectangle(0, 0, (int)length + 1, 1);
 
       InternalDrawSprite(
         core.SpriteManager.OnePixel,
@@ -404,7 +404,7 @@ namespace Chroma.Graphics
         rect,
         color,
         (float)Math.Atan(v.Y / v.X), 
-        new Vector2(1.0f, 1.0f),
+        new Vector2(1.0f, thickness),
         SpriteEffects.None
       );
     }

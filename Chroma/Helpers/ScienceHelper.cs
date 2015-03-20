@@ -22,7 +22,7 @@ namespace Chroma.Helpers
 
     public static bool ChanceRoll(float chance = 0.5f)
     {
-      return GetRandom(1, 100) <= chance * 100;
+      return GetRandom(0, 100) <= chance * 100;
     }
 
     public static bool IsZero(Vector2 v)

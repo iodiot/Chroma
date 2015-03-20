@@ -9,112 +9,6 @@ using Chroma.Helpers;
 
 namespace Chroma.Actors
 {
-  class LightingVertex
-  {
-    public Vector2 Center;
-    public float Amplitude;
-    public float Phase;
-    public float PhaseSpeed;
-    public Vector2 Axis;
-
-    public Vector2 Position {get { return Center + Amplitude * (float)Math.Sin(Phase) * Axis; }}
-  }
-
-  class Lighting
-  {
-    public int Ttl { get; private set; }
-
-    private readonly Core core;
-    private readonly List<LightingVertex> vertices;
-
-    public Lighting(Core core, Vector2 from)
-    {
-      this.core = core;
-
-      Ttl = ScienceHelper.GetRandom(30, 50);
-
-      // Compute aim of lighting
-      var r = ScienceHelper.GetRandom(50f, 100f);
-      var to = from + new Vector2(ScienceHelper.GetRandom(-r, r), 0f);
-      var platform = core.GetPlayState().ActorManager.FindPlatformUnder(to);
-      to.Y = (platform != null) ? platform.Y : ScienceHelper.GetRandom(0f, r * .5f);
-
-      vertices = GenerateVertices(from, to, 5, 10f);
-    }
-
-    private static List<LightingVertex> GenerateVertices(Vector2 from, Vector2 to, int count, float deviation)
-    {
-      var result = new List<LightingVertex>();
-
-      var length = (to - from).Length();
-      var step = length / (float)count;
-      var dir = (to - from);
-      dir.Normalize();
-
-      result.Add(new LightingVertex() { Center = from });
-
-      Vector2 perp;
-      perp.X = 1f;
-      perp.Y = -(dir.X * perp.X) / dir.Y;
-
-      for (var i = 1; i < count; ++i)
-      {
-        var axis = new Vector2(ScienceHelper.GetRandom(-1f, 1f), ScienceHelper.GetRandom(-1f, 1f));
-        axis.Normalize();
-
-        var amp = ScienceHelper.GetRandom(.5f * deviation, deviation);
-
-        result.Add(new LightingVertex() {
-          Center = from + dir * i * step + perp * amp,
-          Amplitude = amp,
-          PhaseSpeed = ScienceHelper.GetRandom(0, .5f), // (float)Math.Sin(i * .01f) * 5f, //
-          Axis = axis,
-          //Phase = ScienceHelper.GetRandom(0f, 100f)
-        });
-      }
-
-      result.Add(new LightingVertex() { Center = to });
-
-      return result;
-    }
-
-    private void UpdateVertices()
-    {
-      foreach (var v in vertices)
-      {
-        if (v.Amplitude > 0f)
-        {
-          v.Phase += v.PhaseSpeed;
-        }
-      }
-    }
-
-    public void Update()
-    {
-      if (Ttl > 0)
-      {
-        --Ttl;
-
-        UpdateVertices();
-      }
-    }
-
-    public void Draw(Vector2 from, Color color)
-    {
-      vertices[0].Center = from;
-
-      for (var i = 1; i < vertices.Count; ++i)
-      {
-        core.Renderer[1000].DrawLineW(vertices[i - 1].Position, vertices[i].Position, color);
-      }
-
-      for (var i = 0; i < vertices.Count; ++i)
-      {
-       // core.Renderer[1001].DrawRectangleW(vertices[i].Position - new Vector2(1.5f, 1.5f), 3f, 3f, Color.Red);
-      }
-    }
-  }
-
   public class ZapperActor : Actor
   {
     private const int BallsCount = 4;
@@ -125,7 +19,8 @@ namespace Chroma.Actors
 
     private int animOffset;
 
-    private Lighting lighting;
+    private Lightning lightning;
+    private Vector2 lightningAim;
 
     public ZapperActor(Core core, Vector2 position, MagicColor color) : base(core, position)
     {
@@ -152,24 +47,25 @@ namespace Chroma.Actors
 
       AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
 
-      lighting = null;
+      lightning = null;
+
+      // Compute lightning aim
+      var r = ScienceHelper.GetRandom(50f, 100f);
+      lightningAim = Position + new Vector2(ScienceHelper.GetRandom(-r, r), 0f);
+      var platform = core.GetPlayState().ActorManager.FindPlatformUnder(lightningAim);
+      lightningAim.Y = (platform != null) ? platform.Y : ScienceHelper.GetRandom(0f, r * .5f);
     }
 
     public override void Update(int ticks)
     {
-      if (lighting == null && ScienceHelper.ChanceRoll(0.05f))
+      if (ScienceHelper.ChanceRoll(.05f))
       {
-        lighting = new Lighting(core, Position);
+        lightning = new Lightning(core, Position, lightningAim);
       }
 
-      if (lighting != null)
+      if (ScienceHelper.ChanceRoll(.05f))
       {
-        lighting.Update();
-
-        if (lighting.Ttl == 0)
-        {
-          lighting = null;
-        }
+        lightning = null;
       }
 
       ticks += animOffset;
@@ -204,9 +100,9 @@ namespace Chroma.Actors
         core.Renderer[4 - z].DrawSpriteW(ballSprites[z], Position + ball.XY() - new Vector2(4));
       } 
 
-      if (lighting != null)
+      if (lightning != null)
       {
-        lighting.Draw(Position, color);
+        lightning.Draw(color);
       }
 
       base.Draw();

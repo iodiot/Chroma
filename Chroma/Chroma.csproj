@@ -211,6 +211,7 @@
     <Compile Include="Actors\Objects\BoulderActor.cs" />
     <Compile Include="Actors\Objects\SpikesActor.cs" />
     <Compile Include="Actors\Enemies\CubeActor.cs" />
+    <Compile Include="Graphics\Lightning.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
