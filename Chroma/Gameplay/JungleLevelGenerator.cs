@@ -84,18 +84,19 @@ namespace Chroma.Gameplay
           ResetAllRatios();
 
           SetRatioOf(LevelModule.Flat, 200);
-          SetRatioOf(LevelModule.Raise, 40);
-          SetRatioOf(LevelModule.Descent, 40);
-          SetRatioOf(LevelModule.CliffRight, 10);
+          SetRatioOf(LevelModule.Raise, 2);
+          SetRatioOf(LevelModule.Descent, 2);
+          SetRatioOf(LevelModule.CliffRight, 2);
+          SetRatioOf(LevelModule.CliffLeft, 10);
           SetRatioOf(LevelModule.Gap, 1);
           SetRatioOf(LevelModule.Pond, 1);
 
           SetRatioOf(Encounter.None, 100);
-//          SetRatioOf(Encounter.Plant, 10);
-//          SetRatioOf(Encounter.Slime, 20);
-//          SetRatioOf(Encounter.Bridge, 2);
-//          SetRatioOf(Encounter.Boulder, 2);
-//          SetRatioOf(Encounter.HealthItem, 1);
+          SetRatioOf(Encounter.Plant, 10);
+          SetRatioOf(Encounter.Slime, 20);
+          SetRatioOf(Encounter.Bridge, 2);
+          SetRatioOf(Encounter.Boulder, 2);
+          SetRatioOf(Encounter.HealthItem, 10);
           break;
         case 200:
           SetRatioOf(Encounter.Plant, 20);

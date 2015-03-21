@@ -53,7 +53,7 @@ namespace Chroma.Actors
     {
       if (other.IsSolid && other != Owner) 
       {
-        Explode();
+        Explode(!(other is PlatformActor));
       }
 
       base.OnColliderTrigger(other, otherCollider, thisCollider);
@@ -68,16 +68,36 @@ namespace Chroma.Actors
     {
       if (other is PlatformActor || other is BoulderActor)
       {
-        Explode();
+        Explode(false);
       }
 
       base.OnBoundingBoxTrigger(other);
     }
 
-    public void Explode()
+    public void Explode(bool hit)
     {
       core.MessageManager.Send(new RemoveActorMessage(this), this);
-      core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
+
+      if (hit)
+      {
+        // TODO: Hit effect preset
+        var effect = new FragmentActor(core, Position + new Vector2(10, -5), 
+          core.SpriteManager.GetSprite(SpriteName.hit_1))
+          {
+            Scale = 1.5f,
+            Ttl = 50,
+            Layer = "add",
+            CanMove = false,
+            Tint = MagicManager.MagicColors[color],
+            Opacity = 0.9f,
+            OpacityStep = -0.05f
+          };
+        core.MessageManager.Send(new AddActorMessage(effect), this);
+      }
+      else
+      {
+        core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, sprite)), this);
+      }
     }
   }
 }

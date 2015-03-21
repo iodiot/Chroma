@@ -23,9 +23,10 @@ namespace Chroma.Actors
 
     public string Handle { get; protected set; }
 
-    public bool CanMove { get; protected set; }
+    public bool CanMove { get; set; }
     public bool CanFall { get; protected set; }
     public bool CanLick { get; protected set; }
+    public bool CanPassPlatforms { get; protected set; }
     public bool CanBounce { get; protected set; }
 
     public bool IsSolid { get; protected set; }
@@ -37,7 +38,7 @@ namespace Chroma.Actors
     private readonly List<Collider> colliders;
     protected Rectangle boundingBox;
 
-    public int Ttl { get; protected set; }
+    public int Ttl { get; set; }
     public bool IsDead { get { return Ttl == 0; } }
 
     protected Color boundingBoxColor = Color.Red;
@@ -58,6 +59,8 @@ namespace Chroma.Actors
       colliders = new List<Collider>();
 
       Ttl = -1;
+
+      CanPassPlatforms = false;
 
       Fell = false;
       Drowned = false;

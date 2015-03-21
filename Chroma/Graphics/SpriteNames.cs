@@ -86,6 +86,11 @@ namespace Chroma.Graphics
     slime_crawl_2,                      // colored |
     slime_crawl_3,                      // colored |
                                                 // |
+    // Slime fragments -----------------------------
+    slime_dead,                         // colored |
+    slime_leg_1,                                // |
+    slime_leg_2,                                // |
+                                                // |
     // Slime roll ----------------------------------
     slime_roll_1,                       // colored |
     slime_roll_2,                       // colored |
@@ -125,7 +130,6 @@ namespace Chroma.Graphics
     forest_floor_1,                             // |
     forest_floor_2,                             // |
     forest_floor_3,                             // |
-    rays,                                       // |
     tree_leaves,                                // |
     trees_l1,                                   // |
     trees_l2,                                   // |
@@ -137,7 +141,6 @@ namespace Chroma.Graphics
     trees_l5_2,                                 // |
     trees_l5_3,                                 // |
     trees_l5_4,                                 // |
-    trees_l5_5,                                 // |
     // Decorations                              // |
     earth_boulder_1,                            // |
     earth_boulder_2,                            // |
@@ -210,6 +213,7 @@ namespace Chroma.Graphics
     // Glow ----------------------------------------
     glow_line,                            // tiled |
     glow,                                       // |
+    hit_1,                                      // |
     projectile,                         // colored |
                                                 // |
     // Water ---------------------------------------

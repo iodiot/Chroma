@@ -16,6 +16,11 @@ namespace Chroma.Graphics
     Vertical =    SpriteEffects.FlipVertically
   }
 
+  public enum SpriteOrigin {
+    TopLeft,
+    Center
+  }
+
   public sealed class Renderer
   {
     private const string DefaultLayerName = "default";
@@ -35,6 +40,7 @@ namespace Chroma.Graphics
       public Rectangle SourceRect;
       public Color Tint;
       public float Rotation;
+      public Vector2 Origin;
       public Vector2 Scale;
       public SpriteEffects Flip;
       public int Depth;
@@ -213,11 +219,11 @@ namespace Chroma.Graphics
         {
           spriteBatch.Draw(
             dd.Texture, 
-            dd.Position,
+            dd.Position + dd.Origin,
             dd.SourceRect,
             dd.Tint,
             dd.Rotation,
-            Vector2.Zero,
+            dd.Origin,
             dd.Scale,
             dd.Flip,
             0
@@ -272,9 +278,10 @@ namespace Chroma.Graphics
 
     public void DrawSpriteW(Sprite sprite, Vector2 position, Color? tint = null, 
       Vector2? scale = null, float rotation = 0.0f,
-      SpriteFlip flip = SpriteFlip.None)
+      SpriteFlip flip = SpriteFlip.None,
+      SpriteOrigin origin = SpriteOrigin.TopLeft)
     {
-      DrawSpriteS(sprite, position + World, tint, scale, rotation, flip);
+      DrawSpriteS(sprite, position + World, tint, scale, rotation, flip, origin);
     }
 
     public void DrawSpriteTiledW(Sprite tile, 
@@ -347,9 +354,10 @@ namespace Chroma.Graphics
 
     public void DrawSpriteW(string spriteName, Vector2 position, Color? tint = null, 
       Vector2? scale = null, float rotation = 0.0f,
-      SpriteFlip flip = SpriteFlip.None)
+      SpriteFlip flip = SpriteFlip.None,
+      SpriteOrigin origin = SpriteOrigin.TopLeft)
     {
-      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position + World, tint, scale, rotation, flip);
+      DrawSpriteS(core.SpriteManager.GetSprite(spriteName), position + World, tint, scale, rotation, flip, origin);
     }
 
     #endregion
@@ -358,15 +366,17 @@ namespace Chroma.Graphics
 
     public void DrawSpriteS(string spriteName, Vector2 position, Color? tint = null, 
       Vector2? scale = null, float rotation = 0.0f, 
-      SpriteFlip flip = SpriteFlip.None)
+      SpriteFlip flip = SpriteFlip.None,
+      SpriteOrigin origin = SpriteOrigin.TopLeft)
     {
       var sprite = core.SpriteManager.GetSprite(spriteName);
-      DrawSpriteS(sprite, position, tint ?? Color.White, scale, rotation, flip);
+      DrawSpriteS(sprite, position, tint ?? Color.White, scale, rotation, flip, origin);
     }
 
     public void DrawSpriteS(Sprite sprite, Vector2 position, Color? tint = null,
       Vector2? scale = null, float rotation = 0.0f, 
-      SpriteFlip flip = SpriteFlip.None)
+      SpriteFlip flip = SpriteFlip.None,
+      SpriteOrigin origin = SpriteOrigin.TopLeft)
     {
       var offset = sprite.GetOffset();
       if (scale != null)
@@ -374,13 +384,28 @@ namespace Chroma.Graphics
         offset.X *= ((Vector2)scale).X;
         offset.Y *= ((Vector2)scale).Y;
       }
+
+      Vector2 actualScale = scale ?? new Vector2(1f);
+
+      var actualOrigin = new Vector2(0);
+      switch (origin)
+      {
+        case SpriteOrigin.TopLeft:
+          break;
+        case SpriteOrigin.Center:
+          actualOrigin.X = sprite.SrcWidth * actualScale.X / 2;
+          actualOrigin.Y = sprite.SrcHeight * actualScale.Y / 2;
+          break;
+      }
+
       InternalDrawSprite(
         core.SpriteManager.GetTexture(sprite.TextureName),
         position + offset,
         new Rectangle(sprite.X, sprite.Y, sprite.SrcWidth, sprite.SrcHeight),
         tint ?? Color.White,
         rotation,
-        scale ?? new Vector2(1.0f, 1.0f),
+        actualOrigin,
+        actualScale,
         (SpriteEffects)flip
       );
     }
@@ -403,7 +428,8 @@ namespace Chroma.Graphics
         from,
         rect,
         color,
-        (float)Math.Atan(v.Y / v.X), 
+        (float)Math.Atan(v.Y / v.X),
+        new Vector2(0, thickness / 2),
         new Vector2(1.0f, thickness),
         SpriteEffects.None
       );
@@ -417,6 +443,7 @@ namespace Chroma.Graphics
         new Rectangle(0, 0, (int)width, (int)height), 
         color, 
         0,
+        new Vector2(0),
         new Vector2(1.0f, 1.0f),
         SpriteEffects.None
       );
@@ -430,6 +457,7 @@ namespace Chroma.Graphics
         new Rectangle(0, 0, rect.Width, rect.Height), 
         color, 
         0,
+        new Vector2(0),
         new Vector2(1.0f, 1.0f),
         SpriteEffects.None
       );
@@ -459,7 +487,7 @@ namespace Chroma.Graphics
     #endregion
   
     private void InternalDrawSprite(Texture2D texture, Vector2 position, Rectangle sourceRect, 
-      Color tint, float rotation, Vector2 scale, SpriteEffects flip)
+      Color tint, float rotation, Vector2 origin, Vector2 scale, SpriteEffects flip)
     {
       const float D = 1.0f; // delta
 
@@ -476,6 +504,7 @@ namespace Chroma.Graphics
             SourceRect = sourceRect,
             Tint = tint,
             Rotation = rotation,
+            Origin = origin,
             Scale = scale,
             Flip = flip,
             Depth = currentDepth

@@ -84,7 +84,7 @@ namespace Chroma.States
           core.Renderer.WorldYOffset = 0;// += (targetWorldYOffset - core.Renderer.WorldYOffset) * 0.02f;
 
           core.Renderer.World = new Vector2(
-            25 - Player.Position.X, 
+            40 - Player.Position.X, 
             currentWorldY + (targetWorldY - currentWorldY) * 0.05f
           );
           core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - Player.Position.Y);

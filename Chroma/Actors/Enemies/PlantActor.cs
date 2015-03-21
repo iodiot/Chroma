@@ -280,8 +280,12 @@ namespace Chroma.Actors
       {
         sm.Trigger(PlantEvent.Die);
 
-        core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(
-          core, headPos + new Vector2(-6, 2), head.GetCurrentFrame())), this);
+//        core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(
+//          core, headPos + new Vector2(-6, 2), head.GetCurrentFrame())), this);
+        var fragment = new FragmentActor(core, headPos, 
+          head.GetCurrentFrame(), 
+          FragmentActor.Preset.Remains);
+        core.MessageManager.Send(new AddActorMessage(fragment), this);
           
         DropCoin(from: headPos);
       }

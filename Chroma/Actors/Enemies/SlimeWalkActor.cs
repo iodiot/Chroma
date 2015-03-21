@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Chroma.Graphics;
 using Chroma.Messages;
 using Chroma.Gameplay;
+using Chroma.Helpers;
 
 namespace Chroma.Actors
 {
@@ -54,7 +55,23 @@ namespace Chroma.Actors
       if (other is ProjectileActor && ((ProjectileActor)other).color == this.Color)
       {
         core.MessageManager.Send(new RemoveActorMessage(this), this);
-        core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, walkAnimation.GetCurrentFrame())), this);
+        //core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, walkAnimation.GetCurrentFrame())), this);
+
+        var fragment = new FragmentActor(core, Position + new Vector2(4, 0), 
+          core.SpriteManager.GetSprite(SpriteName.slime_leg_1), 
+          FragmentActor.Preset.Remains);
+        core.MessageManager.Send(new AddActorMessage(fragment), this);
+
+        fragment = new FragmentActor(core, Position, 
+          core.SpriteManager.GetSprite(SpriteName.slime_leg_2), 
+          FragmentActor.Preset.Remains);
+        fragment.zIndex = -1;
+        core.MessageManager.Send(new AddActorMessage(fragment), this);
+
+        fragment = new FragmentActor(core, Position + new Vector2(4, 0), 
+          core.SpriteManager.GetSprite(SpriteName.slime_dead, Color), 
+          FragmentActor.Preset.Remains) { RotationSpeed = 0.2f };
+        core.MessageManager.Send(new AddActorMessage(fragment), this);
 
         DropCoin();
       }

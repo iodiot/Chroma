@@ -204,7 +204,6 @@
     <Compile Include="Actors\Enemies\SlimeWalkActor.cs" />
     <Compile Include="Actors\Enemies\ZapperActor.cs" />
     <Compile Include="Actors\Effects\DecalActor.cs" />
-    <Compile Include="Actors\Effects\FlashActor.cs" />
     <Compile Include="Actors\Effects\FragmentActor.cs" />
     <Compile Include="Actors\Effects\SpriteDestroyerActor.cs" />
     <Compile Include="Actors\Platforms\PlankActor.cs" />

@@ -110,6 +110,11 @@ namespace Chroma.Actors
 
       }
     }
+
+    public override bool IsPassableFor(Actor actor)
+    {
+      return actor.CanPassPlatforms;
+    }
   }
 }
 

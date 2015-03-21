@@ -452,8 +452,9 @@ namespace Chroma.Gameplay
           break;
 
         case LevelModule.CliffLeft:
-          SpawnSlope(SlopeDirection.Down, 2, -30);
+          //SpawnSlope(SlopeDirection.Down, 2, -30);
           SpawnFlat(30);
+          SpawnFlat(30, -30);
           break;
 
         case LevelModule.Gap:

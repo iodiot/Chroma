@@ -5,6 +5,7 @@ using Chroma.Graphics;
 using Chroma.Messages;
 using Chroma.Gameplay;
 using Chroma.StateMachines;
+using Chroma.Helpers;
 
 namespace Chroma.Actors
 {
@@ -77,7 +78,12 @@ namespace Chroma.Actors
         if (other is ProjectileActor && ((ProjectileActor)other).color == this.Color)
         {
           core.MessageManager.Send(new RemoveActorMessage(this), this);
-          core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, animation.GetCurrentFrame())), this);
+          //core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, animation.GetCurrentFrame())), this);
+
+          var fragment = new FragmentActor(core, Position + new Vector2(0, -5), 
+            core.SpriteManager.GetSprite(SpriteName.slime_dead, Color), 
+            FragmentActor.Preset.Remains);
+          core.MessageManager.Send(new AddActorMessage(fragment), this);
 
           DropCoin();
         }
