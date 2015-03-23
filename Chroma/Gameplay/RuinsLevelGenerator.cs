@@ -12,32 +12,87 @@ namespace Chroma.Gameplay
 {
   public class RuinsLevelGenerator : LevelGenerator
   {
+    private int nextBgObjectIn = 0;
+    private int lastObjectIndex = -1;
+
     public RuinsLevelGenerator(Core core, ActorManager actorManager, Area area) : base(core, actorManager, area)
     {
       // Background
-      bgColor = new Color(9, 16, 25);
+      bgColor = new Color(8, 20, 14);
 
-      BG.Add(new ParallaxLayer(core, 21, 0.1f, 1));
-      BG.Add(new ParallaxLayer(core, 21, 0.2f, 2));
-      BG.Add(new ParallaxLayer(core, 7, 0.5f, 3));
-      BG.Add(new ParallaxLayer(core, -10, 0.65f, 4));
-      BG.Add(new ParallaxLayer(core, 45, 0.7f, 5));
+      var dy = 8;
+      BG.Add(new ParallaxLayer(core, 4 + dy, 0.05f, 1));
+      BG.Add(new ParallaxLayer(core, 9 + dy, 0.1f, 2));
+      BG.Add(new ParallaxLayer(core, 0 + dy, 0.2f, 3, new Color(12, 29, 21), 10));
+      BG.Add(new ParallaxLayer(core, 59 + dy, 0.65f, 4));
+      BG.Add(new ParallaxLayer(core, 94 + dy, 0.65f, 5));
 
-      BG.Add(new ParallaxLayer(core, 91, 0.75f, 5));
-      BG.Add(new ParallaxLayer(core, 99, 0.8f, 5));
-      BG.Add(new ParallaxLayer(core, 107, 0.85f, 5));
-      BG.Add(new ParallaxLayer(core, 115, 0.9f, 5));
+      LoadBGTape(1, new string[] { "ruins_sky" });
+      LoadBGTape(2, new string[] { "ruins_trees_l1" });
+      LoadBGTape(3, new string[] { "ruins_trees_l2" });
+      LoadBGTape(4, new string[] { "ruins_bg_platform_1", "ruins_bg_platform_2" });
+      LoadBGTape(5, new string[] { "ruins_bg_bottom" });
 
-      LoadBGTape(1, new string[] { "trees_l1" });
-      LoadBGTape(2, new string[] { "trees_l2" });
-      LoadBGTape(3, new string[] { "trees_l3_1", "trees_l3_2", "trees_l3_3" });
-      LoadBGTape(4, new string[] { "trees_l4" });
-      LoadBGTape(5, new string[] { "forest_floor_0" });
+      var sun = core.SpriteManager.GetSprite(SpriteName.ruins_sun);
+      var newDecal = new ParallaxDecal(core, 
+        sun, 
+        core.Renderer.ScreenWidth * 0.8f, 12, 
+        0f, "bg", 1
+      );
+      PlaceDecal(newDecal);
+    }
 
-      LoadBGTape(6, new string[] { "forest_floor_1", "forest_floor_2", "forest_floor_3" });
-      LoadBGTape(7, new string[] { "forest_floor_1", "forest_floor_2", "forest_floor_3" });
-      LoadBGTape(8, new string[] { "forest_floor_1", "forest_floor_2", "forest_floor_3" });
-      LoadBGTape(9, new string[] { "forest_floor_1", "forest_floor_2", "forest_floor_3" });
+    public override void Update(float distance)
+    {
+      base.Update(distance);
+
+      if (nextBgObjectIn <= 0)
+      {
+        // Trees
+        int index = ScienceHelper.GetRandom(1, 4, except: lastObjectIndex);
+        lastObjectIndex = index;
+        var sprite = core.SpriteManager.GetSprite("ruins_bg_tree_" + index.ToString());
+        var newDecal = new ParallaxDecal(core, 
+          sprite, 
+          distance + core.Renderer.ScreenWidth + 40, 8, 
+          .65f, "bg", 6
+        );
+        PlaceDecal(newDecal);
+
+        // Leaves
+        var x = distance + core.Renderer.ScreenWidth + 10;
+        var maxX = x + sprite.Width + 30 + 20;
+        var i = 0;
+        do {
+          sprite = core.SpriteManager.GetSprite(SpriteName.ruins_bg_leaves_1);
+          newDecal = new ParallaxDecal(core, 
+            sprite, 
+            x, 0, 
+            .65f, "bg", 6 + ((i % 2 == 0) ? 0 : 1)
+          );
+          PlaceDecal(newDecal);
+          x += 30;
+          i++;
+        } while (x + sprite.Width < maxX);
+
+        // Smaller leaves
+        for (i = 0; i < ScienceHelper.GetRandom(0, 3); i++)
+        {
+          sprite = core.SpriteManager.GetSprite(SpriteName.ruins_bg_leaves_2);
+          newDecal = new ParallaxDecal(core, 
+            sprite, 
+            x - ScienceHelper.GetRandom(0, 35), ScienceHelper.GetRandom(15, 25), 
+            .65f, "bg", 6
+          );
+          PlaceDecal(newDecal);
+        }
+
+        nextBgObjectIn = ScienceHelper.GetRandom(8, 30);
+      }
+      else
+      {
+        nextBgObjectIn -= dDistance;
+      }
     }
 
     public override Sprite GetGroundSprite()
@@ -54,24 +109,6 @@ namespace Chroma.Gameplay
 
     protected override void ProgressLevel()
     {
-      if (milestone > 0)
-        return;
-
-      ResetAllRatios();
-
-      SetRatioOf(LevelModule.Flat, 300);
-      SetRatioOf(LevelModule.Raise, 00);
-      SetRatioOf(LevelModule.Descent, 00);
-      SetRatioOf(LevelModule.Gap, 00);
-      SetRatioOf(LevelModule.Pond, 00);
-      SetRatioOf(LevelModule.CliffRight, 00);
-      SetRatioOf(LevelModule.CliffLeft, 00);
-
-      SetRatioOf(Encounter.None, 100);
-      SetRatioOf(Encounter.Cube, 15);
-      SetRatioOf(Encounter.Zapper, 5);
-
-      return;
 
       switch (milestone)
       {

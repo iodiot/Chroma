@@ -149,7 +149,7 @@ namespace Chroma.States
       substate = SubState.Playing;
       LevelGenerator.Go();
 
-      Player = new PlayerActor(core, new Vector2(25, -27));
+      Player = new PlayerActor(core, new Vector2(40, -27));
       ActorManager.Add(Player);
 
       GameControls = new GameHudGui(core, this, Player);

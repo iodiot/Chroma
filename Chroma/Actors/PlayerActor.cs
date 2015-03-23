@@ -212,7 +212,8 @@ namespace Chroma.Actors
       if (other is PlatformActor)
       {
         PlatformY = other.GetBoundingBoxW().Top;
-        core.DebugWatch("platform Y", PlatformY.ToString(), 1000000);
+        //core.DebugWatch("platform Y", PlatformY.ToString(), 1000000);
+        core.DebugWatch("Hearts", Hearts.ToString(), 1000000);
       }
 
       base.OnBoundingBoxTrigger(other);

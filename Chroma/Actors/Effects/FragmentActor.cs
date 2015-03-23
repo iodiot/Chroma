@@ -83,6 +83,7 @@ namespace Chroma.Actors
           hurtPlayer = false;
           zIndex = 51;
           BouncesTillDrop = 1;
+          Tint = Color.Silver;
           RotationSpeed = ScienceHelper.GetRandom(0.1f, 0.4f);
           break;
       }
@@ -129,13 +130,11 @@ namespace Chroma.Actors
 
     public override void OnFall()
     {
-      CanPassPlatforms = false;
       base.OnFall();
     }
 
     public override void OnDrown()
     {
-      CanPassPlatforms = false;
       base.OnDrown();
     }
 

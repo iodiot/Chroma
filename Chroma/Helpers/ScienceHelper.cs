@@ -15,9 +15,17 @@ namespace Chroma.Helpers
       random = new Random();
     }
 
-    public static int GetRandom(int from, int to)
+    public static int GetRandom(int from, int to, int? except = null)
     {
-      return (random.Next() % (to - from + 1)) + from;
+      int result;
+      Debug.Assert(!(from == except && to == except), "Range contains no integers but the exception.");
+
+      do
+      {
+        result = (random.Next() % (to - from + 1)) + from;
+      } while (result == except);
+
+      return result;
     }
 
     public static bool ChanceRoll(float chance = 0.5f)

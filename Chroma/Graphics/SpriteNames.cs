@@ -163,6 +163,20 @@ namespace Chroma.Graphics
     slope_grass,                                // |
                                                 // |
     // Ruins ---------------------------------------
+    // Background                               // |
+    ruins_bg_bottom,                            // |
+    ruins_bg_leaves_1,                          // |
+    ruins_bg_leaves_2,                          // |
+    ruins_bg_platform_1,                        // |
+    ruins_bg_platform_2,                        // |
+    ruins_bg_tree_1,                            // |
+    ruins_bg_tree_2,                            // |
+    ruins_bg_tree_3,                            // |
+    ruins_bg_tree_4,                            // |
+    ruins_sky,                                  // |
+    ruins_sun,                                  // |
+    ruins_trees_l1,                             // |
+    ruins_trees_l2,                             // |
     // Decorations                              // |
     leaves_1,                                   // |
     leaves_2,                                   // |

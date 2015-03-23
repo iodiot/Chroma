@@ -28,12 +28,15 @@ namespace Chroma.Gameplay
     protected List<ParallaxLayer> BG;
     protected List<ParallaxDecal> BGDecals;
 
+
     // Platforms
     public PlatformActor LastPlatform { get; private set; }
     public int CurrentX { get; private set; }
     public int CurrentY { get; private set; }
     public float distance;
     public int distanceMeters;
+
+    protected int lastDistance, dDistance;
 
     protected bool builtStartingScene = false;
     protected bool startedLevel = false;
@@ -270,6 +273,9 @@ namespace Chroma.Gameplay
         StartLevel();
         builtStartingScene = true;
       }
+        
+      dDistance = distanceMeters - lastDistance;
+      lastDistance = distanceMeters;
         
       foreach (var layer in BG)
       {

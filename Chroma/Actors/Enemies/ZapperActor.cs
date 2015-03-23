@@ -145,7 +145,7 @@ namespace Chroma.Actors
           var z = (int)(Math.Ceiling(ball.Z + 3) / 2);
           z = Math.Min(Math.Max(z, 1), 3);
 
-          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, Position + ball.XY(), ballSprites[z])), this);
+          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, Position + ball.XY(), ballSprites[z], FragmentActor.Preset.Remains)), this);
         }
 
         DropCoin();

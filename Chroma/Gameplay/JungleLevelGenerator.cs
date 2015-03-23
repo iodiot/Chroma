@@ -12,7 +12,6 @@ namespace Chroma.Gameplay
 {
   public class JungleLevelGenerator : LevelGenerator
   {
-    private int lastDistance;
     private int nextTreeIn = 0;
 
     public JungleLevelGenerator(Core core, ActorManager actorManager, Area area) : base(core, actorManager, area)
@@ -89,7 +88,7 @@ namespace Chroma.Gameplay
           SetRatioOf(LevelModule.CliffRight, 2);
           SetRatioOf(LevelModule.CliffLeft, 10);
           SetRatioOf(LevelModule.Gap, 1);
-          SetRatioOf(LevelModule.Pond, 1);
+          SetRatioOf(LevelModule.Pond, 20);
 
           SetRatioOf(Encounter.None, 100);
           SetRatioOf(Encounter.Plant, 10);
@@ -115,9 +114,6 @@ namespace Chroma.Gameplay
     public override void Update(float distance)
     {
       base.Update(distance);
-
-      var dDistance = distanceMeters - lastDistance;
-      lastDistance = distanceMeters;
 
 //      if (this.distanceMeters - lastGrassDistance > 3)
 //      {
