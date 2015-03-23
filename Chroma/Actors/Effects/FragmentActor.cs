@@ -71,20 +71,20 @@ namespace Chroma.Actors
 
       IsSolid = false;
 
-      Velocity.X = (float)ScienceHelper.GetRandom(-20, 20) / 10f;
-      Velocity.Y = (float)ScienceHelper.GetRandom(-30, -10) / 10f;
+      Velocity.X = (float)SciHelper.GetRandom(-20, 20) / 10f;
+      Velocity.Y = (float)SciHelper.GetRandom(-30, -10) / 10f;
 
       // Presets
       switch (preset)
       {
         case Preset.Remains:
-          Velocity.X = ScienceHelper.GetRandom(3, 5);
-          Velocity.Y = ScienceHelper.GetRandom(-3, -1);
+          Velocity.X = SciHelper.GetRandom(3, 5);
+          Velocity.Y = SciHelper.GetRandom(-3, -1);
           hurtPlayer = false;
           zIndex = 51;
           BouncesTillDrop = 1;
           Tint = Color.Silver;
-          RotationSpeed = ScienceHelper.GetRandom(0.1f, 0.4f);
+          RotationSpeed = SciHelper.GetRandom(0.1f, 0.4f);
           break;
       }
     }

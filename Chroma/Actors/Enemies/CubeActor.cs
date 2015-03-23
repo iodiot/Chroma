@@ -63,13 +63,13 @@ namespace Chroma.Actors
       for (var i = 0; i <= 15; i += 5)
       {
         MagicColor? color = null;
-        if (ScienceHelper.ChanceRoll(0.8f)) {
+        if (SciHelper.ChanceRoll(0.8f)) {
           color = MagicManager.GetRandomColor();
         }
         faceColor[(CubeFace)i] = color;
       }
 
-      goRight = ScienceHelper.ChanceRoll();
+      goRight = SciHelper.ChanceRoll();
       anchor = (goRight) ? X : X - 32;
 
       DirOfTop = CubeFace.Top;
@@ -251,11 +251,15 @@ namespace Chroma.Actors
       {
         var hitColor = faceColor[FaceOnSide(CubeFace.Left)];
 
-        if (((ProjectileActor)other).color == hitColor || hitColor == null) {
+        if (((ProjectileActor)other).color == hitColor || hitColor == null) 
+        {
           core.MessageManager.Send(new RemoveActorMessage(this), this);
+
           core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, 
             new Vector2(anchor, Y - frames[frameN].LinkY - 5), 
-            frames[frameN])), this);
+            frames[frameN], .05f)), this
+          );
+
           DropCoin(from: new Vector2(anchor + 10, Y - frames[frameN].LinkY + 10));
         }
       }

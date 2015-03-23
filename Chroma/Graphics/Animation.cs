@@ -34,10 +34,7 @@ namespace Chroma.Graphics
 
     public void Reset()
     {
-      if (!Reverse)
-        timeLine = 0;
-      else
-        timeLine = animations[CurrentSequence].Count - 1;
+      timeLine = Reverse ? animations[CurrentSequence].Count - 1 : 0f;
     }
 
     public void Add(string name, IEnumerable<Sprite> frames)
@@ -55,20 +52,25 @@ namespace Chroma.Graphics
     public void Play(string name = "")
     {
       if (name == "")
+      {
         name = CurrentSequence;
+      }
 
       Debug.Assert(animations[name] != null, String.Format("Animation.Play() : Sequence {0} is missing", name));
 
       Paused = false;
 
       if (CurrentSequence == name)
+      {
         return;
+      }
 
       CurrentSequence = name;
       Reset();
     }
 
-    public void Pause() {
+    public void Pause() 
+    {
       Paused = true;
     }
 
@@ -79,7 +81,9 @@ namespace Chroma.Graphics
       JustStopped = false;
 
       if (Paused)
+      {
         return;
+      }
 
       if (forward ^ Reverse)
       {

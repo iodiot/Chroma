@@ -145,7 +145,7 @@ namespace Chroma.Gameplay
           actorManager.Add(newBoulder);
           break;
         case Encounter.Spikes:
-          var newSpikes = new SpikesActor(core, position, ScienceHelper.GetRandom(50, 80));
+          var newSpikes = new SpikesActor(core, position, SciHelper.GetRandom(50, 80));
           width += newSpikes.GetBoundingBoxW().Width;
           actorManager.Add(newSpikes);
           break;
@@ -359,7 +359,7 @@ namespace Chroma.Gameplay
     protected T GetRandom<T>(List<Pair<T, int>> Ratios)
     {
       var total = Ratios.Sum(x => x.B);
-      var roll = ScienceHelper.GetRandom(1, total);
+      var roll = SciHelper.GetRandom(1, total);
       var i = -1;
       var sum = 0;
       do
@@ -444,17 +444,17 @@ namespace Chroma.Gameplay
           break;
 
         case LevelModule.Raise:
-          SpawnSlope(SlopeDirection.Up, ScienceHelper.GetRandom(1,2));
+          SpawnSlope(SlopeDirection.Up, SciHelper.GetRandom(1,2));
           SpawnFlat(30);
           break;
         case LevelModule.Descent:
-          SpawnSlope(SlopeDirection.Down, ScienceHelper.GetRandom(1,2));
+          SpawnSlope(SlopeDirection.Down, SciHelper.GetRandom(1,2));
           SpawnFlat(30);
           break;
 
         case LevelModule.CliffRight:
           SpawnSlope(SlopeDirection.Up, 2);
-          SpawnFlat(200, ScienceHelper.GetRandom(60, 100));
+          SpawnFlat(200, SciHelper.GetRandom(60, 100));
           break;
 
         case LevelModule.CliffLeft:
@@ -464,7 +464,7 @@ namespace Chroma.Gameplay
           break;
 
         case LevelModule.Gap:
-          SpawnGap(ScienceHelper.GetRandom(50, 100));
+          SpawnGap(SciHelper.GetRandom(50, 100));
           SpawnFlat(50);
           break;
 

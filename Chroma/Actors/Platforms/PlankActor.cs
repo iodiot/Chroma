@@ -28,7 +28,7 @@ namespace Chroma.Actors
       sprite = core.SpriteManager.GetSprite(
         (origin == PlankOrigin.Left) ? "plank_left" :
         (origin == PlankOrigin.Right) ? "plank_right" :
-        "plank_" + ScienceHelper.GetRandom(1, 3).ToString());
+        "plank_" + SciHelper.GetRandom(1, 3).ToString());
       boundingBox = new Rectangle(0, 0, sprite.Width, 7);
 
       Width = sprite.Width;

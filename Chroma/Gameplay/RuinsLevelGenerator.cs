@@ -49,7 +49,7 @@ namespace Chroma.Gameplay
       if (nextBgObjectIn <= 0)
       {
         // Trees
-        int index = ScienceHelper.GetRandom(1, 4, except: lastObjectIndex);
+        int index = SciHelper.GetRandom(1, 4, except: lastObjectIndex);
         lastObjectIndex = index;
         var sprite = core.SpriteManager.GetSprite("ruins_bg_tree_" + index.ToString());
         var newDecal = new ParallaxDecal(core, 
@@ -76,18 +76,18 @@ namespace Chroma.Gameplay
         } while (x + sprite.Width < maxX);
 
         // Smaller leaves
-        for (i = 0; i < ScienceHelper.GetRandom(0, 3); i++)
+        for (i = 0; i < SciHelper.GetRandom(0, 3); i++)
         {
           sprite = core.SpriteManager.GetSprite(SpriteName.ruins_bg_leaves_2);
           newDecal = new ParallaxDecal(core, 
             sprite, 
-            x - ScienceHelper.GetRandom(0, 35), ScienceHelper.GetRandom(15, 25), 
+            x - SciHelper.GetRandom(0, 35), SciHelper.GetRandom(15, 25), 
             .65f, "bg", 6
           );
           PlaceDecal(newDecal);
         }
 
-        nextBgObjectIn = ScienceHelper.GetRandom(8, 30);
+        nextBgObjectIn = SciHelper.GetRandom(8, 30);
       }
       else
       {
@@ -109,7 +109,6 @@ namespace Chroma.Gameplay
 
     protected override void ProgressLevel()
     {
-
       switch (milestone)
       {
         case 0:

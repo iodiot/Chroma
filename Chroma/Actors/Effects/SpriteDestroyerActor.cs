@@ -4,6 +4,7 @@ using Chroma.Actors;
 using Chroma.Graphics;
 using Chroma.Messages;
 using Chroma.States;
+using Chroma.Helpers;
 
 namespace Chroma.Actors
 {
@@ -12,7 +13,7 @@ namespace Chroma.Actors
     private readonly ParticleManager pm;
     private float groundLevel;
 
-    public SpriteDestroyerActor(Core core, Vector2 position, Sprite sprite) : base(core, position)
+    public SpriteDestroyerActor(Core core, Vector2 position, Sprite sprite, float pixelRate = .25f) : base(core, position)
     {
       boundingBox = new Rectangle(0, 0, sprite.Width, sprite.Height);
 
@@ -27,7 +28,7 @@ namespace Chroma.Actors
       pm = new ParticleManager(core, 0.0f);
       pm.OnPreUpdate = OnParticlePreUpdate;
 
-      SpawnParticlesFromSprite(position, sprite);
+      SpawnParticlesFromSprite(position, sprite, pixelRate);
 
       CanMove = true;
       CanFall = true;
@@ -55,14 +56,12 @@ namespace Chroma.Actors
       return true;
     }
 
-    private void SpawnParticlesFromSprite(Vector2 position, Sprite sprite)
+    private void SpawnParticlesFromSprite(Vector2 position, Sprite sprite, float pixelRate)
     {
-      const float PixelRate = 0.25f;
       const float Scale = 2.0f;
 
       var texture = core.SpriteManager.GetTexture(sprite.TextureName);
       var textureData = core.SpriteManager.GetTextureData(sprite.TextureName);
-      var random = new Random();
 
       for (var y = sprite.Y; y < sprite.Y + sprite.SrcHeight; ++y)
       {
@@ -70,24 +69,27 @@ namespace Chroma.Actors
         {
           var color = textureData[x + y * texture.Width];
 
-          if (color.A == 0 || (float)random.NextDouble() > PixelRate)
+          if (color.A == 0)
           {
             continue;
           }
 
-          var p = new Particle();
+          if (SciHelper.ChanceRoll(pixelRate))
+          {
+            var p = new Particle();
 
-          p.Position = position + new Vector2(x - sprite.X, y - sprite.Y) + sprite.GetOffset();
-          p.Color = color;
-          p.Ttl = 100 + random.Next() % 25;
-          p.Sprite = core.SpriteManager.OnePixelSprite;
-          p.Scale = new Vector2(Scale, Scale);
-          //p.RotationSpeed = ((float)random.NextDouble() * 2.0f - 1.0f) * 0.25f;
+            p.Position = position + new Vector2(x - sprite.X, y - sprite.Y) + sprite.GetOffset();
+            p.Color = color;
+            p.Ttl = SciHelper.GetRandom(100, 125);
+            p.Sprite = core.SpriteManager.OnePixelSprite;
+            p.Scale = new Vector2(Scale, Scale);
+            //p.RotationSpeed = ((float)random.NextDouble() * 2.0f - 1.0f) * 0.25f;
 
-          p.Velocity.X = ((float)random.NextDouble() * 2.0f - 1.0f);
-          p.Velocity.Y = (float)random.NextDouble() * -5.0f;
+            p.Velocity.X = SciHelper.GetRandom(-1f, 1f);
+            p.Velocity.Y = SciHelper.GetRandom(-5f, 0f);
 
-          pm.Spawn(p);
+            pm.Spawn(p);
+          }
         }
       }
     }

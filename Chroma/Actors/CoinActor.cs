@@ -30,8 +30,8 @@ namespace Chroma.Actors
       // Flying out
       if (CanMove) 
       {
-        Velocity.X = ScienceHelper.GetRandom(1f, 2f);
-        Velocity.Y = ScienceHelper.GetRandom(-3f, -1f);
+        Velocity.X = SciHelper.GetRandom(1f, 2f);
+        Velocity.Y = SciHelper.GetRandom(-3f, -1f);
       }
 
       AddCollider(new Collider() { Name = "coin", BoundingBox = boundingBox });

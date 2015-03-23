@@ -200,7 +200,7 @@ namespace Chroma.Actors
 
     protected void DropCoin(float chance = 1f, Vector2? from = null) 
     {
-      if (ScienceHelper.ChanceRoll(chance))
+      if (SciHelper.ChanceRoll(chance))
       {
         core.MessageManager.Send(new AddActorMessage(new CoinActor(core, from ?? Position, true)), this);
       } 

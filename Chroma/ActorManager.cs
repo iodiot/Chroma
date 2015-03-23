@@ -46,7 +46,7 @@ namespace Chroma
       // Remove actors
       if (ticks % 100 == 0)
       {
-        actorsToRemove.AddRange(actors.FindAll(actor => CanRemoveActor(actor)));
+        actorsToRemove.AddRange(actors.FindAll(CanRemoveActor));
       }
 
       foreach (var actor in actorsToRemove)
@@ -162,7 +162,7 @@ namespace Chroma
         {
           a.Velocity *= DragFactor;
 
-          if (ScienceHelper.IsZero(a.Velocity))
+          if (SciHelper.IsZero(a.Velocity))
           {
             a.Velocity = Vector2.Zero;
             continue;
@@ -212,7 +212,7 @@ namespace Chroma
 
     private void MoveActor(Actor actor)
     {
-      if (ScienceHelper.IsZero(actor.Velocity))
+      if (SciHelper.IsZero(actor.Velocity))
       {
         return;
       }
@@ -223,7 +223,7 @@ namespace Chroma
       var bounced = false;
 
       // y-axis
-      if (Math.Abs(v.Y) > ScienceHelper.Eps)
+      if (Math.Abs(v.Y) > SciHelper.Eps)
       {
         actor.IsOnPlatform = false;
         var dy = (actor.CanLick && v.Y >= 0f) ? Math.Max(LickStep * 1.5f, v.Y) : v.Y;
@@ -265,7 +265,7 @@ namespace Chroma
       }
 
       // x-axis
-      if (Math.Abs(v.X) > ScienceHelper.Eps)
+      if (Math.Abs(v.X) > SciHelper.Eps)
       {
         var obstaclesX = GetObstacles(actor, v.X, 0);
         if (obstaclesX.Count > 0)
@@ -307,7 +307,7 @@ namespace Chroma
       }
 
       // Final check
-      if (!ScienceHelper.IsZero(v) && GetObstacles(actor, v.X, v.Y).Count > 0)
+      if (!SciHelper.IsZero(v) && GetObstacles(actor, v.X, v.Y).Count > 0)
       {
         core.DebugMessage("final check");
         actor.Velocity = v * 0.75f;
@@ -349,7 +349,7 @@ namespace Chroma
     public PlatformActor FindPlatformUnder(Vector2 position)
     {
       PlatformActor closestActor = null;
-      var minY = ScienceHelper.BigFloat;
+      var minY = SciHelper.BigFloat;
 
       foreach (var a in actors)
       {

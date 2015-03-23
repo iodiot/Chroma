@@ -64,7 +64,7 @@ namespace Chroma.Graphics
         onScreen.Add(newSprite);
         onScreenWidth += newSprite.Width;
 
-        tapePos = ScienceHelper.GetRandom(0, tape.Length - 1);
+        tapePos = SciHelper.GetRandom(0, tape.Length - 1);
       }
     }
 

@@ -16,7 +16,8 @@ namespace Chroma.Graphics
     Vertical =    SpriteEffects.FlipVertically
   }
 
-  public enum SpriteOrigin {
+  public enum SpriteOrigin 
+  {
     TopLeft,
     Center
   }
@@ -101,11 +102,6 @@ namespace Chroma.Graphics
     private int currentDepth;
     private string currentLayerName;
     private Dictionary<string, Layer> layers;
-
-    private float shakeAmplitude;
-    private int shakeTtl;
-
-    private Random random;
     #endregion
 
     public Renderer(Core core, SpriteBatch spriteBatch, float screenWidth, float screenHeight)
@@ -119,8 +115,6 @@ namespace Chroma.Graphics
       ScreenHeight = screenHeight;
 
       World = Vector2.Zero;
-
-      random = new Random();
     }
 
     public void Load()
@@ -182,27 +176,13 @@ namespace Chroma.Graphics
 
     #endregion
 
-    #region Effects
-
-    public void ShakeScreen(float amplitude, int duration)
-    {
-      shakeAmplitude = amplitude;
-      shakeTtl = duration;
-    }
-
-    #endregion
-
     public void Update(int ticks)
     {
-      if (shakeTtl > 0)
-      {
-        --shakeTtl;
-      }
     }
 
     public void Draw()
     {
-      // statistics
+      // Statistics
       var spritesCounter = 0;
       var drawCallsCounter = 0;
 
@@ -244,13 +224,6 @@ namespace Chroma.Graphics
 
     public void Begin(BlendState blendState)
     {
-      var shake = 
-        shakeTtl > 0 
-          ? Matrix.CreateTranslation(
-              (float)random.NextDouble() * shakeAmplitude - shakeAmplitude * 0.5f, 
-              (float)random.NextDouble() * shakeAmplitude - shakeAmplitude * 0.5f, 
-              0) 
-          : Matrix.Identity;
       var scale = Matrix.CreateScale(new Vector3(Settings.ScreenScale, Settings.ScreenScale, 1));
 
       spriteBatch.Begin(
@@ -260,7 +233,7 @@ namespace Chroma.Graphics
         DepthStencilState.Default, 
         RasterizerState.CullCounterClockwise, 
         null, 
-        scale * shake
+        scale
       );
     }
 

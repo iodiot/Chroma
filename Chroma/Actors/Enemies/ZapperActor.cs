@@ -45,17 +45,17 @@ namespace Chroma.Actors
       CanFall = false;
       CanLick = true;
 
-      animOffset = ScienceHelper.GetRandom(0, 10000);
+      animOffset = SciHelper.GetRandom(0, 10000);
 
       AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
 
       lightning = null;
 
       // Compute lightning aim
-      var r = ScienceHelper.GetRandom(50f, 100f);
-      lightningAim = Position + new Vector2(ScienceHelper.GetRandom(-r, r), 0f);
+      var r = SciHelper.GetRandom(50f, 100f);
+      lightningAim = Position + new Vector2(SciHelper.GetRandom(-r, r), 0f);
       var platform = core.GetPlayState().ActorManager.FindPlatformUnder(lightningAim);
-      lightningAim.Y = (platform != null) ? platform.Y : ScienceHelper.GetRandom(0f, r * .5f);
+      lightningAim.Y = (platform != null) ? platform.Y : SciHelper.GetRandom(0f, r * .5f);
 
       pm = new ParticleManager(core, 1f);
       pm.OnSpawn = OnParticleSpawn;
@@ -64,11 +64,11 @@ namespace Chroma.Actors
 
     private void OnParticleSpawn(Particle particle)
     {
-      particle.Position = Position + ScienceHelper.GetRandomVectorInCircle(5f);
-      particle.Ttl = ScienceHelper.GetRandom(50, 75);
-      particle.RotationSpeed = ScienceHelper.GetRandom(-.1f, .1f);
+      particle.Position = Position + SciHelper.GetRandomVectorInCircle(5f);
+      particle.Ttl = SciHelper.GetRandom(50, 75);
+      particle.RotationSpeed = SciHelper.GetRandom(-.1f, .1f);
       particle.Color = MagicManager.MagicColors[color];
-      particle.Velocity = new Vector2(ScienceHelper.GetRandom(-.1f, .1f), ScienceHelper.GetRandom(0f, -.5f));
+      particle.Velocity = new Vector2(SciHelper.GetRandom(-.1f, .1f), SciHelper.GetRandom(0f, -.5f));
       particle.Scale = new Vector2(2f, 2f);
     }
 
@@ -79,12 +79,12 @@ namespace Chroma.Actors
 
     public override void Update(int ticks)
     {
-      if (ScienceHelper.ChanceRoll(.05f))
+      if (SciHelper.ChanceRoll(.05f))
       {
         lightning = new Lightning(core, Position, lightningAim);
       }
 
-      if (ScienceHelper.ChanceRoll(.05f))
+      if (SciHelper.ChanceRoll(.05f))
       {
         lightning = null;
       }

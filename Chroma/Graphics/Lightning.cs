@@ -35,14 +35,14 @@ namespace Chroma.Graphics
       const float D = .1f;
 
       var length = (to - from).Length();
-      var r = ScienceHelper.GetRandom(D, 1f - D);
+      var r = SciHelper.GetRandom(D, 1f - D);
       var dir = to - from;
       dir.Normalize();
 
       var perp = new Vector2(1f, -dir.X / (dir.Y + .01f));
       perp.Normalize();
 
-      var currentDeviation = (float)(maxDepth - currentDepth) / (float)maxDepth * maxDeviation * ScienceHelper.GetRandom(-1f, 1f);
+      var currentDeviation = (float)(maxDepth - currentDepth) / (float)maxDepth * maxDeviation * SciHelper.GetRandom(-1f, 1f);
 
       var randomPosition = from + r * length * dir + perp * currentDeviation;
 
@@ -50,6 +50,7 @@ namespace Chroma.Graphics
       vertices.Add(new LightningVertex() { Position = randomPosition });
       GenerateVertices(randomPosition, to, vertices, maxDeviation, currentDepth + 1, maxDepth);
     }
+
 
     public void Draw(Color color)
     {

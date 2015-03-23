@@ -3,14 +3,14 @@ using Microsoft.Xna.Framework;
 
 namespace Chroma.Helpers
 {
-  public class ScienceHelper
+  public class SciHelper
   {
     public static float Eps = 0.001f;
     public static float BigFloat = 100500.0f;
 
     private static Random random;
 
-    static ScienceHelper()
+    static SciHelper()
     {
       random = new Random();
     }
@@ -45,7 +45,7 @@ namespace Chroma.Helpers
 
     public static Vector2 GetRandomVectorInCircle(float radius)
     {
-      return new Vector2(ScienceHelper.GetRandom(-radius, radius), ScienceHelper.GetRandom(-radius, radius));
+      return new Vector2(SciHelper.GetRandom(-radius, radius), SciHelper.GetRandom(-radius, radius));
     }
   }
 }

@@ -40,7 +40,7 @@ namespace Chroma.Actors
       boundingBox = new Rectangle(0, 0, 20, 20);
       AddCollider(new Collider() { Name = "heart", BoundingBox = boundingBox });
 
-      animOffset = ScienceHelper.GetRandom(0, 10000);
+      animOffset = SciHelper.GetRandom(0, 10000);
 
       CanMove = false;
 
@@ -50,7 +50,7 @@ namespace Chroma.Actors
 
       stem = new Animation(loop: false);
 
-      if (isSecondHead || ScienceHelper.ChanceRoll())
+      if (isSecondHead || SciHelper.ChanceRoll())
       {
         stem.Add("idle", new List<Sprite>
           {
@@ -99,7 +99,7 @@ namespace Chroma.Actors
         headOffset = new Vector2(-11, -11);
 
         // Second head
-        if (!isSecondHead && ScienceHelper.ChanceRoll())
+        if (!isSecondHead && SciHelper.ChanceRoll())
         {
           core.MessageManager.Send(new AddActorMessage(new PlantActor(core, 
             new Vector2(
@@ -140,7 +140,7 @@ namespace Chroma.Actors
 
       sm = new StateMachine<PlantState, PlantEvent>();
       sm.State(PlantState.Idle).IsInitial()
-        .AutoTransitionTo(PlantState.Aiming).After(ScienceHelper.GetRandom(50 + delay, 100 + delay));
+        .AutoTransitionTo(PlantState.Aiming).After(SciHelper.GetRandom(50 + delay, 100 + delay));
       sm.State(PlantState.Aiming).AutoTransitionTo(PlantState.Shooting).After(50);
       sm.State(PlantState.Shooting).AutoTransitionTo(PlantState.Idle).After(25);
       sm.State(PlantState.Dying).ForcedOn(PlantEvent.Die);
@@ -256,7 +256,7 @@ namespace Chroma.Actors
         core.SpriteManager.GetSprite(SpriteName.pellet_3, color),
       });
       var pellet = new FragmentActor(core, headPos + new Vector2(-8, 8), anim);
-      pellet.Velocity.X = ScienceHelper.GetRandom(-5, -2);
+      pellet.Velocity.X = SciHelper.GetRandom(-5, -2);
       pellet.Velocity.Y = 0;
       pellet.hurtPlayer = true;
       pellet.zIndex = 5;

@@ -34,7 +34,7 @@ namespace Chroma.Gameplay
 
       do
       {
-        result = (MagicColor)(ScienceHelper.GetRandom(1, 3) + (ScienceHelper.ChanceRoll(chanceOfComplexColor) ? 3 : 0));
+        result = (MagicColor)(SciHelper.GetRandom(1, 3) + (SciHelper.ChanceRoll(chanceOfComplexColor) ? 3 : 0));
       } while (!(except == null || result != except));
 
       return result;

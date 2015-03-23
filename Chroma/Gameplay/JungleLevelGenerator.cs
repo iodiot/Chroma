@@ -127,9 +127,9 @@ namespace Chroma.Gameplay
 
       if (nextTreeIn <= 0)
       {
-        var lvl = (float)ScienceHelper.GetRandom(0, 20);
+        var lvl = (float)SciHelper.GetRandom(0, 20);
 
-        var sprite = core.SpriteManager.GetSprite("trees_l5_" + ScienceHelper.GetRandom(1, 4).ToString());
+        var sprite = core.SpriteManager.GetSprite("trees_l5_" + SciHelper.GetRandom(1, 4).ToString());
         var newDecal = new ParallaxDecal(core, 
                          sprite, 
                          distance + core.Renderer.ScreenWidth + 40, 95 + lvl - sprite.Height, 
@@ -145,7 +145,7 @@ namespace Chroma.Gameplay
         );
         PlaceDecal(newDecal);
 
-        nextTreeIn = ScienceHelper.GetRandom(5, 20);
+        nextTreeIn = SciHelper.GetRandom(5, 20);
       }
       else
       {

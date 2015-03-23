@@ -21,7 +21,7 @@ namespace Chroma.Helpers
 
     public static bool IsZero(this Vector3 v)
     {
-      return v.Length() < ScienceHelper.Eps;
+      return v.Length() < SciHelper.Eps;
     }
   }
 }

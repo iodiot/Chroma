@@ -176,7 +176,6 @@
     <Compile Include="Helpers\SmallHelpers.cs" />
     <Compile Include="Actors\ActorFeatures.cs" />
     <Compile Include="Actors\ItemActor.cs" />
-    <Compile Include="Helpers\ScienceHelper.cs" />
     <Compile Include="Graphics\ParallaxLayer.cs" />
     <Compile Include="States\GameOverState.cs" />
     <Compile Include="Messages\CoreEventMessage.cs" />
@@ -211,6 +210,7 @@
     <Compile Include="Actors\Objects\SpikesActor.cs" />
     <Compile Include="Actors\Enemies\CubeActor.cs" />
     <Compile Include="Graphics\Lightning.cs" />
+    <Compile Include="Helpers\SciHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

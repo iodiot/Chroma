@@ -35,7 +35,7 @@ namespace Chroma.Actors
 
       IsSolid = false;
 
-      animOffset = ScienceHelper.GetRandom(0, 10000);
+      animOffset = SciHelper.GetRandom(0, 10000);
 
       boundingBox = new Rectangle(0, 0, bubbleAnim.GetCurrentFrame().Width, bubbleAnim.GetCurrentFrame().Height);
       AddCollider(new Collider() { BoundingBox = boundingBox });
@@ -80,7 +80,7 @@ namespace Chroma.Actors
 
         bubble = false;
         CanFall = true;
-        Velocity.X += 0.5f * ScienceHelper.GetRandom(3, 5);
+        Velocity.X += 0.5f * SciHelper.GetRandom(3, 5);
         core.SoundManager.Play("bubble_pop");
       }
 
