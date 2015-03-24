@@ -122,13 +122,13 @@ namespace Chroma.Gameplay
           SetRatioOf(LevelModule.Pond, 1);
 
           SetRatioOf(Encounter.None, 100);
-          SetRatioOf(Encounter.Spikes, 20);
-          SetRatioOf(Encounter.Golem, 10);
-          SetRatioOf(Encounter.Zapper, 30);
+          SetRatioOf(Encounter.Spikes, 0);
+          SetRatioOf(Encounter.Golem, 0);
+          SetRatioOf(Encounter.Zapper, 0);
           SetRatioOf(Encounter.HealthItem, 1);
           SetRatioOf(Encounter.Cube, 30);
 
-          SetRatioOf(Encounter.Plant, 30);
+          SetRatioOf(Encounter.Plant, 0);
           break;
       }
     }

@@ -82,8 +82,8 @@ namespace Chroma.Actors
           Velocity.Y = SciHelper.GetRandom(-3, -1);
           hurtPlayer = false;
           zIndex = 51;
-          BouncesTillDrop = 1;
-          Tint = Color.Silver;
+          BouncesTillDrop = SciHelper.GetRandom(1, 2);
+          //Tint = Color.Silver;
           RotationSpeed = SciHelper.GetRandom(0.1f, 0.4f);
           break;
       }

@@ -26,6 +26,13 @@ namespace Chroma.Graphics
     cube_face_scared_10,                        // |
     cube_face_scared_15,                        // |
     cube_face_scared_5,                         // |
+    // Debris                                   // |
+    cube_debris_1,                              // |
+    cube_debris_2,                              // |
+    cube_debris_3,                              // |
+    cube_debris_4,                              // |
+    cube_debris_5,                              // |
+    cube_debris_6,                              // |
     // Marks                                    // |
     cube_marks_0,                       // colored |
     cube_marks_1,                       // colored |

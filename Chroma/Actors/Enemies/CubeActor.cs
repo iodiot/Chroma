@@ -255,12 +255,61 @@ namespace Chroma.Actors
         {
           core.MessageManager.Send(new RemoveActorMessage(this), this);
 
-          core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, 
-            new Vector2(anchor, Y - frames[frameN].LinkY - 5), 
-            frames[frameN], .05f)), this
-          );
+          #region Spawn debris
+          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, 
+            new Vector2(anchor, Y - 25), 
+            core.SpriteManager.GetSprite(SpriteName.cube_debris_2), 
+            FragmentActor.Preset.Remains) {
+              RotationSpeed = SciHelper.GetRandom(0.05f, 0.1f),
+            }
+          ), this);
+          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, 
+            new Vector2(anchor, Y - 38), 
+            core.SpriteManager.GetSprite(SpriteName.cube_debris_1), 
+            FragmentActor.Preset.Remains) {
+            zIndex = 52,
+            RotationSpeed = SciHelper.GetRandom(0.05f, 0.1f),
+            Velocity = new Vector2(
+              SciHelper.GetRandom(2, 3),
+              SciHelper.GetRandom(-3, -2)
+            )
+          }
+          ), this);
+          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, 
+            new Vector2(anchor + 20, Y - 38), 
+            core.SpriteManager.GetSprite(SpriteName.cube_debris_3), 
+            FragmentActor.Preset.Remains) {
+            zIndex = 52,
+            RotationSpeed = SciHelper.GetRandom(0.1f, 0.2f),
+            Velocity = new Vector2(
+              SciHelper.GetRandom(3, 5),
+              SciHelper.GetRandom(-3, -2)
+            )
+          }
+          ), this);
+          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, 
+            new Vector2(anchor + 20, Y - 34), 
+            core.SpriteManager.GetSprite(SpriteName.cube_debris_6), 
+            FragmentActor.Preset.Remains) {
+          }
+          ), this);
+          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, 
+            new Vector2(anchor + 10, Y - 27), 
+            core.SpriteManager.GetSprite(SpriteName.cube_debris_4), 
+            FragmentActor.Preset.Remains) {
+            zIndex = 52,
+          }
+          ), this);
+          core.MessageManager.Send(new AddActorMessage(new FragmentActor(core, 
+            new Vector2(anchor + 3, Y - 23), 
+            core.SpriteManager.GetSprite(SpriteName.cube_debris_5), 
+            FragmentActor.Preset.Remains) {
+            zIndex = 52,
+          }
+          ), this);
+          #endregion
 
-          DropCoin(from: new Vector2(anchor + 10, Y - frames[frameN].LinkY + 10));
+          DropCoin(from: new Vector2(anchor + 10, Y - frames[frameN].LinkY + 10), number: 3);
         }
       }
 
