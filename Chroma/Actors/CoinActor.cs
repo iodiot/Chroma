@@ -16,10 +16,10 @@ namespace Chroma.Actors
 
     public CoinActor(Core core, Vector2 position, bool canMove = false) : base(core, position)
     {
-      boundingBox = new Rectangle(0, 0, 8, 8);
+      boundingBox = new Rectangle(0, 0, 8, 9);
 
       animation = new Animation();
-      animation.AddAndPlay("spin", core.SpriteManager.GetFrames("coin_", new List<int>{ 0, 0, 0, 0, 1, 2, 3, 4 }));
+      animation.AddAndPlay("spin", core.SpriteManager.GetFrames("coin_", new List<int>{ 1, 1, 1, 2, 3, 4 }));
 
       CanMove = canMove;
       CanFall = canMove;

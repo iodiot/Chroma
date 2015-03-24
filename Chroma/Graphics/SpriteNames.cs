@@ -260,7 +260,6 @@ namespace Chroma.Graphics
     powerup_bubble_2,                           // |
     powerup_bubble_3,                           // |
     // Coin                                     // |
-    coin_0,                                     // |
     coin_1,                                     // |
     coin_2,                                     // |
     coin_3,                                     // |
