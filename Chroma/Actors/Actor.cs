@@ -60,11 +60,6 @@ namespace Chroma.Actors
 
       Ttl = -1;
 
-      CanPassPlatforms = false;
-
-      Fell = false;
-      Drowned = false;
-
       IsSolid = true;
     }
       
@@ -93,6 +88,7 @@ namespace Chroma.Actors
 
     public virtual void Draw()
     {
+      #if DEBUG
       if (Settings.DrawBoundingBoxes)
       {
         core.Renderer["fg", 1001].DrawRectangleW(GetBoundingBoxW(), boundingBoxColor * 0.25f);
@@ -111,6 +107,7 @@ namespace Chroma.Actors
           core.Renderer["fg", 1000].DrawRectangleW(GetColliderW(i).BoundingBox, Color.Yellow * 0.25f);
         }
       }
+      #endif
     }
 
     public virtual void OnMessage(Message message, object sender)
@@ -202,7 +199,7 @@ namespace Chroma.Actors
     {
       if (SciHelper.ChanceRoll(chance))
       {
-        for (int i = 1; i <= number; i++)
+        for (var i = 0; i < number; ++i)
         {
           core.MessageManager.Send(new AddActorMessage(new CoinActor(core, from ?? Position, true)), this);
         }

@@ -15,7 +15,7 @@ namespace Chroma.Graphics
 
     private Queue<float> sampleBuffer = new Queue<float>();
 
-    public bool Update(float deltaTime)
+    public void Update(float deltaTime)
     {
       CurrentFramesPerSecond = 1.0f / deltaTime;
 
@@ -33,8 +33,6 @@ namespace Chroma.Graphics
 
       ++TotalFrames;
       TotalSeconds += deltaTime;
-
-      return true;
     }
   }
 }

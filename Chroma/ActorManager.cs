@@ -144,7 +144,7 @@ namespace Chroma
 
       foreach (var a in actors)
       {
-        if (a.CanMove)
+        if (a.CanMove && !SciHelper.IsZero(a.Velocity))
         {
           MoveActor(a);
         }
@@ -210,14 +210,56 @@ namespace Chroma
       }
     }
 
-    private void MoveActor(Actor actor)
+    private int ComputeMinDistanceY(Actor actor, float dy)
     {
-      if (SciHelper.IsZero(actor.Velocity))
+      var obstaclesY = GetObstacles(actor, 0f, dy);
+      if (obstaclesY.Count > 0)
       {
-        return;
+        var minY = (int)Math.Abs(dy);
+        var box = actor.GetBoundingBoxW();
+        foreach (var o in obstaclesY)
+        {
+          var otherBox = o.GetBoundingBoxW();
+
+          var topBox = box.Y < otherBox.Y ? box : otherBox;
+          var bottomBox = box.Y < otherBox.Y ? otherBox : box;
+
+          minY = Math.Min(minY, Math.Abs(topBox.Y + topBox.Height - bottomBox.Y));
+        }
+
+        return minY;
       }
 
-      const float LickStep = 2.0f;
+      return -1;
+    }
+
+    private int ComputeMinDistanceX(Actor actor, float dx)
+    {
+      var obstaclesX = GetObstacles(actor, dx, 0f);
+      if (obstaclesX.Count > 0)
+      {
+        var minX = (int)Math.Abs(dx);
+        var box = actor.GetBoundingBoxW();
+        foreach (var o in obstaclesX)
+        {
+          var otherBox = o.GetBoundingBoxW();
+
+          var leftBox = box.X < otherBox.X ? box : otherBox;
+          var rightBox = box.X < otherBox.X ? otherBox : box;
+
+          minX = Math.Min(minX, Math.Abs(rightBox.X - leftBox.X - leftBox.Width));
+        }
+
+        return minX;
+      }
+
+      return -1;
+    }
+
+    private void MoveActor(Actor actor)
+    {
+      const float LickStep = 2f;
+      const float LickStepWithStock = LickStep * 1.5f;
 
       var v = actor.Velocity;
       var bounced = false;
@@ -226,23 +268,11 @@ namespace Chroma
       if (Math.Abs(v.Y) > SciHelper.Eps)
       {
         actor.IsOnPlatform = false;
-        var dy = (actor.CanLick && v.Y >= 0f) ? Math.Max(LickStep * 1.5f, v.Y) : v.Y;
+        var dy = (actor.CanLick && v.Y >= 0f) ? Math.Max(LickStepWithStock, v.Y) : v.Y;   // for down-lick
 
-        var obstaclesY = GetObstacles(actor, 0, dy);
-        if (obstaclesY.Count > 0)
+        var minY = ComputeMinDistanceY(actor, dy);
+        if (minY != -1)
         {
-          var minY = (int)Math.Abs(dy);
-          var box = actor.GetBoundingBoxW();
-          foreach (var o in obstaclesY)
-          {
-            var otherBox = o.GetBoundingBoxW();
-
-            var topBox = box.Y < otherBox.Y ? box : otherBox;
-            var bottomBox = box.Y < otherBox.Y ? otherBox : box;
-
-            minY = Math.Min(minY, Math.Abs(topBox.Y + topBox.Height - bottomBox.Y));
-          }
-
           // Try to down-lick
           if (actor.CanLick && minY > Math.Abs(actor.Velocity.Y))
           {
@@ -253,13 +283,13 @@ namespace Chroma
 
           if (actor.CanBounce)
           {
-            v.Y = -v.Y * 0.5f;
-            bounced = Math.Abs(v.Y) > 0.2f;
+            v.Y = -v.Y * .5f;
+            bounced = Math.Abs(v.Y) > .2f;
           }
           else
           {
             v.Y = minY * Math.Sign(dy);
-            actor.IsOnPlatform = minY == 0;
+            actor.IsOnPlatform = (minY == 0);
           }
         }
       }
@@ -267,21 +297,12 @@ namespace Chroma
       // x-axis
       if (Math.Abs(v.X) > SciHelper.Eps)
       {
-        var obstaclesX = GetObstacles(actor, v.X, 0);
-        if (obstaclesX.Count > 0)
+        var dx = v.X;
+
+        var minX = ComputeMinDistanceX(actor, dx);
+
+        if (minX != -1)
         {
-          var minX = (int)Math.Abs(v.X);
-          var box = actor.GetBoundingBoxW();
-          foreach (var o in obstaclesX)
-          {
-            var otherBox = o.GetBoundingBoxW();
-
-            var leftBox = box.X < otherBox.X ? box : otherBox;
-            var rightBox = box.X < otherBox.X ? otherBox : box;
-
-            minX = Math.Min(minX, Math.Abs(rightBox.X - leftBox.X - leftBox.Width));
-          }
-                        
           // Try to up-lick
           if (actor.CanLick && minX == 0 && GetObstacles(actor, actor.Velocity.X, -LickStep).Count == 0)
           {
@@ -291,8 +312,8 @@ namespace Chroma
 
           if (actor.CanBounce)
           {
-            v.X = -v.X * 0.5f;
-            bounced = Math.Abs(v.X) > 0;
+            v.X = -v.X * .5f;
+            bounced = Math.Abs(v.X) > 0f;
           }
           else
           {
@@ -301,16 +322,15 @@ namespace Chroma
         }
       }
 
-      // Check if movement along two axis is acceptable
-      if (Math.Abs(v.X) > SciHelper.Eps && Math.Abs(v.Y) > SciHelper.Eps && GetObstacles(actor, v.X, v.Y).Count > 0)
-      {
-        core.DebugMessage("zzz");
-        v.Y = 0f;
-      }
-
       if (bounced)
       {
         actor.OnBounce();
+      }
+
+      // Check if movement along two axis is acceptable
+      if (Math.Abs(v.X) > SciHelper.Eps && Math.Abs(v.Y) > SciHelper.Eps && GetObstacles(actor, v.X, v.Y).Count > 0)
+      {
+        v.Y = 0f;
       }
 
       actor.Velocity = v;
