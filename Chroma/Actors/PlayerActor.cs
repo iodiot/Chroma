@@ -18,10 +18,13 @@ namespace Chroma.Actors
     public bool charging = false;
 
     public float PlatformY { get; private set; }
+
     private bool holdingJump = false;
     private int jumpReserve;
     private int maxJumpReserve;
     private float jumpSpeed;
+    private float jumpHeightTolerance;
+    private bool jumpAfterLanding = false;
 
     #region Player stats
     public int MaxHearts { get; private set; }
@@ -128,18 +131,26 @@ namespace Chroma.Actors
 //          break;
 //      }
 
-      maxJumpReserve = 10;
-      jumpSpeed = 3.0f;
-
       //DEBUG
       core.DebugWatch("Hearts", Hearts.ToString());
-      core.DebugWatch("Jump reserve", jumpReserve.ToString());
-      jumpSpeed = core.LiveTune("Jump speed", jumpSpeed, 0.05f);
-      maxJumpReserve = core.LiveTune("Max jump reserve", maxJumpReserve);
 
-      if (IsOnPlatform && !holdingJump)
+      // Jump -------------------------------------------------
+
+      maxJumpReserve = 15;
+      jumpSpeed = 3.0f;
+      jumpHeightTolerance = 40.0f;
+
+      //DEBUG
+      //core.DebugWatch("Jump reserve", jumpReserve.ToString());
+      //jumpSpeed = core.LiveTune("Jump speed", jumpSpeed, 0.05f);
+      //maxJumpReserve = core.LiveTune("Max jump reserve", maxJumpReserve);
+      //jumpHeightTolerance = core.LiveTune("Height tolerance", jumpHeightTolerance, 1f);
+      //core.DebugWatch("Jump after landing", jumpAfterLanding.ToString());
+
+      if (IsOnPlatform && (!holdingJump || jumpAfterLanding))
       {
         jumpReserve = maxJumpReserve;
+        jumpAfterLanding = false;
       }
 
       if (holdingJump)
@@ -150,6 +161,8 @@ namespace Chroma.Actors
           jumpReserve--;
         }
       }
+
+      // ------------------------------------------------------
 
       if (hurtTimeout > 0)
       {
@@ -169,16 +182,21 @@ namespace Chroma.Actors
 
     public void TryToJump()
     {
-      if (IsOnPlatform)
-      {
-        //sm.Trigger(PlayerEvent.Jump);
-        holdingJump = true;
+      holdingJump = true;
+
+      var platformBelow = core.GetPlayState().ActorManager.FindPlatformUnder(Position);
+      if (platformBelow != null) {
+        if (platformBelow.GetBoundingBoxW().Top - GetBoundingBoxW().Bottom <= jumpHeightTolerance)
+        {
+          jumpAfterLanding = true;
+        }
       }
     }
 
     public void StopJump()
     {
       holdingJump = false;
+      jumpAfterLanding = false;
       if (!IsOnPlatform)
       {
         jumpReserve = 0;
