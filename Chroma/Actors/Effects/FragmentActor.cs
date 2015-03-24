@@ -109,7 +109,7 @@ namespace Chroma.Actors
       var sprite = (this.sprite == null) ? animation.GetCurrentFrame() : this.sprite;
       core.Renderer[Layer, zIndex].DrawSpriteW(
         sprite, 
-        Position, 
+        Position + new Vector2(sprite.Width / 2, sprite.Height / 2), 
         rotation: rotation, 
         origin: SpriteOrigin.Center,
         tint: Tint * Opacity,

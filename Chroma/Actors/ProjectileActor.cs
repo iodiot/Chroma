@@ -44,7 +44,7 @@ namespace Chroma.Actors
     {
       var color = MagicManager.MagicColors[this.color];
       core.Renderer.DrawSpriteW(sprite, Position);
-      core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(20, 23), color * 0.4f);
+      core.Renderer["add"].DrawGlowW(Position + new Vector2(10, 3), color * 0.4f, 20);
 
       base.Draw();
     }

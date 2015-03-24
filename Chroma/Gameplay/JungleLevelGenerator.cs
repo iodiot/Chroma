@@ -95,7 +95,7 @@ namespace Chroma.Gameplay
           SetRatioOf(Encounter.Slime, 20);
           SetRatioOf(Encounter.Bridge, 2);
           SetRatioOf(Encounter.Boulder, 2);
-          SetRatioOf(Encounter.HealthItem, 10);
+          SetRatioOf(Encounter.HealthItem, 100);
           break;
         case 200:
           SetRatioOf(Encounter.Plant, 20);

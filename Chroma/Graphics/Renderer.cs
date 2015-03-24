@@ -199,7 +199,7 @@ namespace Chroma.Graphics
         {
           spriteBatch.Draw(
             dd.Texture, 
-            dd.Position + dd.Origin,
+            dd.Position,
             dd.SourceRect,
             dd.Tint,
             dd.Rotation,
@@ -320,6 +320,22 @@ namespace Chroma.Graphics
       DrawRectangleW(new Rectangle((int)x - radius, (int)y - radius, radius * 2, radius * 2), color);
     }
 
+    public void DrawGlowS(Vector2 position, Color color, float radius, bool fromCenter = true)
+    {
+      DrawSpriteS(
+        core.SpriteManager.GetSprite(SpriteName.glow), 
+        position, 
+        color, 
+        new Vector2(radius / 25), 
+        origin: fromCenter ? SpriteOrigin.Center : SpriteOrigin.TopLeft
+      );
+    }
+
+    public void DrawGlowW(Vector2 position, Color color, float radius, bool fromCenter = true)
+    {
+      DrawGlowS(position + World, color, radius, fromCenter);
+    }
+
     public void DrawLineW(Vector2 from, Vector2 to, Color color, float thickness = 1f)
     {
       DrawLineS(from + World, to + World, color, thickness);
@@ -351,14 +367,12 @@ namespace Chroma.Graphics
       SpriteFlip flip = SpriteFlip.None,
       SpriteOrigin origin = SpriteOrigin.TopLeft)
     {
-      var offset = sprite.GetOffset();
-      if (scale != null)
-      {
-        offset.X *= ((Vector2)scale).X;
-        offset.Y *= ((Vector2)scale).Y;
-      }
 
       Vector2 actualScale = scale ?? new Vector2(1f);
+
+      var offset = sprite.GetOffset();
+      offset.X *= actualScale.X;
+      offset.Y *= actualScale.Y;
 
       var actualOrigin = new Vector2(0);
       switch (origin)
@@ -366,8 +380,8 @@ namespace Chroma.Graphics
         case SpriteOrigin.TopLeft:
           break;
         case SpriteOrigin.Center:
-          actualOrigin.X = sprite.SrcWidth * actualScale.X / 2;
-          actualOrigin.Y = sprite.SrcHeight * actualScale.Y / 2;
+          actualOrigin.X = sprite.SrcWidth * 0.5f;
+          actualOrigin.Y = sprite.SrcHeight * 0.5f;
           break;
       }
 

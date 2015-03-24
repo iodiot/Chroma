@@ -219,8 +219,9 @@ namespace Chroma.Actors
 
       if (charging)
       {
-        core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(22, 15),
-          MagicManager.MagicColors[chargeColor] * 0.8f);
+//        core.Renderer["fg_add"].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(22, 15),
+//          MagicManager.MagicColors[chargeColor] * 0.8f);
+        core.Renderer["add"].DrawGlowW(pos + new Vector2(6, 8), MagicManager.MagicColors[chargeColor] * 0.8f, 20);
       }
 
       base.Draw();

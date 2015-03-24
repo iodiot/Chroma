@@ -59,13 +59,12 @@ namespace Chroma.Actors
     {
       if (bubble)
       {
-        core.Renderer[-1].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(12, 12), MagicManager.MagicColors[color] * 0.2f, new Vector2(0.7f));
+        core.Renderer[-1].DrawGlowW(Position + new Vector2(8), MagicManager.MagicColors[color] * 0.2f, 18);
         core.Renderer[2].DrawSpriteW(bubbleAnim.GetCurrentFrame(), Position, MagicManager.MagicColors[color]);
       }
       else
       {
-        core.Renderer[4].DrawSpriteW("glow", Position - new Vector2(2, 2), 
-          Color.Red * 0.20f, new Vector2(0.4f, 0.4f));
+        core.Renderer[-1].DrawGlowW(Position + new Vector2(8, 9), Color.Red * 0.2f, 10);
       }
       core.Renderer[1].DrawSpriteW(itemAnim.GetCurrentFrame(), Position + new Vector2(4, 5));
 

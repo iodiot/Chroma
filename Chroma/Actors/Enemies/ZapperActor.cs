@@ -112,7 +112,6 @@ namespace Chroma.Actors
     public override void Draw()
     {
       var color = MagicManager.MagicColors[this.color];
-      //core.Renderer[2].DrawSpriteW(core.SpriteManager.GetSprite("glow"), Position - new Vector2(10), color, scale: new Vector2(0.35f));
 
       for (var i = 0; i < BallsCount; ++i)
       {
