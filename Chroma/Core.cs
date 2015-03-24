@@ -14,16 +14,12 @@ using Chroma.Gameplay;
 using CoreMotion;
 using Foundation;
 using System.Linq;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Chroma
 {
-  public sealed class Core : ISubscriber
+  public sealed partial class Core : ISubscriber
   {
-    private readonly List<Pair<string, int>> debugMessages;
-    private readonly Dictionary<string, string> debugWatches;
-    private readonly Dictionary<string, int> debugWatchTtls;
-    private readonly List<string> debugWatchesToRemove;
-
     public SpriteManager SpriteManager { get; private set; }
     public Renderer Renderer { get; private set; }
     public ContentManager Content { get; private set; }
@@ -31,6 +27,8 @@ namespace Chroma
     public MessageManager MessageManager { get; private set; }
     public TimerManager TimerManager { get; private set; }
     private CMMotionManager MotionManager;
+
+    public TouchCollection TouchState { get; private set; }
 
     public float DeviceTilt { get; private set; }
 
@@ -50,10 +48,7 @@ namespace Chroma
     {
       Ticks = 0;
 
-      debugMessages = new List<Pair<string, int>>();
-      debugWatches = new Dictionary<string, string>();
-      debugWatchTtls = new Dictionary<string, int>();
-      debugWatchesToRemove = new List<string>();
+      InitDebugTools();
 
       GraphicsDevice = graphicsDevice;
 
@@ -155,79 +150,14 @@ namespace Chroma
       return result;
     }
 
-    private void UpdateDebugMessages()
-    {
-      if (Settings.DrawDebugMessages)
-      {
-        // Messages
-        foreach (var message in debugMessages)
-        {
-          message.B--;
-        }
-        debugMessages.RemoveAll(m => m.B == 0);
-
-        // Watches
-        foreach (var key in debugWatchTtls.Keys.ToList())
-        {
-          debugWatchTtls[key] -= 1;
-          if (debugWatchTtls[key] == 0)
-            debugWatchesToRemove.Add(key);
-        }
-        foreach (var watchName in debugWatchesToRemove) {
-          debugWatches.Remove(watchName);
-          debugWatchTtls.Remove(watchName);
-        }
-        debugWatchesToRemove.Clear();
-      }
-    }
-
-    private void DrawDebugMessages()
-    {
-      if (Settings.DrawDebugMessages)
-      {
-        // Messages
-        float i = -5;
-        foreach (var message in debugMessages) {
-          i += 10;
-          Renderer["fg", 1000].DrawTextS(
-            message.A,
-            new Vector2(Renderer.ScreenWidth - 150, i),
-            Color.White * 0.5f * ((float)message.B / 200)
-          );
-        }
-
-        // Watches
-        i = -2;
-        var maxWidth = 0f;
-        foreach (var watch in debugWatches) {
-          i += 7;
-          var w1 = Renderer["fg", 1000].DrawTextS(
-            watch.Key + ": ",
-            new Vector2(5, i),
-            Color.Lime * 0.6f,
-            0.66f
-          );
-          var w2 = Renderer["fg", 1000].DrawTextS(
-            watch.Value,
-            new Vector2(5 + w1, i),
-            Color.White * 0.5f,
-            0.66f
-          );
-          maxWidth = Math.Max(w1 + w2, maxWidth);
-        }
-        Renderer["fg", 999].DrawRectangleS(
-          new Rectangle(0, 0, (int)maxWidth + 10, 7 * debugWatches.Count + 7), 
-          Color.Black * 0.5f
-        );
-      }
-    }
-
     public void Update(GameTime gameTime)
     {
       TimerManager.Update(Ticks);
 
       UpdateDebugMessages();
 
+      TouchState = TouchPanel.GetState();
+      HandleDebugInput();
       GetCurrentState().HandleInput();
 
       foreach (var state in states)
@@ -243,48 +173,6 @@ namespace Chroma
       ++Ticks;
     }
 
-    #region Debug
-    public void DebugMessage(string message)
-    {
-      if (!Settings.DrawDebugMessages)
-        return;
-
-      debugMessages.Insert(0, new Pair<string, int>(message, 200));
-    }
-
-    public void DebugMessage(bool condition, string message) 
-    {
-      if (condition)
-        DebugMessage(message);
-    }
-
-    public void DebugWatch(string watchName, string watchValue, int ttl = 10)
-    {
-      if (!Settings.DrawDebugMessages)
-        return;
-      debugWatches[watchName] = watchValue;
-      debugWatchTtls[watchName] = ttl;
-    }
-
-    public void DebugWatch(Object obj, string watchName, string watchValue, int ttl = 10)
-    {
-      if (!Settings.DrawDebugMessages)
-        return;
-
-      DebugWatch(
-        obj.GetType().Name + " " + String.Format("{0,3:X}", obj.GetHashCode() % 1000) + ((watchName != "") ? " " + watchName : ""), 
-        watchValue, ttl);
-    }
-
-    public void RemoveDebugWatch(string watchName)
-    {      
-      if (!Settings.DrawDebugMessages)
-        return;
-      debugWatches.Remove(watchName);
-      debugWatchTtls.Remove(watchName);
-    }
-    #endregion
-
     public void Draw(GameTime gameTime)
     {
       var deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
@@ -296,6 +184,7 @@ namespace Chroma
       }
 
       DrawDebugMessages();
+      DrawLiveTuners();
      
       // Final draw
       Renderer.Draw();

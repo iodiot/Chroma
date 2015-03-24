@@ -87,8 +87,8 @@ namespace Chroma.Gameplay
           SetRatioOf(LevelModule.Descent, 2);
           SetRatioOf(LevelModule.CliffRight, 2);
           SetRatioOf(LevelModule.CliffLeft, 10);
-          SetRatioOf(LevelModule.Gap, 1);
-          SetRatioOf(LevelModule.Pond, 20);
+          SetRatioOf(LevelModule.Gap, 0);
+          SetRatioOf(LevelModule.Pond, 0);
 
           SetRatioOf(Encounter.None, 100);
           SetRatioOf(Encounter.Plant, 10);

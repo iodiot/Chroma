@@ -52,9 +52,7 @@ namespace Chroma.States
 
     public override void HandleInput()
     {
-      var touchState = TouchPanel.GetState();
-
-      foreach (var touch in touchState)
+      foreach (var touch in core.TouchState)
       {
         if (touch.State == TouchLocationState.Released)
         {

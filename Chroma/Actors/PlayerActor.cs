@@ -19,6 +19,9 @@ namespace Chroma.Actors
 
     public float PlatformY { get; private set; }
     private bool holdingJump = false;
+    private int jumpReserve;
+    private int maxJumpReserve;
+    private float jumpSpeed;
 
     #region Player stats
     public int MaxHearts { get; private set; }
@@ -125,6 +128,29 @@ namespace Chroma.Actors
 //          break;
 //      }
 
+      maxJumpReserve = 10;
+      jumpSpeed = 3.0f;
+
+      //DEBUG
+      core.DebugWatch("Hearts", Hearts.ToString());
+      core.DebugWatch("Jump reserve", jumpReserve.ToString());
+      jumpSpeed = core.LiveTune("Jump speed", jumpSpeed, 0.05f);
+      maxJumpReserve = core.LiveTune("Max jump reserve", maxJumpReserve);
+
+      if (IsOnPlatform && !holdingJump)
+      {
+        jumpReserve = maxJumpReserve;
+      }
+
+      if (holdingJump)
+      {
+        if (jumpReserve > 0)
+        {
+          Velocity.Y = -jumpSpeed;
+          jumpReserve--;
+        }
+      }
+
       if (hurtTimeout > 0)
       {
         --hurtTimeout;
@@ -148,13 +174,15 @@ namespace Chroma.Actors
         //sm.Trigger(PlayerEvent.Jump);
         holdingJump = true;
       }
-
-      Velocity.Y = -4f;
     }
 
     public void StopJump()
     {
       holdingJump = false;
+      if (!IsOnPlatform)
+      {
+        jumpReserve = 0;
+      }
     }
 
     public override void Draw()
@@ -213,7 +241,6 @@ namespace Chroma.Actors
       {
         PlatformY = other.GetBoundingBoxW().Top;
         //core.DebugWatch("platform Y", PlatformY.ToString(), 1000000);
-        core.DebugWatch("Hearts", Hearts.ToString(), 1000000);
       }
 
       base.OnBoundingBoxTrigger(other);

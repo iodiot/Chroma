@@ -122,7 +122,9 @@ namespace Chroma
     #region Physics
     private void Step()
     {
-      const float G = 0.12f;
+      //const float G = 0.12f;
+      float G = 0.17f;
+      G = core.LiveTune("G", G, 0.01f);
       const float DragFactor = 0.99f;
 
       // Apply gravity

@@ -110,11 +110,8 @@ namespace Chroma.Gui
 
     public void HandleInput()
     {
-      //---------------------------------------------------------------
-
-      var touchState = TouchPanel.GetState();
-
-      foreach (TouchLocation touch in touchState)
+    
+      foreach (TouchLocation touch in core.TouchState)
       {
 
         // Debug: stop
