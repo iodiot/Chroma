@@ -10,7 +10,7 @@ namespace Chroma.Graphics
     public Vector2 Position;
   }
 
-  public class Lightning
+  public sealed class Lightning
   {
     private readonly Core core;
     private readonly List<LightningVertex> vertices;

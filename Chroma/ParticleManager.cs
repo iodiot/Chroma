@@ -16,7 +16,6 @@ namespace Chroma
     public float Rotation;
     public int Ttl;
     public float RotationSpeed;
-    public byte Tag;
   }
 
   public sealed class ParticleManager
@@ -24,13 +23,11 @@ namespace Chroma
     public float SpawnRate;
 
     private readonly Core core;
-    private readonly Random random;
 
     public Action<Particle> OnSpawn;
-    public Action<Particle> OnPreUpdate;
-    public Action<Particle> OnPostUpdate;
+    public Action<Particle> OnUpdate;
 
-    private List<Particle> particles, particlesToAdd;
+    private List<Particle> particles;
 
     private int deadCounter;
 
@@ -40,9 +37,6 @@ namespace Chroma
       SpawnRate = spawnRate;
 
       particles = new List<Particle>();
-      particlesToAdd = new List<Particle>();
-
-      random = new Random();
     }
 
     public void Spawn()
@@ -51,7 +45,7 @@ namespace Chroma
 
       if (OnSpawn != null)
       {
-        // Defaults
+        // Set defaults
         particle.Sprite = core.SpriteManager.OnePixelSprite;
         particle.Scale = new Vector2(1f, 1f);
 
@@ -75,40 +69,35 @@ namespace Chroma
       }
       else
       {
-        particlesToAdd.Add(particle);
+        particles.Add(particle);
       }
     }
 
     public void Spawn(Particle particle)
     {
-      particlesToAdd.Add(particle);
+      particles.Add(particle);
     }
 
     public void Update()
     {
       deadCounter = 0;
 
-      // TODO: normal distribution
-      for (var i = 0; i < (int)Math.Floor(SpawnRate); ++i)
+      if (SpawnRate > SciHelper.Eps)
       {
-        Spawn();
+        var count = (int)Math.Round(SciHelper.GetNormalRandom(SpawnRate, SpawnRate * .5f));
+        for (var i = 0; i < count; ++i)
+        {
+          Spawn();
+        }
       }
 
-      if (SpawnRate - Math.Floor(SpawnRate) >= random.NextDouble())
-      {
-        Spawn();
-      }
-
-      particles.AddRange(particlesToAdd);
-      particlesToAdd.Clear();
-
-      if (OnPreUpdate != null)
+      if (OnUpdate != null)
       {
         foreach (var p in particles)
         {
           if (p.Ttl > 0)
           {
-            OnPreUpdate(p);
+            OnUpdate(p);
           }
         }
       }
@@ -126,37 +115,6 @@ namespace Chroma
           ++deadCounter;
         }
       }
-
-      if (OnPostUpdate != null)
-      {
-        foreach (var p in particles)
-        {
-          if (p.Ttl > 0)
-          {
-            OnPostUpdate(p);
-          }
-        }
-      }
-
-      //if (deadCounter > 100 || ticks % 1000 == 0)
-      //{
-      //  RemoveDeadParticles();
-      //}
-    }
-
-    private void RemoveDeadParticles()
-    {
-      var newParticles = new List<Particle>();
-
-      foreach (var p in particles)
-      {
-        if (p.Ttl > 0)
-        {
-          newParticles.Add(p);
-        }
-      }
-
-      particles = newParticles;
     }
 
     public void Draw()

@@ -174,7 +174,6 @@
     <Compile Include="ParticleManager.cs" />
     <Compile Include="Gameplay\LevelGenerator.cs" />
     <Compile Include="Helpers\SmallHelpers.cs" />
-    <Compile Include="Actors\ActorFeatures.cs" />
     <Compile Include="Actors\ItemActor.cs" />
     <Compile Include="Graphics\ParallaxLayer.cs" />
     <Compile Include="States\GameOverState.cs" />

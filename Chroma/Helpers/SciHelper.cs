@@ -47,6 +47,15 @@ namespace Chroma.Helpers
     {
       return new Vector2(SciHelper.GetRandom(-radius, radius), SciHelper.GetRandom(-radius, radius));
     }
+
+    public static float GetNormalRandom(float mean, float deviation)
+    {
+      var u1 = GetRandom(0f, 1f);
+      var u2 = GetRandom(0f, 1f);
+      var randStdNormal = (float)(Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2));
+
+      return mean + deviation * randStdNormal; 
+    }
   }
 }
 

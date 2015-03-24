@@ -25,8 +25,8 @@ namespace Chroma.Actors
       }
       groundLevel = (platform != null) ? platform.GetBoundingBoxW().Y - 4 : 100500f;
 
-      pm = new ParticleManager(core, 0.0f);
-      pm.OnPreUpdate = OnParticlePreUpdate;
+      pm = new ParticleManager(core, 0f);
+      pm.OnUpdate = OnParticleUpdate;
 
       SpawnParticlesFromSprite(position, sprite, pixelRate);
 
@@ -58,7 +58,7 @@ namespace Chroma.Actors
 
     private void SpawnParticlesFromSprite(Vector2 position, Sprite sprite, float pixelRate)
     {
-      const float Scale = 2.0f;
+      const float Scale = 2f;
 
       var texture = core.SpriteManager.GetTexture(sprite.TextureName);
       var textureData = core.SpriteManager.GetTextureData(sprite.TextureName);
@@ -69,12 +69,7 @@ namespace Chroma.Actors
         {
           var color = textureData[x + y * texture.Width];
 
-          if (color.A == 0)
-          {
-            continue;
-          }
-
-          if (SciHelper.ChanceRoll(pixelRate))
+          if (color.A != 0 && SciHelper.ChanceRoll(pixelRate))
           {
             var p = new Particle();
 
@@ -83,7 +78,6 @@ namespace Chroma.Actors
             p.Ttl = SciHelper.GetRandom(100, 125);
             p.Sprite = core.SpriteManager.OnePixelSprite;
             p.Scale = new Vector2(Scale, Scale);
-            //p.RotationSpeed = ((float)random.NextDouble() * 2.0f - 1.0f) * 0.25f;
 
             p.Velocity.X = SciHelper.GetRandom(-1f, 1f);
             p.Velocity.Y = SciHelper.GetRandom(-5f, 0f);
@@ -94,9 +88,9 @@ namespace Chroma.Actors
       }
     }
 
-    private void OnParticlePreUpdate(Particle particle)
+    private void OnParticleUpdate(Particle particle)
     {
-      particle.Color *= 0.99f;
+      particle.Color *= .99f;
 
       if (particle.Position.Y > groundLevel)
       {
@@ -104,8 +98,8 @@ namespace Chroma.Actors
       }
       else
       {
-        // apply gravity
-        particle.Velocity.Y += 0.2f;
+        // Apply gravity
+        particle.Velocity.Y += .2f;
       }
     }
   }

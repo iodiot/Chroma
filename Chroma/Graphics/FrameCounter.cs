@@ -31,7 +31,7 @@ namespace Chroma.Graphics
         AverageFramesPerSecond = CurrentFramesPerSecond;
       }
 
-      TotalFrames++;
+      ++TotalFrames;
       TotalSeconds += deltaTime;
 
       return true;

@@ -57,9 +57,9 @@ namespace Chroma.Actors
       var platform = core.GetPlayState().ActorManager.FindPlatformUnder(lightningAim);
       lightningAim.Y = (platform != null) ? platform.Y : SciHelper.GetRandom(0f, r * .5f);
 
-      pm = new ParticleManager(core, 1f);
+      pm = new ParticleManager(core, .5f);
       pm.OnSpawn = OnParticleSpawn;
-      pm.OnPreUpdate = OnParticleUpdate;
+      pm.OnUpdate = OnParticleUpdate;
     }
 
     private void OnParticleSpawn(Particle particle)

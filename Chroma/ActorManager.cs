@@ -301,18 +301,16 @@ namespace Chroma
         }
       }
 
+      // Check if movement along two axis is acceptable
+      if (Math.Abs(v.X) > SciHelper.Eps && Math.Abs(v.Y) > SciHelper.Eps && GetObstacles(actor, v.X, v.Y).Count > 0)
+      {
+        core.DebugMessage("zzz");
+        v.Y = 0f;
+      }
+
       if (bounced)
       {
         actor.OnBounce();
-      }
-
-      // Final check
-      if (!SciHelper.IsZero(v) && GetObstacles(actor, v.X, v.Y).Count > 0)
-      {
-        core.DebugMessage("final check");
-        actor.Velocity = v * 0.75f;
-        MoveActor(actor);
-        return;
       }
 
       actor.Velocity = v;
