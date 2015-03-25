@@ -40,6 +40,8 @@ namespace Chroma.States
     private Area area;
     private float levelDistance = 0;
 
+    public Camera Camera { get; private set; }
+
     public PlayState(Core core, Area area) : base(core)
     {
       this.area = area;
@@ -50,7 +52,9 @@ namespace Chroma.States
 
     public override void Load()
     {
-      core.Renderer.World = new Vector2(0, (core.Renderer.ScreenHeight - 130) * 0.9f + 50/2);
+      Camera = new Camera(core);
+      Camera.JumpTo(0, (120 - core.Renderer.ScreenHeight) * 0.9f - 20);
+      core.Renderer.SetCamera(Camera);
 
       ActorManager = new ActorManager(core, this);
       ActorManager.Load();
@@ -73,24 +77,6 @@ namespace Chroma.States
       if (substate == SubState.Playing)
       {
         levelDistance = Player.Position.X;
-
-        #region Positioning camera
-        if (!Player.HasLost) {
-          var targetPlatformScreenPos = (core.Renderer.ScreenHeight - 120) * 0.9f;
-          var targetWorldY = targetPlatformScreenPos - (Player.PlatformY + Player.Position.Y) / 2;
-          var currentWorldY = core.Renderer.World.Y;
-            
-          //var targetWorldYOffset = player.PlatformY - (targetPlatformScreenPos - currentWorldY);
-          core.Renderer.WorldYOffset = 0;// += (targetWorldYOffset - core.Renderer.WorldYOffset) * 0.02f;
-
-          core.Renderer.World = new Vector2(
-            40 - Player.Position.X, 
-            currentWorldY + (targetWorldY - currentWorldY) * 0.05f
-          );
-          core.Renderer.World.Y = Math.Max(core.Renderer.World.Y, 10 - Player.Position.Y);
-          core.Renderer.World.Y = Math.Min(core.Renderer.World.Y, core.Renderer.ScreenHeight - 120 - Player.Position.Y);
-        }
-        #endregion
 
         GameControls.Update(ticks);
         HealthGui.Update(ticks);
@@ -152,12 +138,16 @@ namespace Chroma.States
       Player = new PlayerActor(core, new Vector2(40, -27));
       ActorManager.Add(Player);
 
+      Camera.Follow(Player);
+      Camera.Mode = Camera.FollowMode.Platformer;
+
       GameControls = new GameHudGui(core, this, Player);
       HealthGui = new HealthGui(core, Player);
     }
 
     public void GameOver()
     {
+      // TODO: Gameover camera
       substate = SubState.GameOver;
       core.GameResult = new GameResult(LevelGenerator.distanceMeters); 
       core.MessageManager.Send(new CoreEventMessage(CoreEvent.GameOver), this);

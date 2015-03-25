@@ -78,8 +78,8 @@ namespace Chroma.Actors
       switch (preset)
       {
         case Preset.Remains:
-          Velocity.X = SciHelper.GetRandom(3, 5);
-          Velocity.Y = SciHelper.GetRandom(-3, -1);
+          Velocity.X = SciHelper.GetRandom(4, 5);
+          Velocity.Y = SciHelper.GetRandom(-3, -2);
           hurtPlayer = false;
           zIndex = 51;
           BouncesTillDrop = SciHelper.GetRandom(1, 2);

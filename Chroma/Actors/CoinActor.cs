@@ -19,7 +19,7 @@ namespace Chroma.Actors
       boundingBox = new Rectangle(0, 0, 8, 9);
 
       animation = new Animation();
-      animation.AddAndPlay("spin", core.SpriteManager.GetFrames("coin_", new List<int>{ 1, 1, 1, 2, 3, 4 }));
+      animation.AddAndPlay("spin", core.SpriteManager.GetFrames("coin_", new List<int>{ 1, 2, 3, 4 }));
 
       CanMove = canMove;
       CanFall = canMove;
@@ -66,7 +66,7 @@ namespace Chroma.Actors
 
     public override void OnBounce()
     {
-      core.SoundManager.Play("coin_bounce");
+      //core.SoundManager.Play("coin_bounce");
 
       base.OnBounce();
     }

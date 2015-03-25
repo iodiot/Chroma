@@ -211,6 +211,7 @@
     <Compile Include="Graphics\Lightning.cs" />
     <Compile Include="Helpers\SciHelper.cs" />
     <Compile Include="CoreDebug.cs" />
+    <Compile Include="Gameplay\Camera.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

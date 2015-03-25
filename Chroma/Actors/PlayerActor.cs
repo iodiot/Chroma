@@ -205,6 +205,9 @@ namespace Chroma.Actors
 
     public override void Draw()
     {
+      if (HasLost)
+        return;
+
       var tint = hurtTimeout == 0 ? Color.White : Color.White * (0.5f + 0.5f * (float)Math.Sin(core.Ticks / 2));
 
       var pos = new Vector2(Position.X, Position.Y);
@@ -258,8 +261,8 @@ namespace Chroma.Actors
 
       if (other is PlatformActor)
       {
-        PlatformY = other.GetBoundingBoxW().Top;
-        //core.DebugWatch("platform Y", PlatformY.ToString(), 1000000);
+        var y = other.GetBoundingBoxW().Top;
+        PlatformY = y;
       }
 
       base.OnBoundingBoxTrigger(other);
@@ -281,37 +284,38 @@ namespace Chroma.Actors
     public void Hurt(int strength = 1) 
     {
       // After-shock invincibility
-      if (hurtTimeout > 0)
+      if (hurtTimeout > 0 || HasLost)
         return;
 
       hurtTimeout = 30;
 
       Hearts--;
 
+      core.GetPlayState().Camera.Shake();
+
       if (Hearts == 0)
       {
-        //Die();
+        Die();
       }
     }
 
     public override void OnFall()
     {
-      HasLost = true;
+      Die();
 
       base.OnFall();
     }
 
     public override void OnDrown()
     {
-      HasLost = true;
+      Die();
 
       base.OnDrown();
     }
 
     private void Die() {
       HasLost = true;
-      core.MessageManager.Send(new RemoveActorMessage(this), this);
-      core.MessageManager.Send(new AddActorMessage(new SpriteDestroyerActor(core, Position, animation.GetCurrentFrame())), this);
+      CanMove = false;
     }
   }
 }

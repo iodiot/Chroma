@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Chroma.Gameplay;
 
 namespace Chroma.Graphics
 {
@@ -93,6 +94,8 @@ namespace Chroma.Graphics
     public Vector2 World;
     public float WorldYOffset { get; set; }
 
+    private Camera camera;
+
     public readonly float ScreenWidth;
     public readonly float ScreenHeight;
 
@@ -133,6 +136,17 @@ namespace Chroma.Graphics
 
     public void Unload()
     {
+    }
+
+    public void SetCamera(Camera camera)
+    {
+      this.camera = camera;
+      ReadCamera();
+    }
+
+    public void ReadCamera()
+    {
+      World = -camera.Position;
     }
 
     public void SetCurrentDepth(int depth)
@@ -178,6 +192,11 @@ namespace Chroma.Graphics
 
     public void Update(int ticks)
     {
+      if (camera != null)
+      {
+        camera.Update(ticks);
+        ReadCamera();
+      }
     }
 
     public void Draw()

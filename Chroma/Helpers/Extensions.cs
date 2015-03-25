@@ -10,6 +10,11 @@ namespace Chroma.Helpers
       return new Vector2(v.X, v.Y);
     }
 
+    public static void SetX(this Vector2 v, float x)
+    {
+      v.X = x;
+    }
+
     public static Rectangle FromFloats(this Rectangle r, float x, float y, float width, float height) 
     {
       r.X = (int)x;
