@@ -313,7 +313,8 @@ namespace Chroma.Actors
       base.OnDrown();
     }
 
-    private void Die() {
+    private void Die() 
+    {
       HasLost = true;
       CanMove = false;
     }

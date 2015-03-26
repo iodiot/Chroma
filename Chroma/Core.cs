@@ -44,6 +44,8 @@ namespace Chroma
     public ProfileData ProfileData;
     public GameResult GameResult;
 
+    public GameData GameData;
+
     public Core(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, ContentManager content, int screenWidth, int screenHeight)
     {
       Ticks = 0;
@@ -57,8 +59,7 @@ namespace Chroma
       Renderer = new Renderer(this, spriteBatch, screenWidth, screenHeight);
       TimerManager = new TimerManager(this);
 
-      MotionManager = new CMMotionManager();
-      MotionManager.DeviceMotionUpdateInterval = 0.05;
+      MotionManager = new CMMotionManager() { DeviceMotionUpdateInterval = .05 };
 
       MessageManager = new MessageManager(this);
       MessageManager.Subscribe(MessageType.CoreEvent, this);
@@ -72,7 +73,7 @@ namespace Chroma
 
       ProfileData = new ProfileData();
 
-      Debug.Print(String.Format("screen size: {0}x{1}", screenWidth, screenHeight));
+      DebugMessage(String.Format("screen size: {0}x{1}", screenWidth, screenHeight));
     }
 
     #region States
@@ -121,6 +122,8 @@ namespace Chroma
       MessageManager.Load();
 
       Reset();
+
+      GameData = Storage.LoadGameData();
     }
 
     public void Unload()
@@ -168,7 +171,8 @@ namespace Chroma
       MessageManager.Update(Ticks);
       Renderer.Update(Ticks);
 
-      DebugWatch("fps", Math.Round(frameCounter.AverageFramesPerSecond).ToString());
+      DebugWatch("fps", frameCounter.AverageFramesPerSecond.ToString("N1"));
+      DebugWatch("races/coins", String.Format("{0}/{1}", GameData.RacesNumber, GameData.CoinsNumber));
 
       ++Ticks;
     }

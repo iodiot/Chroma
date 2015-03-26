@@ -89,6 +89,8 @@ namespace Chroma.Graphics
       AddTexture("font", Font);
 
       OnePixelSprite = new Sprite() { SrcWidth = 1, SrcHeight = 1, TextureName = "one" };
+
+      core.DebugMessage(String.Format("sprites count: {0}", sprites.Count));
     }
 
     public void Unload()

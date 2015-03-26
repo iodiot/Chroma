@@ -58,6 +58,8 @@ namespace Chroma.Actors
       {
         core.SoundManager.Play("coin");
 
+        core.GameData.CoinsNumber += 1;
+
         core.MessageManager.Send(new RemoveActorMessage(this), this);
       }
 

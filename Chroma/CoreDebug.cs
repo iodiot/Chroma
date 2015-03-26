@@ -31,7 +31,8 @@ namespace Chroma
     private Dictionary<string, Rectangle> liveTuneMinus;
     private Dictionary<string, Rectangle> liveTunePlus;
 
-    private void InitDebugTools() {
+    private void InitDebugTools() 
+    {
       debugMessages = new List<Pair<string, int>>();
 
       debugWatches = new Dictionary<string, string>();
@@ -207,9 +208,12 @@ namespace Chroma
       }
     }
 
-    private void DrawLiveTuners() {
+    private void DrawLiveTuners() 
+    {
       if (!Settings.DrawDebugMessages || liveTuners.Count == 0)
+      {
         return;
+      }
 
       var y = Renderer.ScreenHeight - 80;
       var x = 120;

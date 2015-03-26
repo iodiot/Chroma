@@ -212,6 +212,7 @@
     <Compile Include="Helpers\SciHelper.cs" />
     <Compile Include="CoreDebug.cs" />
     <Compile Include="Gameplay\Camera.cs" />
+    <Compile Include="Storage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

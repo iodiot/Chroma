@@ -151,6 +151,10 @@ namespace Chroma.States
       substate = SubState.GameOver;
       core.GameResult = new GameResult(LevelGenerator.distanceMeters); 
       core.MessageManager.Send(new CoreEventMessage(CoreEvent.GameOver), this);
+
+      core.GameData.RacesNumber += 1;
+
+      Storage.SaveGameData(core.GameData);
     }
   }
 }

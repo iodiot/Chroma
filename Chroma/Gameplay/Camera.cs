@@ -22,7 +22,7 @@ namespace Chroma.Gameplay
 
     private Vector2 target;
     private Actor targetActor;
-    public FollowMode Mode { get; set; }
+    public FollowMode Mode;
 
     private int shakeDuration = 0;
     private float shakeStrength = 0f;
